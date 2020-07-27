@@ -37,7 +37,6 @@ const StockScreen = ({ navigation, route }) => {
   const [searchText, setSearchText] = React.useState('');
   const [isBarcodeRead, setIsBarcodeRead] = React.useState(false);
   const debouncedSearchTerm = useDebounce(searchText, 500);
-  console.log('TCL: ShopScreen -> debouncedSearchTerm', debouncedSearchTerm);
 
   const searchRef = React.createRef();
 

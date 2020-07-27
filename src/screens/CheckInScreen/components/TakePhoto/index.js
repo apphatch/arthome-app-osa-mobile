@@ -36,13 +36,10 @@ const TakePhoto = (props) => {
     setIsLoading(true);
     ImagePicker.launchCamera(options, (response) => {
       if (response.didCancel) {
-        console.log('User cancelled image picker');
         setIsLoading(false);
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error);
         setIsLoading(false);
       } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton);
       } else {
         const now = moment()
           .tz('Asia/Ho_Chi_Minh')
@@ -80,13 +77,11 @@ const TakePhoto = (props) => {
                 setValue('photo', source.uri);
                 triggerValidation('photo');
               })
-              .catch((err) => {
-                console.log(err, 'err');
+              .catch(() => {
                 setIsLoading(false);
               });
           })
-          .catch((err) => {
-            console.log(err, 'err');
+          .catch(() => {
             setIsLoading(false);
           });
       }

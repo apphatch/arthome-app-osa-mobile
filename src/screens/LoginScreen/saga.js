@@ -1,14 +1,8 @@
-import {
-  put,
-  call,
-  // select,
-  delay,
-  all,
-  takeLatest,
-} from 'redux-saga/effects';
+import { put, call, select, delay, all, takeLatest } from 'redux-saga/effects';
 import _ from 'lodash';
 
 import * as actions from './actions';
+import * as selectors from './selectors';
 import * as actionTypes from './actionTypes';
 import { actions as checkInActions } from '../CheckInScreen';
 
@@ -37,6 +31,7 @@ export function* login({ payload }) {
           : last_checkin_checkout.is_checkin,
       }),
     );
+    yield put(actions.updateAuthorization(response.headers.authorization));
   } catch (error) {
     yield put(actions.loginFailed(error.message));
     setError('Đăng nhập không thành công');
@@ -45,9 +40,9 @@ export function* login({ payload }) {
 
 export function* logout() {
   try {
-    // yield call(API.logout, {});
+    const response = yield call(API.logout);
     yield put(actions.onLogoutSuccess());
-    yield put(checkInActions.onCheckOutResponse());
+    yield put(checkInActions.onCheckOutResponse(response));
   } catch (error) {
     console.log('TCL: function*logout -> error', error);
     yield put(actions.logoutFailed(''));

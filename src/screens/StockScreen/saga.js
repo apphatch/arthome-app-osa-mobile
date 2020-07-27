@@ -1,7 +1,7 @@
 import {
   put,
   // call,
-  // select,
+  select,
   delay,
   all,
   takeLatest,
@@ -9,6 +9,8 @@ import {
 
 import * as actions from './actions';
 import * as actionTypes from './actionTypes';
+
+import { selectors as loginSelectors } from '../LoginScreen';
 
 // ## API
 // import * as API from './services';

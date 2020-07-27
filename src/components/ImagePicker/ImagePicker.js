@@ -48,7 +48,6 @@ const CustomImagePicker = ({ photos, setPhotos, isLoading }) => {
       setIsDeleting(true);
       ImagePicker.cleanSingle(photo.path)
         .then(() => {
-          console.log(`removed tmp image ${photo.path} from tmp directory`);
           setIsDeleting(false);
           const newPhotos = photos.filter(
             (item) => item.localIdentifier !== photo.localIdentifier,

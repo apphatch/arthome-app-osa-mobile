@@ -28,6 +28,7 @@ internals.get = (url, params, options) => {
 };
 
 internals.post = (url, payload, options) => {
+  console.log(payload);
   let config = {
     method: 'POST',
     url: url,
@@ -65,7 +66,6 @@ export default internals;
 // export { instance };
 
 const setupInterceptors = (store) => {
-  console.log('store', store);
   instance.interceptors.request.use(
     (config) => {
       return config;

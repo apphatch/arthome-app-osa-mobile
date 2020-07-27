@@ -24,12 +24,12 @@ export const RootNavigator = () => {
   const navigationTheme = theme.dark ? DarkTheme : DefaultTheme;
 
   const isLoggedIn = useSelector(loginSelectors.makeSelectIsLoggedIn());
-  const token = useSelector(loginSelectors.makeSelectToken());
+  const authorization = useSelector(loginSelectors.makeSelectAuthorization());
 
   return (
     <NavigationContainer theme={navigationTheme}>
       <Stack.Navigator headerMode="none">
-        {token ? (
+        {authorization ? (
           <>
             <Stack.Screen
               name="ShopScreen"

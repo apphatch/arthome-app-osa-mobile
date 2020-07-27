@@ -1,17 +1,17 @@
-import React, {memo} from 'react';
-import {Appbar, List, Divider, useTheme, Caption} from 'react-native-paper';
-import {View, StyleSheet, Vibration} from 'react-native';
+import React, { memo } from 'react';
+import { Appbar, List, Divider, useTheme, Caption } from 'react-native-paper';
+import { View, StyleSheet, Vibration } from 'react-native';
 // import {useSafeArea} from 'react-native-safe-area-context';
-import {RNCamera} from 'react-native-camera';
+import { RNCamera } from 'react-native-camera';
 import {
   useBarcodeRead,
   BarcodeMaskWithOuterLayout,
 } from '@nartc/react-native-barcode-mask';
 
 // ###
-import {defaultTheme} from '../../theme';
+import { defaultTheme } from '../../theme';
 
-const ScanBarCode = ({navigation}) => {
+const ScanBarCode = ({ navigation }) => {
   // const safeArea = useSafeArea();
   // const {colors} = useTheme();
   const [isBarcodeRead, setIsBarcodeRead] = React.useState(false);
@@ -22,19 +22,18 @@ const ScanBarCode = ({navigation}) => {
     onBarcodeFinderLayoutChange,
   } = useBarcodeRead(
     true,
-    data => data,
-    processed => {
+    (data) => data,
+    (processed) => {
       scanProcessed(processed);
     },
   );
 
   const scanProcessed = React.useCallback(
-    barCode => {
-      console.log('TCL: scanProcessed -> barCode', barCode);
+    (barCode) => {
       if (!isBarcodeRead) {
         Vibration.vibrate();
         setIsBarcodeRead(true);
-        navigation.navigate('StockScreen', {barCode});
+        navigation.navigate('StockScreen', { barCode });
       }
     },
     [isBarcodeRead, navigation],

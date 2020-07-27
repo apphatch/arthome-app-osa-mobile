@@ -55,9 +55,9 @@ const CheckListItemsScreen = ({ navigation, route }) => {
 
   React.useEffect(() => {
     if (toIndex > 0) {
-      scrollToOffset();
+      scrollToPosition();
     }
-  }, [stocks, scrollToOffset, toIndex]);
+  }, [scrollToPosition, toIndex]);
 
   React.useEffect(() => {
     dispatch(
@@ -73,11 +73,9 @@ const CheckListItemsScreen = ({ navigation, route }) => {
     return { length: stocks.length, offset: 56 * index, index };
   };
 
-  const scrollToOffset = React.useCallback(() => {
+  const scrollToPosition = React.useCallback(() => {
     if (toIndex > 0 && flatListRef) {
-      console.log('scrollToOffset inside', toIndex);
-      let offset = 56 * toIndex;
-      flatListRef.scrollToOffset({ animated: true, offset: offset });
+      flatListRef.scrollToIndex({ animated: true, index: toIndex });
     }
   }, [flatListRef, toIndex]);
 

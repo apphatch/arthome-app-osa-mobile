@@ -48,8 +48,6 @@ const StockCheckListScreen = ({ navigation, route }) => {
     getValues,
   } = useForm({});
 
-  console.log('data item', item);
-
   React.useEffect(() => {
     if (!isLoading) {
       if (isSubmitted) {

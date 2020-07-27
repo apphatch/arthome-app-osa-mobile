@@ -61,7 +61,7 @@ const LoginScreen = ({ navigation }) => {
         label="Tài khoản"
         returnKeyType="next"
         value={username.value}
-        onChangeText={text => setUsername({ value: text, error: '' })}
+        onChangeText={(text) => setUsername({ value: text, error: '' })}
         error={!!username.error}
         errorText={username.error}
         autoCapitalize="none"
@@ -73,7 +73,7 @@ const LoginScreen = ({ navigation }) => {
         label="Mật khẩu"
         returnKeyType="done"
         value={password.value}
-        onChangeText={text => setPassword({ value: text, error: '' })}
+        onChangeText={(text) => setPassword({ value: text, error: '' })}
         error={!!password.error}
         errorText={password.error}
         secureTextEntry

@@ -10,7 +10,10 @@ import * as selectors from './selectors';
 
 import { logger } from '../../utils';
 
-import { selectors as loginSelectors } from '../LoginScreen';
+import {
+  selectors as loginSelectors,
+  actions as loginActions,
+} from '../LoginScreen';
 
 export function* submitCheckList({ payload }) {
   const { itemId, data, shopId } = payload;
@@ -18,15 +21,20 @@ export function* submitCheckList({ payload }) {
     const formData = new FormData();
     formData.append('data', JSON.stringify(data));
     const token = yield select(loginSelectors.makeSelectToken());
+    const authorization = yield select(
+      loginSelectors.makeSelectAuthorization(),
+    );
 
     const res = yield call(API.submitCheckListItemData, {
       itemId,
       data: formData,
       token,
+      authorization,
     });
     // const response = yield call(API.fetchCheckList, { shopId });
     // yield put(actions.checkListResponse({ checkList: response.data }));
     yield put(actions.submitSuccess({ itemId, data }));
+    yield put(loginActions.updateAuthorization(res.headers['authorization']));
   } catch (error) {
     console.log('function*submitCheckList -> error', error);
     yield put(actions.submitFailed(error.message));
@@ -35,9 +43,20 @@ export function* submitCheckList({ payload }) {
 
 export function* fetchCheckList({ payload }) {
   try {
+    const token = yield select(loginSelectors.makeSelectToken());
+    const authorization = yield select(
+      loginSelectors.makeSelectAuthorization(),
+    );
     const { shopId } = payload;
-    const response = yield call(API.fetchCheckList, { shopId });
+    const response = yield call(API.fetchCheckList, {
+      shopId,
+      token,
+      authorization,
+    });
     yield put(actions.checkListResponse({ checkList: response.data }));
+    yield put(
+      loginActions.updateAuthorization(response.headers['authorization']),
+    );
   } catch (error) {
     console.log('function*fetchCheckList -> error', error);
     yield put(actions.fetchCheckListFailed(error.message));
@@ -50,6 +69,9 @@ export function* markDoneAllCheckListItems({ payload: { clId, clType } }) {
       selectors.makeSelectStocksHasDataNull(),
     );
     const token = yield select(loginSelectors.makeSelectToken());
+    const authorization = yield select(
+      loginSelectors.makeSelectAuthorization(),
+    );
     const currentCl = yield select(selectors.makeSelectCheckListById(clId));
     const { template } = currentCl;
     let data = [];
@@ -82,8 +104,14 @@ export function* markDoneAllCheckListItems({ payload: { clId, clType } }) {
     }
     logger('function*markDoneAllCheckListItems -> data', data);
     formData.append('checklist_items', JSON.stringify(data));
-    const res = yield call(API.markDoneAll, { data: formData, token, clId });
+    const res = yield call(API.markDoneAll, {
+      data: formData,
+      token,
+      authorization,
+      clId,
+    });
     yield put(actions.markDoneAllSuccess());
+    yield put(loginActions.updateAuthorization(res.headers.authorization));
     yield put(actions.fetchStocks({ search: '', checkListId: clId }));
   } catch (error) {
     yield put(actions.markDoneAllFailed(error.message));
@@ -92,7 +120,15 @@ export function* markDoneAllCheckListItems({ payload: { clId, clType } }) {
 
 export function* fetchStocks({ payload }) {
   try {
-    const res = yield call(API.fetchStockByCheckList, { ...payload });
+    const token = yield select(loginSelectors.makeSelectToken());
+    const authorization = yield select(
+      loginSelectors.makeSelectAuthorization(),
+    );
+    const res = yield call(API.fetchStockByCheckList, {
+      ...payload,
+      token,
+      authorization,
+    });
     var categories = [];
 
     res.data.forEach(function (item) {
@@ -110,6 +146,7 @@ export function* fetchStocks({ payload }) {
       newData = res.data;
     }
     yield put(actions.stocksResponse({ stocks: newData, categories }));
+    yield put(loginActions.updateAuthorization(res.headers.authorization));
   } catch (error) {
     yield put(actions.fetchStocksFailed(error.message));
   }

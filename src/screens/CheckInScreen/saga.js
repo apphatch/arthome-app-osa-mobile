@@ -9,30 +9,52 @@ import * as actionTypes from './actionTypes';
 // ## API
 import * as API from './services';
 
-import { selectors as loginSelectors } from '../LoginScreen';
+import {
+  selectors as loginSelectors,
+  actions as loginActions,
+} from '../LoginScreen';
 
 export function* checkIn({ payload }) {
   try {
     const { note, photo, shopId } = payload;
-    const formData = new FormData();
+    // const formData = new FormData();
     const photoName = yield UUIDGenerator.getRandomUUID();
     const token = yield select(loginSelectors.makeSelectToken());
+    const authorization = yield select(
+      loginSelectors.makeSelectAuthorization(),
+    );
 
-    formData.append('photo', {
-      uri: photo,
-      type: 'image/jpeg',
-      name: photoName,
+    const formData = {
+      photo: {
+        uri: photo,
+        type: 'image/jpeg',
+        name: photoName,
+      },
+      note: note,
+      time: moment().format('DD/MM/YYYY'),
+    };
+
+    // formData.append('photo', {
+    //   uri: photo,
+    //   type: 'image/jpeg',
+    //   name: photoName,
+    // });
+    // formData.append('note', note);
+    // formData.append('time', moment().format('DD/MM/YYYY'));
+    const response = yield call(API.checkIn, {
+      formData,
+      token,
+      authorization,
+      shopId,
     });
-    formData.append('note', note);
-    formData.append('time', moment().format('DD/MM/YYYY'));
-    const response = yield call(API.checkIn, { formData, token, shopId });
-    console.log('function*checkIn -> response', response);
+    console.log(response);
     yield put(
       actions.onCheckInResponse({
         checkInData: response.data.last_checkin_checkout,
         isCheckIn: !_.isEmpty(response.data.last_checkin_checkout),
       }),
     );
+    yield put(loginActions.updateAuthorization(response.headers.authorization));
   } catch (error) {
     console.log('function*login -> error', error);
     yield put(actions.checkInFailed(error.message));
@@ -42,19 +64,38 @@ export function* checkIn({ payload }) {
 export function* checkOut({ payload }) {
   try {
     const token = yield select(loginSelectors.makeSelectToken());
+    const authorization = yield select(
+      loginSelectors.makeSelectAuthorization(),
+    );
     const { note, photo, shopId } = payload;
-    const formData = new FormData();
+    // const formData = new FormData();
     const photoName = yield UUIDGenerator.getRandomUUID();
-    formData.append('photo', {
-      uri: photo,
-      type: 'image/jpeg',
-      name: photoName,
+    const formData = {
+      photo: {
+        uri: photo,
+        type: 'image/jpeg',
+        name: photoName,
+      },
+      note: note,
+      time: moment().format('DD/MM/YYYY'),
+    };
+    // formData.append('photo', {
+    //   uri: photo,
+    //   type: 'image/jpeg',
+    //   name: photoName,
+    // });
+    // formData.append('note', note);
+    // formData.append('time', moment().format('DD/MM/YYYY'));
+    const response = yield call(API.checkOut, {
+      formData,
+      token,
+      authorization,
+      shopId,
     });
-    formData.append('note', note);
-    formData.append('time', moment().format('DD/MM/YYYY'));
-    const response = yield call(API.checkOut, { formData, token, shopId });
-    console.log('function*checkOut -> response', response);
-    yield put(actions.onCheckOutResponse());
+    yield put(actions.onCheckOutResponse(response));
+    yield put(
+      loginActions.updateAuthorization(response.headers['authorization']),
+    );
   } catch (error) {
     console.log('function*checkOut -> error', error);
     yield put(actions.checkOutFailed(error.message));

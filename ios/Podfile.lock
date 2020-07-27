@@ -62,6 +62,10 @@ PODS:
     - DoubleConversion
     - Folly/Default (= 2020.01.13.00)
     - glog
+  - Folly/Default (2020.01.13.00):
+    - boost-for-react-native
+    - DoubleConversion
+    - glog
   - glog (0.3.5)
   - OpenSSL-Universal (1.0.2.19):
     - OpenSSL-Universal/Static (= 1.0.2.19)
@@ -220,6 +224,11 @@ PODS:
     - Folly (= 2020.01.13.00)
     - glog
     - React-jsi/Default (= 0.63.1)
+  - React-jsi/Default (0.63.1):
+    - boost-for-react-native (= 1.63.0)
+    - DoubleConversion
+    - Folly (= 2020.01.13.00)
+    - glog
   - React-jsiexecutor (0.63.1):
     - DoubleConversion
     - Folly (= 2020.01.13.00)
@@ -555,6 +564,6 @@ SPEC CHECKSUMS:
   Yoga: d5bd05a2b6b94c52323745c2c2b64557c8c66f64
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: e7149814b52da2ca61afb7685fdb7ce2573417ee
+PODFILE CHECKSUM: e437cef84c14b989578fc10ac63e87727575c18b
 
 COCOAPODS: 1.9.3

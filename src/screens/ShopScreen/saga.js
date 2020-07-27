@@ -1,7 +1,7 @@
 import {
   put,
   call,
-  // select,
+  select,
   // delay,
   all,
   takeLatest,
@@ -9,6 +9,10 @@ import {
 
 import * as actions from './actions';
 import * as actionTypes from './actionTypes';
+import {
+  actions as loginActions,
+  selectors as loginSelectors,
+} from '../LoginScreen';
 
 // ## API
 import * as API from './services';
@@ -19,22 +23,34 @@ import * as API from './services';
 export function* fetchShops({ payload: { userId, search } }) {
   try {
     let shops = [];
-    const { data } = yield call(API.fetchShops, { userId });
-    shops = data;
-
-    console.log(search);
-    // let shops = [];
-    // const { data } = yield call(API.searchShops, { search });
-    // shops = data;
-    // console.log(userId);
+    let newHeaders = {};
+    const token = yield select(loginSelectors.makeSelectToken());
+    const authorization = yield select(
+      loginSelectors.makeSelectAuthorization(),
+    );
     if (search !== '') {
-      const { data } = yield call(API.searchShops, { search });
+      const { data, headers } = yield call(API.searchShops, {
+        search,
+        token,
+        authorization,
+      });
       shops = data;
+      newHeaders = headers;
     } else {
-      const { data } = yield call(API.fetchShops, { userId });
+      const token = yield select(loginSelectors.makeSelectToken());
+      const authorization = yield select(
+        loginSelectors.makeSelectAuthorization(),
+      );
+      const { data, headers } = yield call(API.fetchShops, {
+        userId,
+        token,
+        authorization,
+      });
       shops = data;
+      newHeaders = headers;
     }
     yield put(actions.fetchShopsSuccess({ shops }));
+    yield put(loginActions.updateAuthorization(newHeaders.authorization));
   } catch (error) {
     yield put(actions.fetchShopsFailed(error.message));
   }
