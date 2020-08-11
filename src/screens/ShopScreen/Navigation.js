@@ -9,7 +9,7 @@ const Drawer = createDrawerNavigator();
 
 export default function ShopNavigator() {
   return (
-    <Drawer.Navigator drawerContent={props => <DrawerContent {...props} />}>
+    <Drawer.Navigator drawerContent={(props) => <DrawerContent {...props} />}>
       <Drawer.Screen name="ShopScreen" component={ShopScreenStack} />
     </Drawer.Navigator>
   );

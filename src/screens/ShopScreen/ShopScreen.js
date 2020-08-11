@@ -13,6 +13,7 @@ import { TouchableOpacity, View, FlatList, StyleSheet } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
+import { useFocusEffect } from '@react-navigation/native';
 
 // ###
 import { defaultTheme } from '../../theme';
@@ -41,29 +42,31 @@ const ShopScreen = ({ navigation, route }) => {
 
   const searchRef = React.createRef();
 
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      if (!isCheckIn) {
-        dispatch(actions.fetchShops({ userId, search: debounceSearchTerm }));
+  useFocusEffect(
+    React.useCallback(() => {
+      if (isLoggedIn) {
+        if (!isCheckIn) {
+          dispatch(actions.fetchShops({ userId, search: debounceSearchTerm }));
+        } else {
+          navigation.navigate('StockCheckListScreen', {
+            screen: 'StockCheckListScreen',
+            params: { shopId: checkInData.shop_id, shopName: checkInData.name },
+          });
+        }
       } else {
-        navigation.navigate('StockCheckListScreen', {
-          screen: 'StockCheckListScreen',
-          params: { shopId: checkInData.shop_id, shopName: checkInData.name },
-        });
+        navigation.navigate('LoginScreen');
       }
-    } else {
-      navigation.navigate('LoginScreen');
-    }
-  }, [
-    userId,
-    dispatch,
-    isLoggedIn,
-    navigation,
-    debounceSearchTerm,
-    isCheckIn,
-    checkInData.name,
-    checkInData.shop_id,
-  ]);
+    }, [
+      userId,
+      dispatch,
+      isLoggedIn,
+      navigation,
+      debounceSearchTerm,
+      isCheckIn,
+      checkInData.name,
+      checkInData.shop_id,
+    ]),
+  );
 
   const renderItem = ({ item }) => (
     <List.Item

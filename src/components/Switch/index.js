@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Caption, Text } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 
-const CustomSwitch = props => {
+const CustomSwitch = (props) => {
   const {
     register,
     name,
@@ -20,7 +20,7 @@ const CustomSwitch = props => {
   React.useEffect(() => {
     register({ name }, rules);
     setValue(name, isSwitchOn, true);
-  }, [name, register, rules]);
+  }, [name, register, rules, isSwitchOn, setValue]);
 
   return (
     <>

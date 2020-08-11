@@ -48,18 +48,45 @@ export function* fetchCheckList({ payload }) {
       loginSelectors.makeSelectAuthorization(),
     );
     const { shopId } = payload;
+    console.log('shopId', shopId);
     const response = yield call(API.fetchCheckList, {
       shopId,
       token,
       authorization,
     });
+
     yield put(actions.checkListResponse({ checkList: response.data }));
-    yield put(
-      loginActions.updateAuthorization(response.headers['authorization']),
-    );
+    yield put(loginActions.updateAuthorization(response.headers.authorization));
   } catch (error) {
     console.log('function*fetchCheckList -> error', error);
     yield put(actions.fetchCheckListFailed(error.message));
+  }
+}
+
+export function* markValueYToAllCheckListItems({ payload: { clId, clType } }) {
+  try {
+    const stocksHasDataNull = yield select(
+      selectors.makeSelectStocksHasDataNull(),
+    );
+    const currentCl = yield select(selectors.makeSelectCheckListById(clId));
+    const { template } = currentCl;
+    const stocks = stocksHasDataNull.map((item) => {
+      return {
+        id: item.id,
+        data: mapValues(template, (o) => {
+          if (o.type === 'select') {
+            return o.values[0];
+          }
+          return '';
+        }),
+        category: item.category,
+        stock_name: item.stock_name,
+      };
+    });
+
+    yield put(actions.markValueAllSuccess({ stocks }));
+  } catch (error) {
+    yield put(actions.markValueAllFailed(error.message));
   }
 }
 
@@ -158,6 +185,10 @@ export default function root() {
       yield takeLatest(actionTypes.SUBMIT, submitCheckList),
       yield takeLatest(actionTypes.FETCH_CHECK_LIST, fetchCheckList),
       yield takeLatest(actionTypes.MARK_DONE_ALL, markDoneAllCheckListItems),
+      yield takeLatest(
+        actionTypes.MARK_VALUE_ALL,
+        markValueYToAllCheckListItems,
+      ),
       yield takeLatest(actionTypes.FETCH_STOCKS, fetchStocks),
     ]);
   };

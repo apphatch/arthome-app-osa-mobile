@@ -1,5 +1,5 @@
 import React from 'react';
-import RNPickerSelect from 'react-native-picker-select';
+import RNPickerSelect from './RNPickerSelect';
 import { StyleSheet, View } from 'react-native';
 import { Caption, Text } from 'react-native-paper';
 

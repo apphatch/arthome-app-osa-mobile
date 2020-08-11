@@ -1,5 +1,12 @@
 import React, { memo } from 'react';
-import { Appbar, FAB, Snackbar, Title } from 'react-native-paper';
+import {
+  Appbar,
+  FAB,
+  Snackbar,
+  Title,
+  ToggleButton,
+  Text,
+} from 'react-native-paper';
 import {
   StyleSheet,
   View,
@@ -9,7 +16,6 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { isEmpty } from 'lodash';
 
 // ###
 import CustomSwitch from '../../components/Switch';
@@ -20,7 +26,6 @@ import NumberInput from '../../components/NumberInput';
 import { defaultTheme } from '../../theme';
 import * as actions from './actions';
 import * as selectors from './selectors';
-import { logger } from '../../utils';
 
 const StockCheckListScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
@@ -38,6 +43,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
   const item = useSelector(selectors.makeSelectStockById(itemId));
 
   const [showSnack, setShowSnack] = React.useState(false);
+  const [checked, setChecked] = React.useState();
 
   const {
     handleSubmit,
@@ -155,6 +161,16 @@ const StockCheckListScreen = ({ navigation, route }) => {
                     disabled={isLoading}
                     clearErrors={clearErrors}
                   />
+                );
+              }
+              if (type === 'slider') {
+                return (
+                  <ToggleButton.Row
+                    onValueChange={(value) => setChecked(value)}
+                    value={checked}>
+                    <ToggleButton icon={() => <Text>Y</Text>} value="y" />
+                    <ToggleButton icon={() => <Text>N</Text>} value="n" />
+                  </ToggleButton.Row>
                 );
               }
             })}

@@ -34,19 +34,15 @@ export function* fetchShops({ payload: { userId, search } }) {
         token,
         authorization,
       });
-      shops = data;
+      shops = data.filter((d) => d.completed === false);
       newHeaders = headers;
     } else {
-      const token = yield select(loginSelectors.makeSelectToken());
-      const authorization = yield select(
-        loginSelectors.makeSelectAuthorization(),
-      );
       const { data, headers } = yield call(API.fetchShops, {
         userId,
         token,
         authorization,
       });
-      shops = data;
+      shops = data.filter((d) => d.completed === false);
       newHeaders = headers;
     }
     yield put(actions.fetchShopsSuccess({ shops }));

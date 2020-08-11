@@ -82,7 +82,7 @@ const setupInterceptors = (store) => {
       console.log(error);
       const { status } = error.response;
       console.log('status', status);
-      if (status === UNAUTHORIZED) {
+      if (status === UNAUTHORIZED || status === 500) {
         store.dispatch(loginActions.logout());
       }
       return Promise.reject(error);
