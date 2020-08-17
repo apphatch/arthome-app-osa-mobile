@@ -129,8 +129,7 @@ export function* fetchStocks({ payload }) {
       token,
       authorization,
     });
-    var categories = [];
-
+    let categories = [];
     res.data.forEach(function (item) {
       var existing = categories.filter(function (v, i) {
         return v === item.category;
@@ -139,7 +138,18 @@ export function* fetchStocks({ payload }) {
         categories.push(item.category);
       }
     });
-    var newData;
+
+    res.data.sort((a, b) => {
+      if (a.category === b.category) {
+        if (a.sub_category === b.sub_category) {
+          return a.stock_name > b.stock_name ? 1 : -1;
+        }
+        return a.sub_category > b.sub_category ? 1 : -1;
+      }
+      return a.category > b.category ? 1 : -1;
+    });
+
+    let newData;
     if (filter !== '') {
       newData = res.data.filter((item) => item.category === filter);
     } else {

@@ -229,7 +229,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
           <Portal>
             <Dialog visible={visibleFilter} onDismiss={hideDialog}>
               <Dialog.Title>Filter by</Dialog.Title>
-              <Dialog.ScrollArea style={{ height: '40%' }}>
+              <Dialog.ScrollArea style={{ maxHeight: '90%' }}>
                 <ScrollView>
                   <RadioButton.Group
                     onValueChange={(value) => changeOption(value)}
