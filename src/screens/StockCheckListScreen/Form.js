@@ -68,18 +68,17 @@ const StockCheckListScreen = ({ navigation, route }) => {
   React.useEffect(() => {
     if (!isLoading) {
       if (isSubmitted) {
-        navigation.goBack();
+        dispatch(actions.resetProps());
+        setTimeout(() => {
+          navigation.goBack();
+        }, 500);
       } else {
         if (errorMessage && errorMessage.length) {
           setShowSnack(true);
         }
       }
     }
-  }, [isLoading, isSubmitted, navigation, errorMessage]);
-
-  React.useEffect(() => {
-    return () => dispatch(actions.resetProps());
-  }, [dispatch]);
+  }, [isLoading, isSubmitted, navigation, errorMessage, dispatch]);
 
   const onSubmitCheckList = React.useCallback(
     (values) => {

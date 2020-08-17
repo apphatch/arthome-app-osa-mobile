@@ -54,6 +54,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   let flatListRef = React.createRef();
 
   React.useEffect(() => {
+    console.log('index ====>', toIndex);
     if (toIndex > 0) {
       scrollToPosition();
     }
@@ -227,7 +228,8 @@ const CheckListItemsScreen = ({ navigation, route }) => {
                 backgroundColor: colors.background,
                 paddingBottom: safeArea.bottom,
               }}
-              initialNumToRender={toIndex || 15}
+              initialNumToRender={15}
+              initialScrollIndex={toIndex}
             />
           </View>
           <Portal>
