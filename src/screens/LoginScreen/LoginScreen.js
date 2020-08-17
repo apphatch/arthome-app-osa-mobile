@@ -15,24 +15,13 @@ import { emailValidator, passwordValidator } from './validations';
 import * as actions from './actions';
 import * as selectors from './selectors';
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectors.makeSelectIsLoading());
-  // const isLoggedIn = useSelector(selectors.makeSelectIsLoggedIn());
-  // const userId = useSelector(selectors.makeSelectUserId());
 
   const [username, setUsername] = useState({ value: 'tvv08', error: '' });
   const [password, setPassword] = useState({ value: 'password', error: '' });
   const [error, setError] = useState('');
-
-  // React.useEffect(() => {
-  //   if (isLoggedIn) {
-  //     navigation.navigate('ShopScreen');
-  //   } else {
-  //     // navigation.navigate('LoginScreen');
-  //     //
-  //   }
-  // }, [isLoggedIn, navigation, userId]);
 
   const _onLoginPressed = React.useCallback(() => {
     const usernameError = emailValidator(username.value);

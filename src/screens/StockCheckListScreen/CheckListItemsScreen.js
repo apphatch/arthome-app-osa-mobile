@@ -125,10 +125,6 @@ const CheckListItemsScreen = ({ navigation, route }) => {
     dispatch(actions.markDoneAll({ clId, clType }));
   }, [dispatch, clId, clType]);
 
-  const setValueToAllItems = () => {
-    dispatch(actions.markValueAll({ clId, clType }));
-  };
-
   const showAlert = React.useCallback(() => {
     Alert.alert(
       'Thông báo',
@@ -178,14 +174,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
         <Appbar.Content title={'Sản phẩm'} subtitle="" />
         {/* With clType is OOS then alway allow send report */}
         {isOOS ? (
-          <>
-            <Appbar.Action
-              color="white"
-              icon={'check-all'}
-              onPress={setValueToAllItems}
-            />
-            <Appbar.Action color="white" icon={'upload'} onPress={onDoneAll} />
-          </>
+          <Appbar.Action color="white" icon={'upload'} onPress={onDoneAll} />
         ) : (
           <Appbar.Action
             icon={'upload'}
@@ -248,7 +237,11 @@ const CheckListItemsScreen = ({ navigation, route }) => {
                     {categories &&
                       categories.length > 0 &&
                       categories.map((item) => (
-                        <RadioButton.Item label={item} value={item} />
+                        <RadioButton.Item
+                          key={item}
+                          label={item}
+                          value={item}
+                        />
                       ))}
                   </RadioButton.Group>
                 </ScrollView>

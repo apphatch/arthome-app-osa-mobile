@@ -31,6 +31,8 @@ export function* login({ payload }) {
           : last_checkin_checkout.is_checkin,
       }),
     );
+    console.log(response.headers);
+
     yield put(actions.updateAuthorization(response.headers.authorization));
   } catch (error) {
     yield put(actions.loginFailed(error.message));

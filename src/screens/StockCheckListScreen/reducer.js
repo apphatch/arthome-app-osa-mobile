@@ -15,10 +15,6 @@ const handlers = {
   [actionTypes.MARK_DONE_ALL_RESPONSE]: markDoneAllSuccess,
   [actionTypes.MARK_DONE_ALL_FAILED]: markDoneAllFailed,
 
-  [actionTypes.MARK_VALUE_ALL]: markValueAll,
-  [actionTypes.MARK_VALUE_ALL_RESPONSE]: markValueAllSuccess,
-  [actionTypes.MARK_VALUE_ALL_FAILED]: markValueAllFailed,
-
   [actionTypes.SUBMIT]: submit,
   [actionTypes.SUBMIT_SUCCESS]: submitSuccess,
   [actionTypes.SUBMIT_FAILED]: submitFailed,
@@ -95,16 +91,5 @@ function markDoneAllSuccess(state, action) {
   state.isDoneAll = true;
 }
 function markDoneAllFailed(state, action) {
-  state.isLoading = false;
-}
-
-function markValueAll(state, action) {
-  state.isLoading = true;
-}
-function markValueAllSuccess(state, action) {
-  state.isLoading = false;
-  state.stocks = action.payload.stocks;
-}
-function markValueAllFailed(state, action) {
   state.isLoading = false;
 }

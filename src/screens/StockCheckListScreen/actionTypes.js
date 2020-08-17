@@ -20,10 +20,6 @@ export const MARK_DONE_ALL = `${prefix}/MARK_DONE_ALL`;
 export const MARK_DONE_ALL_RESPONSE = `${prefix}/MARK_DONE_ALL_RESPONSE`;
 export const MARK_DONE_ALL_FAILED = `${prefix}/MARK_DONE_ALL_FAILED`;
 
-export const MARK_VALUE_ALL = `${prefix}/MARK_VALUE_ALL`;
-export const MARK_VALUE_ALL_RESPONSE = `${prefix}/MARK_VALUE_ALL_RESPONSE`;
-export const MARK_VALUE_ALL_FAILED = `${prefix}/MARK_VALUE_ALL_FAILED`;
-
 export const GET_ITEMS = `${prefix}/GET_ITEMS`;
 export const RESET_PROPS = `${prefix}/RESET_PROPS`;
 export const RESET_DONE_ALL = `${prefix}/RESET_DONE_ALL`;

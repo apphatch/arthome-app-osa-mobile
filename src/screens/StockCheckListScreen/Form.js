@@ -4,8 +4,8 @@ import {
   FAB,
   Snackbar,
   Title,
-  ToggleButton,
   Text,
+  Caption,
 } from 'react-native-paper';
 import {
   StyleSheet,
@@ -14,6 +14,9 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
 } from 'react-native';
+import ImagePicker from '../..//components/ImagePicker';
+import CustomToggleButton from '../../components/ToggleButton';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
@@ -31,7 +34,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const {
-    params: { clId, itemId, shopId, clType, stockName },
+    params: { clId, itemId, shopId, clType, stockName, mechanic, quantity },
   } = route;
 
   const isLoading = useSelector(selectors.makeSelectIsLoading());
@@ -43,7 +46,6 @@ const StockCheckListScreen = ({ navigation, route }) => {
   const item = useSelector(selectors.makeSelectStockById(itemId));
 
   const [showSnack, setShowSnack] = React.useState(false);
-  const [checked, setChecked] = React.useState();
 
   const {
     handleSubmit,
@@ -51,7 +53,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
     setValue,
     errors,
     clearErrors,
-    getValues,
+    trigger,
   } = useForm({});
 
   React.useEffect(() => {
@@ -78,6 +80,10 @@ const StockCheckListScreen = ({ navigation, route }) => {
   );
 
   const isSOS = clType.toUpperCase() === 'SOS';
+  const isOOS = clType.toUpperCase() === 'OOS';
+  const isRental = clType.toLowerCase() === 'rental';
+  const isPromotion = clType.toLowerCase() === 'promotion';
+  const isNpd = clType.toLowerCase() === 'npd';
   return (
     <>
       <Appbar.Header>
@@ -88,8 +94,30 @@ const StockCheckListScreen = ({ navigation, route }) => {
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <View style={styles.form}>
             <Title style={styles.caption}>{stockName}</Title>
+            {(isPromotion || isNpd) && (
+              <View style={[styles.row, styles.textValue]}>
+                <Caption style={styles.caption}>Mechanic</Caption>
+                <Text>{mechanic}</Text>
+              </View>
+            )}
+            {isOOS && (
+              <View style={[styles.row, styles.textValue]}>
+                <Caption style={styles.caption}>Stock</Caption>
+                <Text>{quantity}</Text>
+              </View>
+            )}
             {Object.keys(template).map((fieldName) => {
               const type = template[fieldName].type;
+              if (type === 'info') {
+                if (isOOS) {
+                  return (
+                    <View style={[styles.row, styles.textValue]}>
+                      <Caption style={styles.caption}>{fieldName}</Caption>
+                      <Text>djddj</Text>
+                    </View>
+                  );
+                }
+              }
               if (type === 'input') {
                 if (isSOS) {
                   return (
@@ -163,17 +191,33 @@ const StockCheckListScreen = ({ navigation, route }) => {
                   />
                 );
               }
-              if (type === 'slider') {
+              if (type === 'radio') {
                 return (
-                  <ToggleButton.Row
-                    onValueChange={(value) => setChecked(value)}
-                    value={checked}>
-                    <ToggleButton icon={() => <Text>Y</Text>} value="y" />
-                    <ToggleButton icon={() => <Text>N</Text>} value="n" />
-                  </ToggleButton.Row>
+                  <CustomToggleButton
+                    options={template[fieldName].values}
+                    register={register}
+                    setValue={setValue}
+                    name={fieldName}
+                    label={fieldName}
+                    key={fieldName}
+                    rules={{ required: true }}
+                    error={errors[fieldName]}
+                    value={item.data ? item.data[fieldName] : ''}
+                    disabled={isLoading}
+                    clearErrors={clearErrors}
+                  />
                 );
               }
             })}
+
+            {isRental && (
+              <ImagePicker
+                setValue={setValue}
+                isSubmitting={isLoading}
+                register={register}
+                triggerValidation={trigger}
+              />
+            )}
           </View>
           {
             <FAB
@@ -212,6 +256,14 @@ const styles = StyleSheet.create({
   },
   form: {
     paddingHorizontal: 16,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  textValue: {
+    paddingRight: 10,
   },
 });
 

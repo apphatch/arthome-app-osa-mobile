@@ -16,16 +16,30 @@ import {
   Dialog,
   Portal,
 } from 'react-native-paper';
+import ActionSheet from 'react-native-actionsheet';
 
 import { objectId } from '../../utils/uniqId';
 
 const ImagePicker = NativeModules.ImageCropPicker;
 
-const CustomImagePicker = ({ photos, setPhotos, isLoading }) => {
+const CustomImagePicker = ({
+  setValue,
+  isSubmitting,
+  register,
+  triggerValidation,
+}) => {
+  let actionSheet = React.useRef({});
+  let [photos, setPhotos] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
 
+  React.useEffect(() => {
+    register({ name: 'photos' }, { required: true });
+  }, [register]);
+
   const onTakePhoto = () => {
+    setIsLoading(true);
     ImagePicker.openCamera({
       cropping: false,
       includeExif: true,
@@ -35,9 +49,38 @@ const CustomImagePicker = ({ photos, setPhotos, isLoading }) => {
         photos = [...photos, { ...image, localIdentifier: objectId() }];
         if (photos.length <= 10) {
           onTakePhoto();
+          setIsLoading(false);
           setPhotos(photos);
+          setValue('photos', photos);
+          triggerValidation('photos');
         } else {
           setVisible(true);
+          setIsLoading(false);
+        }
+      }
+    });
+  };
+
+  const onChooseAlbum = () => {
+    setIsLoading(true);
+    ImagePicker.openPicker({
+      cropping: false,
+      includeExif: true,
+      mediaType: 'photo',
+      multiple: true,
+      maxFiles: 10,
+    }).then((image) => {
+      if (image) {
+        photos = [...photos, { ...image, localIdentifier: objectId() }];
+        if (photos.length <= 10) {
+          setPhotos(photos);
+          setIsLoading(false);
+          setPhotos(photos);
+          setValue('photos', photos);
+          triggerValidation('photos');
+        } else {
+          setVisible(true);
+          setIsLoading(false);
         }
       }
     });
@@ -53,28 +96,48 @@ const CustomImagePicker = ({ photos, setPhotos, isLoading }) => {
             (item) => item.localIdentifier !== photo.localIdentifier,
           );
           setPhotos(newPhotos);
+          setValue('photos', newPhotos);
+          triggerValidation('photos');
         })
         .catch((e) => {
           setIsDeleting(false);
           alert(e);
         });
     },
-    [photos, setPhotos],
+    [photos, setPhotos, setValue, triggerValidation],
   );
 
   const hideDialog = () => {
     setVisible(false);
   };
 
+  const showActionSheet = () => {
+    actionSheet.show();
+  };
+
+  const onChoose = (i) => {
+    if (i === 0) {
+      onTakePhoto();
+    }
+
+    if (i === 1) {
+      onChooseAlbum();
+    }
+  };
   return (
     <View style={styles.root}>
-      <View style={styles.row}>
+      <View style={styles.itemBox}>
         <IconButton
           icon="camera"
           size={30}
-          onPress={() => onTakePhoto()}
+          onPress={showActionSheet}
           disabled={isLoading || isDeleting}
         />
+        {!photos.length ? (
+          <Paragraph style={{ color: 'red', textAlign: 'center' }}>
+            Cần chọn hình ảnh
+          </Paragraph>
+        ) : null}
       </View>
       <ScrollView containerStyle={styles.content} horizontal>
         {photos.map((photo) => {
@@ -86,7 +149,7 @@ const CustomImagePicker = ({ photos, setPhotos, isLoading }) => {
               <TouchableOpacity
                 style={[styles.btnDelete]}
                 onPress={() => onRemovePhoto(photo)}
-                disabled={isLoading || isDeleting}>
+                disabled={isSubmitting}>
                 <Text>Xoá</Text>
               </TouchableOpacity>
             </View>
@@ -105,6 +168,13 @@ const CustomImagePicker = ({ photos, setPhotos, isLoading }) => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
+      <ActionSheet
+        ref={(o) => (actionSheet = o)}
+        options={['Camera', 'Choose from Album', 'Cancel']}
+        cancelButtonIndex={2}
+        onPress={(index) => onChoose(index)}
+        styles={{ messageBox: { height: 60 } }}
+      />
     </View>
   );
 };
@@ -120,12 +190,6 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     flexGrow: 1,
-  },
-  content: {
-    // flexDirection: 'row',
-    // flexGrow: 1,
-    // flexWrap: 'wrap',
-    // padding: 4,
   },
 
   itemBox: {
@@ -143,21 +207,29 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderStyle: 'solid',
     borderRadius: 5,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    // backgroundColor: 'transparent',
     marginRight: 12,
-
-    // height: Dimensions.get('window').width / 2,
     height: 150,
     width: 150,
   },
   img: {
-    // width: 88,
-    // height: 88,
     borderRadius: 5,
     resizeMode: 'cover',
     flex: 1,
+  },
+
+  wrapper: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    width: 200,
+    marginBottom: 10,
+    paddingTop: 15,
+    paddingBottom: 15,
+    textAlign: 'center',
+    color: '#fff',
+    backgroundColor: '#38f',
   },
 });
 
