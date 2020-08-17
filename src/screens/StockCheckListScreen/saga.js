@@ -16,7 +16,7 @@ import {
 } from '../LoginScreen';
 
 export function* submitCheckList({ payload }) {
-  const { itemId, data, shopId } = payload;
+  const { itemId, data } = payload;
   try {
     const formData = new FormData();
     formData.append('data', JSON.stringify(data));
@@ -31,8 +31,7 @@ export function* submitCheckList({ payload }) {
       token,
       authorization,
     });
-    // const response = yield call(API.fetchCheckList, { shopId });
-    // yield put(actions.checkListResponse({ checkList: response.data }));
+
     yield put(actions.submitSuccess({ itemId, data }));
     yield put(loginActions.updateAuthorization(res.headers.authorization));
   } catch (error) {

@@ -122,13 +122,22 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   };
 
   const onDoneAll = React.useCallback(() => {
-    dispatch(actions.markDoneAll({ clId, clType }));
-  }, [dispatch, clId, clType]);
+    if (stocksHasDataNull.length <= 0) {
+      Alert.alert(
+        'Thông báo',
+        'Báo cáo đã được gửi!',
+        [{ text: 'OK', onPress: () => _onPressGoBack() }],
+        { cancelable: false },
+      );
+    } else {
+      dispatch(actions.markDoneAll({ clId, clType }));
+    }
+  }, [dispatch, clId, clType, stocksHasDataNull, _onPressGoBack]);
 
   const showAlert = React.useCallback(() => {
     Alert.alert(
       'Thông báo',
-      'Gửi báo cáo thành công',
+      'Gửi báo cáo thành công!',
       [{ text: 'OK', onPress: () => dispatch(actions.resetProps()) }],
       { cancelable: false },
     );
@@ -140,10 +149,10 @@ const CheckListItemsScreen = ({ navigation, route }) => {
     }
   }, [isSubmittedDoneAll, showAlert]);
 
-  const _onPressGoBack = () => {
+  const _onPressGoBack = React.useCallback(() => {
     navigation.goBack();
     dispatch(actions.fetchCheckList({ shopId }));
-  };
+  }, [navigation, dispatch, shopId]);
 
   const showDialog = () => setVisibleFilter(true);
 
@@ -172,16 +181,11 @@ const CheckListItemsScreen = ({ navigation, route }) => {
       <Appbar.Header>
         <Appbar.BackAction onPress={_onPressGoBack} disabled={isLoading} />
         <Appbar.Content title={'Sản phẩm'} subtitle="" />
-        {/* With clType is OOS then alway allow send report */}
-        {isOOS ? (
-          <Appbar.Action color="white" icon={'upload'} onPress={onDoneAll} />
-        ) : (
-          <Appbar.Action
-            icon={'upload'}
-            onPress={onDoneAll}
-            disabled={stocksHasDataNull ? true : false}
-          />
-        )}
+        {/* <Appbar.Action
+          icon={'upload'}
+          onPress={onDoneAll}
+          disabled={stocksHasDataNull.length > 0 ? true : false}
+        /> */}
       </Appbar.Header>
       {isLoading ? (
         <LoadingIndicator />

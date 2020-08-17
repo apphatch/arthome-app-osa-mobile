@@ -34,7 +34,16 @@ const StockCheckListScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const {
-    params: { clId, itemId, shopId, clType, stockName, mechanic, quantity },
+    params: {
+      clId,
+      itemId,
+      shopId,
+      clType,
+      stockName,
+      mechanic,
+      quantity,
+      barcode,
+    },
   } = route;
 
   const isLoading = useSelector(selectors.makeSelectIsLoading());
@@ -79,11 +88,12 @@ const StockCheckListScreen = ({ navigation, route }) => {
     [dispatch, itemId, shopId],
   );
 
-  const isSOS = clType.toUpperCase() === 'SOS';
-  const isOOS = clType.toUpperCase() === 'OOS';
+  const isSOS = clType.toLowerCase() === 'sos';
+  const isOOS = clType.toLowerCase() === 'oos';
   const isRental = clType.toLowerCase() === 'rental';
   const isPromotion = clType.toLowerCase() === 'promotion';
   const isNpd = clType.toLowerCase() === 'npd';
+  const isOsa = clType.toLowerCase() === 'osa weekend';
   return (
     <>
       <Appbar.Header>
@@ -104,6 +114,12 @@ const StockCheckListScreen = ({ navigation, route }) => {
               <View style={[styles.row, styles.textValue]}>
                 <Caption style={styles.caption}>Stock</Caption>
                 <Text>{quantity}</Text>
+              </View>
+            )}
+            {(isOOS || isNpd || isPromotion || isOsa) && (
+              <View style={[styles.row, styles.textValue]}>
+                <Caption style={styles.caption}>Barcode</Caption>
+                <Text>{barcode}</Text>
               </View>
             )}
             {Object.keys(template).map((fieldName) => {
