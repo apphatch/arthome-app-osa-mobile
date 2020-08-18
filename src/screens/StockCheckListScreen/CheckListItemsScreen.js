@@ -54,7 +54,6 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   let flatListRef = React.createRef();
 
   React.useEffect(() => {
-    console.log('index ====>', toIndex);
     if (toIndex > 0) {
       scrollToPosition();
     }
@@ -75,10 +74,10 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   };
 
   const scrollToPosition = React.useCallback(() => {
-    if (toIndex > 0 && flatListRef) {
+    if (toIndex > 0 && toIndex <= stocks.length && flatListRef) {
       flatListRef.scrollToIndex({ animated: true, index: toIndex });
     }
-  }, [flatListRef, toIndex]);
+  }, [flatListRef, toIndex, stocks]);
 
   const renderItem = ({ item, index }) => {
     return (
@@ -93,6 +92,11 @@ const CheckListItemsScreen = ({ navigation, route }) => {
             shopId,
             clType,
             stockName: item.stock_name,
+            mechanic: item.mechanic,
+            barcode: item.barcode,
+            quantity: item.quantity,
+            rental_type: item.rental_type || null,
+            category: item.category || null,
           });
         }}
         right={(props) =>
@@ -229,7 +233,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
                 paddingBottom: safeArea.bottom,
               }}
               initialNumToRender={15}
-              initialScrollIndex={toIndex}
+              initialScrollIndex={toIndex > stocks.length ? 0 : toIndex}
             />
           </View>
           <Portal>

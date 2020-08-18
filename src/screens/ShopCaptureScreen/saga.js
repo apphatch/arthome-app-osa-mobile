@@ -26,24 +26,28 @@ export function* checkOut({ payload }) {
       loginSelectors.makeSelectAuthorization(),
     );
 
+    const newPhotos = [];
     for (let i = 0; i < photos.length; i++) {
       const element = photos[i];
       const photoName = yield UUIDGenerator.getRandomUUID();
-      formData.append('photos[]', {
+      const photo = {
         uri: element.path,
         type: 'image/jpeg',
         name: photoName,
-      });
+      };
+      newPhotos.push(photo);
     }
+    formData.append('photos', JSON.stringify(newPhotos));
     formData.append('note', note);
     formData.append('time', moment().format('DD/MM/YYYY'));
+
     const response = yield call(API.checkOut, {
       formData,
       token,
       authorization,
       shopId,
     });
-    logger('function*login -> error', response);
+    yield put(loginActions.updateAuthorization(response.headers.authorization));
     if (response?.data?.status === 'failed') {
       setError('Gửi không thành công');
       yield put(actions.shopPictureFailed('Gửi không thành công'));
@@ -52,9 +56,6 @@ export function* checkOut({ payload }) {
         actions.onShopPictureResponse({
           data: response.data,
         }),
-      );
-      yield put(
-        loginActions.updateAuthorization(response.headers['authorization']),
       );
       navigation.dispatch(CommonActions.goBack());
     }

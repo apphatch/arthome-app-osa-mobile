@@ -24,6 +24,7 @@ import { useForm } from 'react-hook-form';
 import CustomSwitch from '../../components/Switch';
 import CustomSelect from '../../components/Select';
 import FormTextInput from '../../components/FormTextInput';
+import FormTextArea from '../../components/FormTextArea';
 import NumberInput from '../../components/NumberInput';
 
 import { defaultTheme } from '../../theme';
@@ -43,6 +44,8 @@ const StockCheckListScreen = ({ navigation, route }) => {
       mechanic,
       quantity,
       barcode,
+      category,
+      rental_type,
     },
   } = route;
 
@@ -103,7 +106,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
         <KeyboardAvoidingView style={styles.container} behavior="padding">
           <View style={styles.form}>
             <Title style={styles.caption}>{stockName}</Title>
-            {(isPromotion || isNpd) && (
+            {isPromotion && (
               <View style={[styles.row, styles.textValue]}>
                 <Caption style={styles.caption}>Mechanic</Caption>
                 <Text>{mechanic}</Text>
@@ -121,18 +124,23 @@ const StockCheckListScreen = ({ navigation, route }) => {
                 <Text>{barcode}</Text>
               </View>
             )}
+            {isRental && (
+              <>
+                <View style={[styles.row, styles.textValue]}>
+                  <Caption style={styles.caption}>Category</Caption>
+                  <Text>{category}</Text>
+                </View>
+                <View style={[styles.row, styles.textValue]}>
+                  <Caption style={styles.caption}>Rental type</Caption>
+                  <Text>{rental_type}</Text>
+                </View>
+              </>
+            )}
             {Object.keys(template).map((fieldName) => {
               const type = template[fieldName].type;
-              if (type === 'info') {
-                if (isOOS) {
-                  return (
-                    <View style={[styles.row, styles.textValue]}>
-                      <Caption style={styles.caption}>{fieldName}</Caption>
-                      <Text>djddj</Text>
-                    </View>
-                  );
-                }
-              }
+              const default_value_use =
+                template[fieldName].default_value_use || '';
+
               if (type === 'input') {
                 if (isSOS) {
                   return (
@@ -157,7 +165,11 @@ const StockCheckListScreen = ({ navigation, route }) => {
                       label={fieldName}
                       register={register}
                       setValue={setValue}
-                      value={item.data ? item.data[fieldName] : ''}
+                      value={
+                        item.data
+                          ? item.data[fieldName]
+                          : route.params[default_value_use].toString()
+                      }
                       disabled={isLoading}
                       clearErrors={clearErrors}
                     />
@@ -217,6 +229,20 @@ const StockCheckListScreen = ({ navigation, route }) => {
                     key={fieldName}
                     rules={{ required: true }}
                     error={errors[fieldName]}
+                    value={item.data ? item.data[fieldName] : ''}
+                    disabled={isLoading}
+                    clearErrors={clearErrors}
+                  />
+                );
+              }
+              if (type === 'textarea') {
+                return (
+                  <FormTextArea
+                    key={fieldName}
+                    name={fieldName}
+                    label={fieldName}
+                    register={register}
+                    setValue={setValue}
                     value={item.data ? item.data[fieldName] : ''}
                     disabled={isLoading}
                     clearErrors={clearErrors}

@@ -1,7 +1,7 @@
 import React from 'react';
 import TextInput from '../TextInput';
 
-const FormTextInput = (props) => {
+const FormTextArea = (props) => {
   const {
     name,
     register,
@@ -18,8 +18,6 @@ const FormTextInput = (props) => {
     setValue(name, localValue);
   }, [name, register, localValue, setValue]);
 
-  console.log(value);
-
   return (
     <TextInput
       label={label}
@@ -31,8 +29,10 @@ const FormTextInput = (props) => {
       }}
       value={localValue}
       disabled={disabled}
+      multiline={true}
+      numberOfLines={4}
     />
   );
 };
 
-export default React.memo(FormTextInput);
+export default React.memo(FormTextArea);
