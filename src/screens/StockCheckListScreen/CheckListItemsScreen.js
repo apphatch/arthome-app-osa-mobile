@@ -17,6 +17,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { isEmpty, zipObjectDeep } from 'lodash';
 
 import { LoadingIndicator } from '../../components/LoadingIndicator';
+import { PenNote } from '../../assets/icons';
 
 import { defaultTheme } from '../../theme';
 import * as selectors from './selectors';
@@ -103,7 +104,10 @@ const CheckListItemsScreen = ({ navigation, route }) => {
           !isEmpty(item.data) ? (
             <List.Icon {...props} icon="check-circle" color="green" />
           ) : (
-            <List.Icon {...props} icon="square-edit-outline" />
+            <List.Icon
+              {...props}
+              icon={() => <PenNote width="100%" fill="black" />}
+            />
           )
         }
       />

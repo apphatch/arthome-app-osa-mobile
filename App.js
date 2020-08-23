@@ -6,18 +6,18 @@
  * @flow
  */
 import React from 'react';
-import {YellowBox, ActivityIndicator} from 'react-native';
-import {enableScreens} from 'react-native-screens';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {AppearanceProvider} from 'react-native-appearance';
-import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/integration/react';
+import { YellowBox, ActivityIndicator } from 'react-native';
+import { enableScreens } from 'react-native-screens';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { AppearanceProvider } from 'react-native-appearance';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 // ###
-import {setupInterceptors} from './src/utils/httpClient';
+import { setupInterceptors } from './src/utils/httpClient';
 import configureStore from './src/store/configureStore';
-import {Main} from './src/main';
-const {store, persistor} = configureStore();
+import { Main } from './src/main';
+const { store, persistor } = configureStore();
 
 YellowBox.ignoreWarnings(['Require cycle:']);
 enableScreens();

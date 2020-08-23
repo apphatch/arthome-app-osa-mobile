@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
+  ScrollView,
 } from 'react-native';
 import ImagePicker from '../..//components/ImagePicker';
 import CustomToggleButton from '../../components/ToggleButton';
@@ -103,46 +104,45 @@ const StockCheckListScreen = ({ navigation, route }) => {
         <Appbar.Content title={'Kiểm tra lỗi'} subtitle="" />
       </Appbar.Header>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
-          <View style={styles.form}>
-            <Title style={styles.caption}>{stockName}</Title>
-            {isPromotion && (
-              <View style={[styles.row, styles.textValue]}>
-                <Caption style={styles.caption}>Mechanic</Caption>
-                <Text>{mechanic}</Text>
-              </View>
-            )}
-            {isOOS && (
-              <View style={[styles.row, styles.textValue]}>
-                <Caption style={styles.caption}>Stock</Caption>
-                <Text>{quantity}</Text>
-              </View>
-            )}
-            {(isOOS || isNpd || isPromotion || isOsa) && (
-              <View style={[styles.row, styles.textValue]}>
-                <Caption style={styles.caption}>Barcode</Caption>
-                <Text>{barcode}</Text>
-              </View>
-            )}
-            {isRental && (
-              <>
+        <ScrollView style={styles.container}>
+          <KeyboardAvoidingView style={styles.container} behavior="padding">
+            <View style={styles.form}>
+              <Title style={styles.caption}>{stockName}</Title>
+              {isPromotion && (
                 <View style={[styles.row, styles.textValue]}>
-                  <Caption style={styles.caption}>Category</Caption>
-                  <Text>{category}</Text>
+                  <Caption style={styles.caption}>Mechanic</Caption>
+                  <Text>{mechanic}</Text>
                 </View>
+              )}
+              {isOOS && (
                 <View style={[styles.row, styles.textValue]}>
-                  <Caption style={styles.caption}>Rental type</Caption>
-                  <Text>{rental_type}</Text>
+                  <Caption style={styles.caption}>Stock</Caption>
+                  <Text>{quantity}</Text>
                 </View>
-              </>
-            )}
-            {Object.keys(template).map((fieldName) => {
-              const type = template[fieldName].type;
-              const default_value_use =
-                template[fieldName].default_value_use || '';
-
-              if (type === 'input') {
-                if (isSOS) {
+              )}
+              {(isOOS || isNpd || isPromotion || isOsa) && (
+                <View style={[styles.row, styles.textValue]}>
+                  <Caption style={styles.caption}>Barcode</Caption>
+                  <Text>{barcode}</Text>
+                </View>
+              )}
+              {isRental && (
+                <>
+                  <View style={[styles.row, styles.textValue]}>
+                    <Caption style={styles.caption}>Category</Caption>
+                    <Text>{category}</Text>
+                  </View>
+                  <View style={[styles.row, styles.textValue]}>
+                    <Caption style={styles.caption}>Rental type</Caption>
+                    <Text>{rental_type}</Text>
+                  </View>
+                </>
+              )}
+              {Object.keys(template).map((fieldName) => {
+                const type = template[fieldName].type;
+                const default_value_use =
+                  template[fieldName].default_value_use || '';
+                if (type === 'number') {
                   return (
                     <NumberInput
                       key={fieldName}
@@ -150,14 +150,21 @@ const StockCheckListScreen = ({ navigation, route }) => {
                       label={fieldName}
                       register={register}
                       setValue={setValue}
-                      value={item.data ? item.data[fieldName] : ''}
+                      value={
+                        item.data
+                          ? item.data[fieldName]
+                          : route.params[default_value_use]
+                          ? route.params[default_value_use].toString()
+                          : ''
+                      }
                       disabled={isLoading}
                       rules={{ required: true }}
                       error={errors[fieldName]}
                       clearErrors={clearErrors}
                     />
                   );
-                } else {
+                }
+                if (type === 'input') {
                   return (
                     <FormTextInput
                       key={fieldName}
@@ -168,110 +175,109 @@ const StockCheckListScreen = ({ navigation, route }) => {
                       value={
                         item.data
                           ? item.data[fieldName]
-                          : route.params[default_value_use].toString()
+                          : route.params[default_value_use]
+                          ? route.params[default_value_use].toString()
+                          : ''
                       }
                       disabled={isLoading}
                       clearErrors={clearErrors}
                     />
                   );
                 }
-              }
-              if (type === 'checkbox') {
-                return (
-                  <CustomSwitch
-                    register={register}
-                    setValue={setValue}
-                    name={fieldName}
-                    label={fieldName}
-                    key={fieldName}
-                    rules={{ required: true }}
-                    error={errors[fieldName]}
-                    value={item.data ? item.data[fieldName] : false}
-                    disabled={isLoading}
-                    clearErrors={clearErrors}
-                  />
-                );
-              }
-              if (type === 'select') {
-                return (
-                  <CustomSelect
-                    key={fieldName}
-                    options={template[fieldName].values.map((val) => {
-                      return {
-                        value: val,
-                        label: val,
-                        color:
-                          item.data != null && item.data[fieldName] === val
-                            ? 'purple'
-                            : 'black',
-                      };
-                    })}
-                    register={register}
-                    setValue={setValue}
-                    name={fieldName}
-                    label={fieldName}
-                    rules={{ required: true }}
-                    error={errors[fieldName]}
-                    value={item.data ? item.data[fieldName] : null}
-                    disabled={isLoading}
-                    clearErrors={clearErrors}
-                  />
-                );
-              }
-              if (type === 'radio') {
-                return (
-                  <CustomToggleButton
-                    options={template[fieldName].values}
-                    register={register}
-                    setValue={setValue}
-                    name={fieldName}
-                    label={fieldName}
-                    key={fieldName}
-                    rules={{ required: true }}
-                    error={errors[fieldName]}
-                    value={item.data ? item.data[fieldName] : ''}
-                    disabled={isLoading}
-                    clearErrors={clearErrors}
-                  />
-                );
-              }
-              if (type === 'textarea') {
-                return (
-                  <FormTextArea
-                    key={fieldName}
-                    name={fieldName}
-                    label={fieldName}
-                    register={register}
-                    setValue={setValue}
-                    value={item.data ? item.data[fieldName] : ''}
-                    disabled={isLoading}
-                    clearErrors={clearErrors}
-                  />
-                );
-              }
-            })}
+                if (type === 'checkbox') {
+                  return (
+                    <CustomSwitch
+                      register={register}
+                      setValue={setValue}
+                      name={fieldName}
+                      label={fieldName}
+                      key={fieldName}
+                      rules={{ required: true }}
+                      error={errors[fieldName]}
+                      value={item.data ? item.data[fieldName] : false}
+                      disabled={isLoading}
+                      clearErrors={clearErrors}
+                    />
+                  );
+                }
+                if (type === 'select') {
+                  return (
+                    <CustomSelect
+                      key={fieldName}
+                      options={template[fieldName].values.map((val) => {
+                        return {
+                          value: val,
+                          label: val,
+                          color:
+                            item.data != null && item.data[fieldName] === val
+                              ? 'purple'
+                              : 'black',
+                        };
+                      })}
+                      register={register}
+                      setValue={setValue}
+                      name={fieldName}
+                      label={fieldName}
+                      rules={{ required: true }}
+                      error={errors[fieldName]}
+                      value={item.data ? item.data[fieldName] : null}
+                      disabled={isLoading}
+                      clearErrors={clearErrors}
+                    />
+                  );
+                }
+                if (type === 'radio') {
+                  return (
+                    <CustomToggleButton
+                      options={template[fieldName].values}
+                      register={register}
+                      setValue={setValue}
+                      name={fieldName}
+                      label={fieldName}
+                      key={fieldName}
+                      rules={{ required: true }}
+                      error={errors[fieldName]}
+                      value={item.data ? item.data[fieldName] : ''}
+                      disabled={isLoading}
+                      clearErrors={clearErrors}
+                    />
+                  );
+                }
+                if (type === 'textarea') {
+                  return (
+                    <FormTextArea
+                      key={fieldName}
+                      name={fieldName}
+                      label={fieldName}
+                      register={register}
+                      setValue={setValue}
+                      value={item.data ? item.data[fieldName] : ''}
+                      disabled={isLoading}
+                      clearErrors={clearErrors}
+                    />
+                  );
+                }
+              })}
 
-            {isRental && (
-              <ImagePicker
-                setValue={setValue}
-                isSubmitting={isLoading}
-                register={register}
-                triggerValidation={trigger}
-              />
-            )}
-          </View>
-          {
-            <FAB
-              visible={true}
-              style={[styles.fab]}
-              icon="check-all"
-              label="Gửi"
-              onPress={handleSubmit(onSubmitCheckList)}
-            />
-          }
-        </KeyboardAvoidingView>
+              {isRental && (
+                <ImagePicker
+                  setValue={setValue}
+                  isSubmitting={isLoading}
+                  register={register}
+                  triggerValidation={trigger}
+                />
+              )}
+            </View>
+          </KeyboardAvoidingView>
+        </ScrollView>
       </TouchableWithoutFeedback>
-
+      <FAB
+        visible={true}
+        style={[styles.fab]}
+        icon="check-all"
+        label="Gửi"
+        onPress={handleSubmit(onSubmitCheckList)}
+      />
       <Snackbar
         visible={showSnack}
         onDismiss={() => setShowSnack(false)}
