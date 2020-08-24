@@ -48,7 +48,9 @@ const CheckOutScreen = ({ navigation, route }) => {
 
   const onSubmitCheckList = React.useCallback(
     (values) => {
-      dispatch(actions.requestCheckOut({ ...values, shopId }));
+      dispatch(
+        actions.requestCheckOut({ ...values, shopId, incomplete: false }),
+      );
     },
     [dispatch, shopId],
   );

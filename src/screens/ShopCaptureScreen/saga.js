@@ -37,7 +37,7 @@ export function* checkOut({ payload }) {
       };
       newPhotos.push(photo);
     }
-    formData.append('photos', JSON.stringify(newPhotos));
+    formData.append('photos', newPhotos);
     formData.append('note', note);
     formData.append('time', moment().format('DD/MM/YYYY'));
 

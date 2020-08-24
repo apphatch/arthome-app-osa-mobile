@@ -19,7 +19,7 @@ export function* submitCheckList({ payload }) {
   const { itemId, data } = payload;
   try {
     const formData = new FormData();
-    formData.append('data', JSON.stringify(data));
+    formData.append('data', data);
     const token = yield select(loginSelectors.makeSelectToken());
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
@@ -101,7 +101,7 @@ export function* markDoneAllCheckListItems({ payload: { clId, clType } }) {
       });
     }
     logger('function*markDoneAllCheckListItems -> data', data);
-    formData.append('checklist_items', JSON.stringify(data));
+    formData.append('checklist_items', data);
     const res = yield call(API.markDoneAll, {
       data: formData,
       token,

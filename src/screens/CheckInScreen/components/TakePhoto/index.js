@@ -71,7 +71,7 @@ const TakePhoto = (props) => {
                 const source = {
                   uri: Platform.OS === 'android' ? 'file://' + path : path,
                 };
-                logger('source', source);
+                console.log('source', source);
                 setIsLoading(false);
                 setPhoto(source);
                 setValue('photo', source.uri);

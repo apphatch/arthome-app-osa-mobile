@@ -55,7 +55,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
   const [FABItems, setFABItems] = React.useState([]);
 
   React.useEffect(() => {
-    if (checkList && checkList.length > 0) {
+    if (checkList && checkList.length <= 0) {
       setFABItems([
         {
           icon: 'camera',

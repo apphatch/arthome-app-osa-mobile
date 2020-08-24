@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { Appbar, Caption } from 'react-native-paper';
-import { StyleSheet, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
@@ -39,7 +39,7 @@ const CheckInScreen = ({ navigation, route }) => {
     mode: 'onChange',
   });
 
-  const [error, setError] = React.useState('');
+  const [err, setErr] = React.useState('');
 
   React.useEffect(() => {
     if (isCheckIn) {
@@ -52,9 +52,24 @@ const CheckInScreen = ({ navigation, route }) => {
 
   const onSubmitCheckList = React.useCallback(
     (values) => {
-      dispatch(actions.requestCheckIn({ ...values, shopId, setError }));
+      dispatch(actions.requestCheckIn({ ...values, shopId }));
     },
     [dispatch, shopId],
+  );
+
+  const report = React.useCallback(
+    (values) => {
+      if (!values.note) {
+        setErr('Cần nhập ghi chú');
+      } else {
+        setErr('');
+        dispatch(
+          actions.requestCheckOut({ ...values, shopId, incomplete: true }),
+        );
+        navigation.goBack();
+      }
+    },
+    [dispatch, shopId, navigation],
   );
 
   return (
@@ -62,16 +77,31 @@ const CheckInScreen = ({ navigation, route }) => {
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title={shopName} subtitle="" />
+        <Appbar.Action
+          size={50}
+          icon={() => (
+            <Text
+              style={{ color: 'white', lineHeight: 50, textAlign: 'center' }}>
+              Report
+            </Text>
+          )}
+          onPress={handleSubmit(report)}
+          style={{
+            height: '100%',
+          }}
+          disabled={isLoading || !formState.isValid}
+        />
       </Appbar.Header>
 
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Caption style={styles.caption}>Thông tin</Caption>
-        {/*<TextInput
+        <TextInput
           label="Ghi chú"
           ref={register({ name: 'note' })}
-          onChangeText={text => setValue('note', text, true)}
+          onChangeText={(text) => setValue('note', text, true)}
           disabled={isLoading}
-        />*/}
+          errorText={err}
+        />
 
         <TakePhoto
           setValue={setValue}
