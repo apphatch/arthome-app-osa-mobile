@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { TextInput as Input } from 'react-native-paper';
+import { TextInput as Input, HelperText } from 'react-native-paper';
 import { defaultTheme } from '../../theme';
 
 const TextInput = ({ errorText, ...props }) => (
@@ -12,7 +12,9 @@ const TextInput = ({ errorText, ...props }) => (
       mode="outlined"
       {...props}
     />
-    {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
+    <HelperText type="error" visible={errorText ? true : false}>
+      {errorText}
+    </HelperText>
   </View>
 );
 

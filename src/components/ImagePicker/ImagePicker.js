@@ -75,7 +75,6 @@ const CustomImagePicker = ({
         if (photos.length <= 10) {
           setPhotos(photos);
           setIsLoading(false);
-          setPhotos(photos);
           setValue('photos', photos);
           triggerValidation('photos');
         } else {

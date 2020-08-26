@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToggleButton, Text, Caption } from 'react-native-paper';
+import { ToggleButton, Text, Caption, HelperText } from 'react-native-paper';
 import { StyleSheet, View } from 'react-native';
 
 const CustomToggleButton = (props) => {
@@ -40,11 +40,9 @@ const CustomToggleButton = (props) => {
           ))}
         </ToggleButton.Row>
       </View>
-      {error ? (
-        <Text accessibilityRole="text" style={styles.textRed}>
-          Required
-        </Text>
-      ) : null}
+      <HelperText type="error" visible={error ? true : false}>
+        Required
+      </HelperText>
     </View>
   );
 };

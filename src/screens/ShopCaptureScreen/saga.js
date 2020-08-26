@@ -17,7 +17,7 @@ import {
 import { logger } from '../../utils';
 
 export function* checkOut({ payload }) {
-  const { note, photos, shopId, setError, navigation } = payload;
+  const { note, photos, shopId, navigation } = payload;
   try {
     const formData = new FormData();
 
@@ -26,7 +26,6 @@ export function* checkOut({ payload }) {
       loginSelectors.makeSelectAuthorization(),
     );
 
-    const newPhotos = [];
     for (let i = 0; i < photos.length; i++) {
       const element = photos[i];
       const photoName = yield UUIDGenerator.getRandomUUID();
@@ -35,9 +34,8 @@ export function* checkOut({ payload }) {
         type: 'image/jpeg',
         name: photoName,
       };
-      newPhotos.push(photo);
+      formData.append('photos[]', photo);
     }
-    formData.append('photos', newPhotos);
     formData.append('note', note);
     formData.append('time', moment().format('DD/MM/YYYY'));
 
@@ -49,7 +47,6 @@ export function* checkOut({ payload }) {
     });
     yield put(loginActions.updateAuthorization(response.headers.authorization));
     if (response?.data?.status === 'failed') {
-      setError('Gửi không thành công');
       yield put(actions.shopPictureFailed('Gửi không thành công'));
     } else {
       yield put(

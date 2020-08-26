@@ -15,6 +15,9 @@ const handlers = {
   [actionTypes.CHECK_OUT_REQUEST]: checkOutRequest,
   [actionTypes.CHECK_OUT_RESPONSE]: checkOutResponse,
   [actionTypes.CHECK_OUT_FAILED]: checkOutFailed,
+
+  [actionTypes.REPORT_RESPONSE]: reportResponse,
+  [actionTypes.RESET_REPORT]: resetReport,
 };
 
 export default createReducer(initialState, handlers);
@@ -22,17 +25,20 @@ export default createReducer(initialState, handlers);
 function checkInRequest(state, action) {
   state.isLoading = true;
   state.isCheckIn = false;
+  state.isReport = false;
 }
 
 function checkInResponse(state, action) {
   state.isLoading = false;
   state.isCheckIn = action.payload.isCheckIn;
   state.checkInData = action.payload.checkInData;
+  state.isReport = false;
 }
 
 function checkInFailed(state, action) {
   state.isLoading = false;
   state.isCheckIn = false;
+  state.isReport = false;
 }
 
 function checkOutRequest(state, action) {
@@ -47,4 +53,14 @@ function checkOutResponse(state, action) {
 
 function checkOutFailed(state, action) {
   state.isLoading = false;
+}
+
+function reportResponse(state) {
+  state.isLoading = false;
+  state.isReport = true;
+  state.checkInData = {};
+}
+
+function resetReport(state) {
+  state.isReport = false;
 }

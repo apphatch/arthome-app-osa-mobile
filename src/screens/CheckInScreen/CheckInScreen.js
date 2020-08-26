@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import Paragraph from '../../components/Paragraph';
+import FormTextInput from '../../components/FormTextInput';
 
 import TakePhoto from './components/TakePhoto';
 
@@ -24,6 +25,7 @@ const CheckInScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectors.makeSelectIsLoading());
   const isCheckIn = useSelector(selectors.makeSelectIsCheckIn());
+  const isReport = useSelector(selectors.makeSelectIsReport());
   const currentShopChecked = useSelector(
     shopSelectors.makeSelectShopById(shopId),
   );
@@ -35,11 +37,12 @@ const CheckInScreen = ({ navigation, route }) => {
     errors,
     formState,
     trigger,
+    clearErrors,
   } = useForm({
     mode: 'onChange',
   });
 
-  const [err, setErr] = React.useState('');
+  const [err, setErr] = React.useState(false);
 
   React.useEffect(() => {
     if (isCheckIn) {
@@ -48,7 +51,11 @@ const CheckInScreen = ({ navigation, route }) => {
         params: { shopId, shopName },
       });
     }
-  }, [isCheckIn, navigation, shopId, shopName]);
+    if (isReport) {
+      navigation.goBack();
+      dispatch(actions.resetReport());
+    }
+  }, [isCheckIn, navigation, shopId, shopName, isReport, dispatch]);
 
   const onSubmitCheckList = React.useCallback(
     (values) => {
@@ -59,17 +66,17 @@ const CheckInScreen = ({ navigation, route }) => {
 
   const report = React.useCallback(
     (values) => {
+      console.log(values);
       if (!values.note) {
-        setErr('Cần nhập ghi chú');
+        setErr(true);
       } else {
-        setErr('');
+        setErr(false);
         dispatch(
           actions.requestCheckOut({ ...values, shopId, incomplete: true }),
         );
-        navigation.goBack();
       }
     },
-    [dispatch, shopId, navigation],
+    [dispatch, shopId],
   );
 
   return (
@@ -95,12 +102,15 @@ const CheckInScreen = ({ navigation, route }) => {
 
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <Caption style={styles.caption}>Thông tin</Caption>
-        <TextInput
+        <FormTextInput
+          name="note"
           label="Ghi chú"
-          ref={register({ name: 'note' })}
-          onChangeText={(text) => setValue('note', text, true)}
+          register={register}
+          setValue={setValue}
           disabled={isLoading}
-          errorText={err}
+          clearErrors={clearErrors}
+          error={err}
+          errorText="Cần nhập ghi chú"
         />
 
         <TakePhoto

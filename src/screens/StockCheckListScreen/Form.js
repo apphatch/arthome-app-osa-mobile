@@ -151,10 +151,10 @@ const StockCheckListScreen = ({ navigation, route }) => {
                       register={register}
                       setValue={setValue}
                       value={
-                        item.data
+                        item.data && item.data[fieldName]
                           ? item.data[fieldName]
-                          : route.params[default_value_use]
-                          ? route.params[default_value_use].toString()
+                          : item[default_value_use]
+                          ? item[default_value_use].toString()
                           : ''
                       }
                       disabled={isLoading}
@@ -173,10 +173,10 @@ const StockCheckListScreen = ({ navigation, route }) => {
                       register={register}
                       setValue={setValue}
                       value={
-                        item.data
+                        item.data && item.data[fieldName]
                           ? item.data[fieldName]
-                          : route.params[default_value_use]
-                          ? route.params[default_value_use].toString()
+                          : item[default_value_use]
+                          ? item[default_value_use].toString()
                           : ''
                       }
                       disabled={isLoading}

@@ -29,6 +29,7 @@ export function* login({ payload }) {
         isCheckIn: _.isEmpty(last_checkin_checkout)
           ? false
           : last_checkin_checkout.is_checkin,
+        isReport: false,
       }),
     );
     yield put(actions.updateAuthorization(response.headers.authorization));

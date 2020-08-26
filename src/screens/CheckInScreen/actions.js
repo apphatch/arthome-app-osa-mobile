@@ -16,3 +16,8 @@ export const onCheckOutResponse = (response) =>
 
 export const checkOutFailed = () =>
   createAction(actionTypes.CHECK_OUT_FAILED, {});
+
+export const reportResponse = (response) =>
+  createAction(actionTypes.REPORT_RESPONSE, { ...response });
+
+export const resetReport = () => createAction(actionTypes.RESET_REPORT, {});

@@ -1,6 +1,4 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { Text } from 'react-native-paper';
 import TextInput from '../TextInput';
 
 const NumberInput = (props) => {
@@ -34,33 +32,16 @@ const NumberInput = (props) => {
   );
 
   return (
-    <>
-      <TextInput
-        label={label}
-        ref={register({ name }, rules)}
-        keyboardType="numeric"
-        onChangeText={handleInputChange}
-        value={localValue}
-        disabled={disabled}
-      />
-      {error ? (
-        <Text accessibilityRole="text" style={styles.textRed}>
-          Required
-        </Text>
-      ) : null}
-    </>
+    <TextInput
+      label={label}
+      ref={register({ name }, rules)}
+      keyboardType="numeric"
+      onChangeText={handleInputChange}
+      value={localValue}
+      disabled={disabled}
+      errorText={error ? 'Require' : null}
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  textRed: {
-    color: 'red',
-  },
-});
 
 export default React.memo(NumberInput);

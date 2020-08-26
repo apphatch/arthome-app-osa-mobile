@@ -28,7 +28,6 @@ internals.get = (url, params, options) => {
 };
 
 internals.post = (url, payload, options) => {
-  console.log(payload);
   let config = {
     method: 'POST',
     url: url,

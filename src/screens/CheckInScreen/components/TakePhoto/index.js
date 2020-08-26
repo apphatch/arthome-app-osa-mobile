@@ -23,7 +23,7 @@ const options = {
 };
 
 const TakePhoto = (props) => {
-  const { setValue, isSubmitting, register, triggerValidation, shop } = props;
+  const { setValue, isSubmitting, register, triggerValidation } = props;
 
   const [photo, setPhoto] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);

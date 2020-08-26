@@ -8,7 +8,15 @@ const makeSelectIsLoading = () =>
 const makeSelectIsCheckIn = () =>
   createSelector(selectCheckInDomain(), (state) => state.isCheckIn);
 
+const makeSelectIsReport = () =>
+  createSelector(selectCheckInDomain(), (state) => state.isReport);
+
 const makeSelectCheckInData = () =>
   createSelector(selectCheckInDomain(), (state) => state.checkInData);
 
-export { makeSelectIsLoading, makeSelectIsCheckIn, makeSelectCheckInData };
+export {
+  makeSelectIsLoading,
+  makeSelectIsCheckIn,
+  makeSelectIsReport,
+  makeSelectCheckInData,
+};

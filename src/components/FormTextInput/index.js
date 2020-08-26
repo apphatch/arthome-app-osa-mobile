@@ -10,20 +10,21 @@ const FormTextInput = (props) => {
     disabled,
     label,
     clearErrors,
+    error,
+    errorText,
+    rules,
   } = props;
 
   const [localValue, setLocalValue] = React.useState(value);
 
   React.useEffect(() => {
     setValue(name, localValue);
-  }, [name, register, localValue, setValue]);
-
-  console.log(value);
+  }, [name, localValue, setValue]);
 
   return (
     <TextInput
       label={label}
-      ref={register({ name: name })}
+      ref={register({ name: name }, rules)}
       onChangeText={(text) => {
         setValue(name, text, true);
         setLocalValue(text);
@@ -31,6 +32,7 @@ const FormTextInput = (props) => {
       }}
       value={localValue}
       disabled={disabled}
+      errorText={error ? errorText : null}
     />
   );
 };
