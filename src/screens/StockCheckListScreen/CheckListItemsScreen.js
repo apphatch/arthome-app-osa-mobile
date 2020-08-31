@@ -236,7 +236,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
                 backgroundColor: colors.background,
                 paddingBottom: safeArea.bottom,
               }}
-              initialNumToRender={15}
+              initialNumToRender={toIndex || 15}
               initialScrollIndex={toIndex > stocks.length ? 0 : toIndex}
             />
           </View>

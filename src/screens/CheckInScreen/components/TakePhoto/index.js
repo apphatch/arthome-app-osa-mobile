@@ -69,7 +69,10 @@ const TakePhoto = (props) => {
             })
               .then((path) => {
                 const source = {
-                  uri: Platform.OS === 'android' ? 'file://' + path : path,
+                  uri:
+                    Platform.OS === 'android'
+                      ? 'file://' + path
+                      : 'file:///' + path,
                 };
                 console.log('source', source);
                 setIsLoading(false);

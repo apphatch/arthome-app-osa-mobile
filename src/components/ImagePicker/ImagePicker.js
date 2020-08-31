@@ -16,7 +16,7 @@ import {
   Dialog,
   Portal,
 } from 'react-native-paper';
-import ActionSheet from 'react-native-actionsheet';
+// import ActionSheet from 'react-native-actionsheet';
 
 import { objectId } from '../../utils/uniqId';
 
@@ -28,7 +28,7 @@ const CustomImagePicker = ({
   register,
   triggerValidation,
 }) => {
-  let actionSheet = React.useRef({});
+  // let actionSheet = React.useRef({});
   let [photos, setPhotos] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
@@ -44,46 +44,50 @@ const CustomImagePicker = ({
       cropping: false,
       includeExif: true,
       mediaType: 'photo',
-    }).then((image) => {
-      if (image) {
-        photos = [...photos, { ...image, localIdentifier: objectId() }];
-        if (photos.length <= 10) {
-          onTakePhoto();
-          setIsLoading(false);
-          setPhotos(photos);
-          setValue('photos', photos);
-          triggerValidation('photos');
-        } else {
-          setVisible(true);
-          setIsLoading(false);
+    })
+      .then((image) => {
+        if (image) {
+          photos = [...photos, { ...image, localIdentifier: objectId() }];
+          if (photos.length <= 10) {
+            onTakePhoto();
+            setIsLoading(false);
+            setPhotos(photos);
+            setValue('photos', photos);
+            triggerValidation('photos');
+          } else {
+            setVisible(true);
+            setIsLoading(false);
+          }
         }
-      }
-    });
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
 
-  const onChooseAlbum = () => {
-    setIsLoading(true);
-    ImagePicker.openPicker({
-      cropping: false,
-      includeExif: true,
-      mediaType: 'photo',
-      multiple: true,
-      maxFiles: 10,
-    }).then((image) => {
-      if (image) {
-        photos = [...photos, { ...image, localIdentifier: objectId() }];
-        if (photos.length <= 10) {
-          setPhotos(photos);
-          setIsLoading(false);
-          setValue('photos', photos);
-          triggerValidation('photos');
-        } else {
-          setVisible(true);
-          setIsLoading(false);
-        }
-      }
-    });
-  };
+  // const onChooseAlbum = () => {
+  //   setIsLoading(true);
+  //   ImagePicker.openPicker({
+  //     cropping: false,
+  //     includeExif: true,
+  //     mediaType: 'photo',
+  //     multiple: true,
+  //     maxFiles: 10,
+  //   }).then((image) => {
+  //     if (image) {
+  //       photos = [...photos, { ...image, localIdentifier: objectId() }];
+  //       if (photos.length <= 10) {
+  //         setPhotos(photos);
+  //         setIsLoading(false);
+  //         setValue('photos', photos);
+  //         triggerValidation('photos');
+  //       } else {
+  //         setVisible(true);
+  //         setIsLoading(false);
+  //       }
+  //     }
+  //   });
+  // };
 
   const onRemovePhoto = React.useCallback(
     (photo) => {
@@ -110,26 +114,26 @@ const CustomImagePicker = ({
     setVisible(false);
   };
 
-  const showActionSheet = () => {
-    actionSheet.show();
-  };
+  // const showActionSheet = () => {
+  //   actionSheet.show();
+  // };
 
-  const onChoose = (i) => {
-    if (i === 0) {
-      onTakePhoto();
-    }
+  // const onChoose = (i) => {
+  //   if (i === 0) {
+  //     onTakePhoto();
+  //   }
 
-    if (i === 1) {
-      onChooseAlbum();
-    }
-  };
+  //   if (i === 1) {
+  //     onChooseAlbum();
+  //   }
+  // };
   return (
     <View style={styles.root}>
       <View style={styles.itemBox}>
         <IconButton
           icon="camera"
           size={30}
-          onPress={showActionSheet}
+          onPress={onTakePhoto}
           disabled={isLoading || isDeleting}
         />
         {!photos.length ? (
@@ -167,13 +171,13 @@ const CustomImagePicker = ({
           </Dialog.Actions>
         </Dialog>
       </Portal>
-      <ActionSheet
+      {/* <ActionSheet
         ref={(o) => (actionSheet = o)}
         options={['Camera', 'Choose from Album', 'Cancel']}
         cancelButtonIndex={2}
         onPress={(index) => onChoose(index)}
         styles={{ messageBox: { height: 60 } }}
-      />
+      /> */}
     </View>
   );
 };

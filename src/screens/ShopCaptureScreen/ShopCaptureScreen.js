@@ -22,7 +22,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
   const isLoading = useSelector(selectors.makeSelectIsLoading());
   const errorMessage = useSelector(selectors.makeSelectErrorMessage());
 
-  const { register, setValue, handleSubmit, triggerValidation } = useForm({
+  const { register, setValue, handleSubmit, trigger } = useForm({
     mode: 'onChange',
   });
 
@@ -59,7 +59,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
             setValue={setValue}
             isSubmitting={isLoading}
             register={register}
-            triggerValidation={triggerValidation}
+            triggerValidation={trigger}
           />
 
           <Button
