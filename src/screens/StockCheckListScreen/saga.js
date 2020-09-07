@@ -16,14 +16,31 @@ import {
 } from '../LoginScreen';
 
 export function* submitCheckList({ payload }) {
-  const { itemId, data } = payload;
+  const { clId, itemId, data } = payload;
   try {
     const formData = new FormData();
-    formData.append('data', JSON.stringify(data));
+
     const token = yield select(loginSelectors.makeSelectToken());
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
+
+    if (!clId) {
+      formData.append('data', JSON.stringify(data));
+    } else {
+      const currentCl = yield select(selectors.makeSelectCheckListById(clId));
+      const { template } = currentCl;
+      const newData = mapValues(template, (o) => {
+        if (o.default_value_use && data[o.default_value_use]) {
+          return data[o.default_value_use].toString();
+        }
+        if (o.type === 'radio') {
+          return 'N';
+        }
+        return '';
+      });
+      formData.append('data', JSON.stringify(newData));
+    }
 
     const res = yield call(API.submitCheckListItemData, {
       itemId,

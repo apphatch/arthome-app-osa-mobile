@@ -39,7 +39,6 @@ const StockCheckListScreen = ({ navigation, route }) => {
     params: {
       clId,
       itemId,
-      shopId,
       clType,
       stockName,
       mechanic,
@@ -86,12 +85,11 @@ const StockCheckListScreen = ({ navigation, route }) => {
 
   const onSubmitCheckList = React.useCallback(
     (values) => {
-      dispatch(actions.submit({ itemId, data: values, shopId }));
+      dispatch(actions.submit({ clId: null, itemId, data: values }));
     },
-    [dispatch, itemId, shopId],
+    [dispatch, itemId],
   );
 
-  const isSOS = clType.toLowerCase() === 'sos';
   const isOOS = clType.toLowerCase() === 'oos';
   const isRental = clType.toLowerCase() === 'rental';
   const isPromotion = clType.toLowerCase() === 'promotion';
@@ -151,8 +149,8 @@ const StockCheckListScreen = ({ navigation, route }) => {
                       register={register}
                       setValue={setValue}
                       value={
-                        item.data && item.data[fieldName]
-                          ? item.data[fieldName]
+                        item && item.data && item.data[fieldName]
+                          ? item.data[fieldName].toString()
                           : item[default_value_use]
                           ? item[default_value_use].toString()
                           : ''

@@ -41,6 +41,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   const stocksHasDataNull = useSelector(
     selectors.makeSelectStocksHasDataNull(),
   );
+  const isSubmitted = useSelector(selectors.makeSelectIsSubmitted());
 
   const [visibleFilter, setVisibleFilter] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState('');
@@ -80,10 +81,33 @@ const CheckListItemsScreen = ({ navigation, route }) => {
     }
   }, [flatListRef, toIndex, stocks]);
 
+  React.useEffect(() => {
+    if (!isLoading) {
+      if (isSubmitted) {
+        dispatch(actions.resetProps());
+        dispatch(
+          actions.fetchStocks({
+            search: debounceSearchTerm,
+            checkListId: clId,
+            filter: filterValue,
+          }),
+        );
+      }
+    }
+  }, [isLoading, isSubmitted, dispatch, debounceSearchTerm, clId, filterValue]);
+
+  const onSubmitCheckList = React.useCallback(
+    (item) => {
+      dispatch(actions.submit({ clId, itemId: item.id, data: item }));
+    },
+    [dispatch, clId],
+  );
+
   const renderItem = ({ item, index }) => {
     return (
       <List.Item
         title={item.stock_name}
+        description={clType === 'oos' && `Stock: ${item.quantity}`}
         titleNumberOfLines={3}
         onPress={() => {
           setToIndex(index);
@@ -103,6 +127,12 @@ const CheckListItemsScreen = ({ navigation, route }) => {
         right={(props) =>
           !isEmpty(item.data) ? (
             <List.Icon {...props} icon="check-circle" color="green" />
+          ) : clType === 'oos' ? (
+            <IconButton
+              icon="upload"
+              size={20}
+              onPress={() => onSubmitCheckList(item)}
+            />
           ) : (
             <List.Icon
               {...props}

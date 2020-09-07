@@ -8,8 +8,8 @@ export const markDoneAllSuccess = (response) =>
 export const markDoneAllFailed = (errorMessage) =>
   createAction(actionTypes.MARK_DONE_ALL_FAILED, { errorMessage });
 
-export const submit = ({ itemId, data, shopId }) =>
-  createAction(actionTypes.SUBMIT, { itemId, data, shopId });
+export const submit = ({ clId, itemId, data }) =>
+  createAction(actionTypes.SUBMIT, { clId, itemId, data });
 export const submitSuccess = (response) =>
   createAction(actionTypes.SUBMIT_SUCCESS, { ...response });
 export const submitFailed = (errorMessage) =>
