@@ -11,7 +11,14 @@ import {
   RadioButton,
   Button,
 } from 'react-native-paper';
-import { StyleSheet, View, FlatList, Alert, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Alert,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useSelector, useDispatch } from 'react-redux';
 import { isEmpty } from 'lodash';
@@ -38,9 +45,6 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   logger('CheckListItemsScreen -> stocks', stocks);
   const isLoading = useSelector(selectors.makeSelectIsLoading());
   const isSubmittedDoneAll = useSelector(selectors.makeSelectIsDoneAlled());
-  const stocksHasDataNull = useSelector(
-    selectors.makeSelectStocksHasDataNull(),
-  );
   const isSubmitted = useSelector(selectors.makeSelectIsSubmitted());
 
   const [visibleFilter, setVisibleFilter] = React.useState(false);
@@ -52,13 +56,6 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   const [toIndex, setToIndex] = React.useState(0);
 
   const searchRef = React.createRef();
-  let flatListRef = React.createRef();
-
-  // React.useEffect(() => {
-  //   if (toIndex > 0) {
-  //     scrollToPosition();
-  //   }
-  // }, [scrollToPosition, toIndex]);
 
   React.useEffect(() => {
     dispatch(
@@ -71,17 +68,9 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   }, [debounceSearchTerm, clId, dispatch, filterValue]);
 
   const getItemLayout = (data, index) => {
-    return { length: data.length, offset: 80 * index, index };
+    const itemHeight = Platform.OS === 'ios' ? 70 : 80;
+    return { length: data.length, offset: itemHeight * index, index };
   };
-
-  // const scrollToPosition = React.useCallback(() => {
-  //   if (toIndex > 0 && toIndex <= stocks.length && flatListRef) {
-  //     console.log(flatListRef);
-  //     setTimeout(() => {
-  //       flatListRef.scrollToIndex({ animated: true, index: toIndex });
-  //     }, 2000);
-  //   }
-  // }, [flatListRef, toIndex, stocks]);
 
   React.useEffect(() => {
     if (!isLoading) {
@@ -158,19 +147,6 @@ const CheckListItemsScreen = ({ navigation, route }) => {
     searchRef.current && searchRef.current.blur();
   };
 
-  const onDoneAll = React.useCallback(() => {
-    if (stocksHasDataNull.length <= 0) {
-      Alert.alert(
-        'Thông báo',
-        'Báo cáo đã được gửi!',
-        [{ text: 'OK', onPress: () => _onPressGoBack() }],
-        { cancelable: false },
-      );
-    } else {
-      dispatch(actions.markDoneAll({ clId, clType }));
-    }
-  }, [dispatch, clId, clType, stocksHasDataNull, _onPressGoBack]);
-
   const showAlert = React.useCallback(() => {
     Alert.alert(
       'Thông báo',
@@ -218,11 +194,6 @@ const CheckListItemsScreen = ({ navigation, route }) => {
       <Appbar.Header>
         <Appbar.BackAction onPress={_onPressGoBack} disabled={isLoading} />
         <Appbar.Content title={'Sản phẩm'} subtitle="" />
-        {/* <Appbar.Action
-          icon={'upload'}
-          onPress={onDoneAll}
-          disabled={stocksHasDataNull.length > 0 ? true : false}
-        /> */}
       </Appbar.Header>
       {isLoading ? (
         <LoadingIndicator />
@@ -253,9 +224,6 @@ const CheckListItemsScreen = ({ navigation, route }) => {
           <View style={[styles.container]}>
             <FlatList
               data={stocks}
-              ref={(ref) => {
-                flatListRef = ref;
-              }}
               renderItem={renderItem}
               getItemLayout={getItemLayout}
               ItemSeparatorComponent={Divider}

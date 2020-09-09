@@ -238,19 +238,19 @@ PODS:
   - React-jsinspector (0.63.2)
   - react-native-appearance (0.3.4):
     - React
-  - react-native-camera (3.35.0):
+  - react-native-camera (3.39.0):
     - React
-    - react-native-camera/RCT (= 3.35.0)
-    - react-native-camera/RN (= 3.35.0)
-  - react-native-camera/RCT (3.35.0):
+    - react-native-camera/RCT (= 3.39.0)
+    - react-native-camera/RN (= 3.39.0)
+  - react-native-camera/RCT (3.39.0):
     - React
-  - react-native-camera/RN (3.35.0):
+  - react-native-camera/RN (3.39.0):
     - React
   - react-native-image-picker (2.3.3):
     - React
-  - react-native-image-resizer (1.2.3):
+  - react-native-image-resizer (1.2.6):
     - React
-  - react-native-safe-area-context (3.1.1):
+  - react-native-safe-area-context (3.1.7):
     - React
   - react-native-uuid-generator (6.1.1):
     - React
@@ -314,28 +314,28 @@ PODS:
     - React-Core (= 0.63.2)
     - React-cxxreact (= 0.63.2)
     - React-jsi (= 0.63.2)
-  - RNCAsyncStorage (1.11.0):
+  - RNCAsyncStorage (1.12.0):
     - React
   - RNCMaskedView (0.1.10):
     - React
-  - RNCPicker (1.6.5):
+  - RNCPicker (1.7.1):
     - React
-  - RNDeviceInfo (5.6.3):
+  - RNDeviceInfo (6.0.2):
     - React
-  - RNGestureHandler (1.7.0):
+  - RNGestureHandler (1.8.0):
     - React
-  - RNImageCropPicker (0.32.2):
+  - RNImageCropPicker (0.34.1):
     - React-Core
     - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.32.2)
+    - RNImageCropPicker/QBImagePickerController (= 0.34.1)
     - TOCropViewController
-  - RNImageCropPicker/QBImagePickerController (0.32.2):
+  - RNImageCropPicker/QBImagePickerController (0.34.1):
     - React-Core
     - React-RCTImage
     - TOCropViewController
   - RNImageMarker (0.6.1):
     - React
-  - RNReanimated (1.10.1):
+  - RNReanimated (1.13.0):
     - React
   - RNScreens (2.10.1):
     - React
@@ -546,10 +546,10 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 8ca588cc921e70590820ce72b8789b02c67cce38
   React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
   react-native-appearance: fc2014516054585d531e07aa0b40ab0de1d2be85
-  react-native-camera: 9dd96065b956306de03ef2a2efc3583019f95941
+  react-native-camera: e39c8ef9f21163c8873ad0a95960a4f58eea2320
   react-native-image-picker: a6c3d644751a388b0fc8b56822ff7cbd398a3008
-  react-native-image-resizer: 3a0a2ab15953b2aec5dda20338e3c6bd6c26e528
-  react-native-safe-area-context: 4c3249e4840225c61fcd215b136af0a737bccb79
+  react-native-image-resizer: f9fd7a61ffb3683987a6528e15e32bc32eb9dee3
+  react-native-safe-area-context: fcece23844742b6f7f0627c3715b806a7deff946
   react-native-uuid-generator: 997d9848f07081ce7200a05b76e3f8c7b309963c
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
   React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6
@@ -561,14 +561,14 @@ SPEC CHECKSUMS:
   React-RCTText: 1b6773e776e4b33f90468c20fe3b16ca3e224bb8
   React-RCTVibration: 4d2e726957f4087449739b595f107c0d4b6c2d2d
   ReactCommon: a0a1edbebcac5e91338371b72ffc66aa822792ce
-  RNCAsyncStorage: db711e29e5e0500d9bd21aa0c2e397efa45302b1
+  RNCAsyncStorage: 3eea36d9460c5159b592f9ecbe5a77f8aca98006
   RNCMaskedView: f5c7d14d6847b7b44853f7acb6284c1da30a3459
-  RNCPicker: 55b9b4240d0a9eba8733d02616775d4040de2e7d
-  RNDeviceInfo: c5fa705c8914c42800ff36e86d25d277e8eb16ff
-  RNGestureHandler: b6b359bb800ae399a9c8b27032bdbf7c18f08a08
-  RNImageCropPicker: f0557a908758c4a3f83978894ec7227651529b45
+  RNCPicker: a2bf7bad059f23de52add203c3c5a3bc5b5239d8
+  RNDeviceInfo: 273208fc409c58acecd7f5bd726eb5c7edd8265d
+  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
+  RNImageCropPicker: 39ec170dc53c227ea352b706c76f7960070309a8
   RNImageMarker: 3d2ad96afe3db0965ecff23ca97d65b812d06b47
-  RNReanimated: c2bb7438b57a3d987bb2e4e6e4bca94787e30b02
+  RNReanimated: 89f5e0a04d1dd52fbf27e7e7030d8f80a646a3fc
   RNScreens: b748efec66e095134c7166ca333b628cd7e6f3e2
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: da6fe858f5a65d7bbc3379540a889b0b12aa5976
