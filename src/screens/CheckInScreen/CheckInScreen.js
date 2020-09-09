@@ -1,6 +1,12 @@
 import React, { memo } from 'react';
 import { Appbar, Caption } from 'react-native-paper';
-import { StyleSheet, KeyboardAvoidingView, Text } from 'react-native';
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  Text,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
@@ -100,35 +106,41 @@ const CheckInScreen = ({ navigation, route }) => {
         />
       </Appbar.Header>
 
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Caption style={styles.caption}>Thông tin</Caption>
-        <FormTextInput
-          name="note"
-          label="Ghi chú"
-          register={register}
-          setValue={setValue}
-          disabled={isLoading}
-          clearErrors={clearErrors}
-          error={err}
-          errorText="Cần nhập ghi chú"
-        />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        enabled
+        keyboardVerticalOffset={'100%'}>
+        <ScrollView>
+          <Caption style={styles.caption}>Thông tin</Caption>
+          <FormTextInput
+            name="note"
+            label="Ghi chú"
+            register={register}
+            setValue={setValue}
+            disabled={isLoading}
+            clearErrors={clearErrors}
+            error={err}
+            errorText="Cần nhập ghi chú"
+          />
 
-        <TakePhoto
-          setValue={setValue}
-          isSubmitting={isLoading}
-          register={register}
-          triggerValidation={trigger}
-          shop={currentShopChecked}
-        />
-        {errors.photo ? <Paragraph>Cần chụp hình</Paragraph> : null}
+          <TakePhoto
+            setValue={setValue}
+            isSubmitting={isLoading}
+            register={register}
+            triggerValidation={trigger}
+            shop={currentShopChecked}
+          />
+          {errors.photo ? <Paragraph>Cần chụp hình</Paragraph> : null}
 
-        <Button
-          mode="contained"
-          onPress={handleSubmit(onSubmitCheckList)}
-          loading={isLoading}
-          disabled={isLoading || !formState.isValid}>
-          Check in
-        </Button>
+          <Button
+            mode="contained"
+            onPress={handleSubmit(onSubmitCheckList)}
+            loading={isLoading}
+            disabled={isLoading || !formState.isValid}>
+            Check in
+          </Button>
+        </ScrollView>
       </KeyboardAvoidingView>
     </>
   );
@@ -139,6 +151,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: defaultTheme.colors.background,
     paddingHorizontal: 10,
+    flexDirection: 'column',
   },
   caption: {
     paddingHorizontal: 16,

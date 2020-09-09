@@ -14,7 +14,7 @@ import {
 import { StyleSheet, View, FlatList, Alert, ScrollView } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useSelector, useDispatch } from 'react-redux';
-import { isEmpty, zipObjectDeep } from 'lodash';
+import { isEmpty } from 'lodash';
 
 import { LoadingIndicator } from '../../components/LoadingIndicator';
 import { PenNote } from '../../assets/icons';
@@ -52,14 +52,13 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   const [toIndex, setToIndex] = React.useState(0);
 
   const searchRef = React.createRef();
-  const isOOS = clType.toUpperCase() === 'OOS';
   let flatListRef = React.createRef();
 
-  React.useEffect(() => {
-    if (toIndex > 0) {
-      scrollToPosition();
-    }
-  }, [scrollToPosition, toIndex]);
+  // React.useEffect(() => {
+  //   if (toIndex > 0) {
+  //     scrollToPosition();
+  //   }
+  // }, [scrollToPosition, toIndex]);
 
   React.useEffect(() => {
     dispatch(
@@ -72,29 +71,25 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   }, [debounceSearchTerm, clId, dispatch, filterValue]);
 
   const getItemLayout = (data, index) => {
-    return { length: stocks.length, offset: 56 * index, index };
+    return { length: data.length, offset: 80 * index, index };
   };
 
-  const scrollToPosition = React.useCallback(() => {
-    if (toIndex > 0 && toIndex <= stocks.length && flatListRef) {
-      flatListRef.scrollToIndex({ animated: true, index: toIndex });
-    }
-  }, [flatListRef, toIndex, stocks]);
+  // const scrollToPosition = React.useCallback(() => {
+  //   if (toIndex > 0 && toIndex <= stocks.length && flatListRef) {
+  //     console.log(flatListRef);
+  //     setTimeout(() => {
+  //       flatListRef.scrollToIndex({ animated: true, index: toIndex });
+  //     }, 2000);
+  //   }
+  // }, [flatListRef, toIndex, stocks]);
 
   React.useEffect(() => {
     if (!isLoading) {
       if (isSubmitted) {
         dispatch(actions.resetProps());
-        dispatch(
-          actions.fetchStocks({
-            search: debounceSearchTerm,
-            checkListId: clId,
-            filter: filterValue,
-          }),
-        );
       }
     }
-  }, [isLoading, isSubmitted, dispatch, debounceSearchTerm, clId, filterValue]);
+  }, [isLoading, isSubmitted, dispatch]);
 
   const onSubmitCheckList = React.useCallback(
     (item) => {
@@ -131,7 +126,10 @@ const CheckListItemsScreen = ({ navigation, route }) => {
             <IconButton
               icon="upload"
               size={20}
-              onPress={() => onSubmitCheckList(item)}
+              onPress={() => {
+                onSubmitCheckList(item);
+                setToIndex(index);
+              }}
             />
           ) : (
             <List.Icon

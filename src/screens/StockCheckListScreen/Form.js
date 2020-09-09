@@ -14,6 +14,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
+  Platform,
 } from 'react-native';
 import ImagePicker from '../..//components/ImagePicker';
 import CustomToggleButton from '../../components/ToggleButton';
@@ -102,8 +103,12 @@ const StockCheckListScreen = ({ navigation, route }) => {
         <Appbar.Content title={'Kiểm tra lỗi'} subtitle="" />
       </Appbar.Header>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <ScrollView style={styles.container}>
-          <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <KeyboardAvoidingView
+          style={styles.container}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          enabled
+          keyboardVerticalOffset={'100%'}>
+          <ScrollView>
             <View style={styles.form}>
               <Title style={styles.caption}>{stockName}</Title>
               {isPromotion && (
@@ -138,6 +143,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
               )}
               {Object.keys(template).map((fieldName) => {
                 const type = template[fieldName].type;
+                const required = template[fieldName].required;
                 const default_value_use =
                   template[fieldName].default_value_use || '';
                 if (type === 'number') {
@@ -156,7 +162,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
                           : ''
                       }
                       disabled={isLoading}
-                      rules={{ required: true }}
+                      rules={{ required }}
                       error={errors[fieldName]}
                       clearErrors={clearErrors}
                     />
@@ -178,6 +184,8 @@ const StockCheckListScreen = ({ navigation, route }) => {
                           : ''
                       }
                       disabled={isLoading}
+                      rules={{ required }}
+                      error={errors[fieldName]}
                       clearErrors={clearErrors}
                     />
                   );
@@ -190,7 +198,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
                       name={fieldName}
                       label={fieldName}
                       key={fieldName}
-                      rules={{ required: true }}
+                      rules={{ required }}
                       error={errors[fieldName]}
                       value={item.data ? item.data[fieldName] : false}
                       disabled={isLoading}
@@ -216,7 +224,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
                       setValue={setValue}
                       name={fieldName}
                       label={fieldName}
-                      rules={{ required: true }}
+                      rules={{ required }}
                       error={errors[fieldName]}
                       value={item.data ? item.data[fieldName] : null}
                       disabled={isLoading}
@@ -233,7 +241,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
                       name={fieldName}
                       label={fieldName}
                       key={fieldName}
-                      rules={{ required: true }}
+                      rules={{ required }}
                       error={errors[fieldName]}
                       value={item.data ? item.data[fieldName] : ''}
                       disabled={isLoading}
@@ -251,6 +259,8 @@ const StockCheckListScreen = ({ navigation, route }) => {
                       setValue={setValue}
                       value={item.data ? item.data[fieldName] : ''}
                       disabled={isLoading}
+                      rules={{ required }}
+                      error={errors[fieldName]}
                       clearErrors={clearErrors}
                     />
                   );
@@ -266,8 +276,8 @@ const StockCheckListScreen = ({ navigation, route }) => {
                 />
               )}
             </View>
-          </KeyboardAvoidingView>
-        </ScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
       <FAB
         visible={true}

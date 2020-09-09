@@ -1,6 +1,11 @@
 import React, { memo } from 'react';
 import { Appbar, Caption, Snackbar } from 'react-native-paper';
-import { StyleSheet, KeyboardAvoidingView, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
@@ -44,7 +49,11 @@ const ShopCaptureScreen = ({ navigation, route }) => {
         <Appbar.Content title={shopName} subtitle="" />
       </Appbar.Header>
 
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        enabled
+        keyboardVerticalOffset={'100%'}>
         <ScrollView>
           <Caption style={styles.caption}>Thông tin</Caption>
           <TextInput

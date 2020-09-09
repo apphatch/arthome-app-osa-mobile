@@ -35,7 +35,7 @@ export function* submitCheckList({ payload }) {
           return data[o.default_value_use].toString();
         }
         if (o.type === 'radio') {
-          return 'N';
+          return 'Y';
         }
         return '';
       });

@@ -1,4 +1,6 @@
 import React from 'react';
+import { StyleSheet } from 'react-native';
+import { Text } from 'react-native-paper';
 import TextInput from '../TextInput';
 
 const FormTextInput = (props) => {
@@ -9,32 +11,53 @@ const FormTextInput = (props) => {
     value,
     disabled,
     label,
-    clearErrors,
-    error,
-    errorText,
     rules,
+    error,
+    clearErrors,
   } = props;
 
   const [localValue, setLocalValue] = React.useState(value);
 
   React.useEffect(() => {
     setValue(name, localValue);
-  }, [name, localValue, setValue]);
+  }, [name, register, rules, localValue, setValue]);
+
+  const handleInputChange = React.useCallback(
+    (val) => {
+      setValue(name, val, true);
+      setLocalValue(val);
+      clearErrors(name);
+    },
+    [name, setValue, clearErrors],
+  );
 
   return (
-    <TextInput
-      label={label}
-      ref={register({ name: name }, rules)}
-      onChangeText={(text) => {
-        setValue(name, text, true);
-        setLocalValue(text);
-        clearErrors(name);
-      }}
-      value={localValue}
-      disabled={disabled}
-      errorText={error ? errorText : null}
-    />
+    <>
+      <TextInput
+        label={label}
+        ref={register({ name }, rules)}
+        onChangeText={handleInputChange}
+        value={localValue}
+        disabled={disabled}
+      />
+      {error ? (
+        <Text accessibilityRole="text" style={styles.textRed}>
+          Required
+        </Text>
+      ) : null}
+    </>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  textRed: {
+    color: 'red',
+  },
+});
 
 export default React.memo(FormTextInput);

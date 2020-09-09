@@ -1,6 +1,11 @@
 import React, { memo } from 'react';
 import { Appbar, Caption } from 'react-native-paper';
-import { StyleSheet, KeyboardAvoidingView } from 'react-native';
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
@@ -62,31 +67,37 @@ const CheckOutScreen = ({ navigation, route }) => {
         <Appbar.Content title={'Check out'} subtitle="" />
       </Appbar.Header>
 
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <Caption style={styles.caption}>Thông tin</Caption>
-        <TextInput
-          label="Ghi chú"
-          ref={register({ name: 'note' })}
-          onChangeText={(text) => setValue('note', text, true)}
-          disabled={isLoading}
-        />
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        enabled
+        keyboardVerticalOffset={'100%'}>
+        <ScrollView>
+          <Caption style={styles.caption}>Thông tin</Caption>
+          <TextInput
+            label="Ghi chú"
+            ref={register({ name: 'note' })}
+            onChangeText={(text) => setValue('note', text, true)}
+            disabled={isLoading}
+          />
 
-        <TakePhoto
-          setValue={setValue}
-          isSubmitting={isLoading}
-          register={register}
-          triggerValidation={trigger}
-          shop={currentShopChecked}
-        />
-        {errors.photo ? <Paragraph>Cần chụp hình</Paragraph> : null}
+          <TakePhoto
+            setValue={setValue}
+            isSubmitting={isLoading}
+            register={register}
+            triggerValidation={trigger}
+            shop={currentShopChecked}
+          />
+          {errors.photo ? <Paragraph>Cần chụp hình</Paragraph> : null}
 
-        <Button
-          mode="contained"
-          onPress={handleSubmit(onSubmitCheckList)}
-          loading={isLoading}
-          disabled={isLoading || !formState.isValid}>
-          Check out
-        </Button>
+          <Button
+            mode="contained"
+            onPress={handleSubmit(onSubmitCheckList)}
+            loading={isLoading}
+            disabled={isLoading || !formState.isValid}>
+            Check out
+          </Button>
+        </ScrollView>
       </KeyboardAvoidingView>
     </>
   );
