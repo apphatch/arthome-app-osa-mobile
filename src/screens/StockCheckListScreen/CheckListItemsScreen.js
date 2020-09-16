@@ -10,15 +10,12 @@ import {
   Portal,
   RadioButton,
   Button,
+  Caption,
+  Card,
+  Text,
+  Avatar,
 } from 'react-native-paper';
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  Alert,
-  ScrollView,
-  Platform,
-} from 'react-native';
+import { StyleSheet, View, FlatList, ScrollView, Platform } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { useSelector, useDispatch } from 'react-redux';
 import { isEmpty } from 'lodash';
@@ -44,7 +41,6 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   const categories = useSelector(selectors.makeSelectCategoriesOfStocks());
   logger('CheckListItemsScreen -> stocks', stocks);
   const isLoading = useSelector(selectors.makeSelectIsLoading());
-  const isSubmittedDoneAll = useSelector(selectors.makeSelectIsDoneAlled());
   const isSubmitted = useSelector(selectors.makeSelectIsSubmitted());
 
   const [visibleFilter, setVisibleFilter] = React.useState(false);
@@ -56,6 +52,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   const [toIndex, setToIndex] = React.useState(0);
 
   const searchRef = React.createRef();
+  const flatListRef = React.useRef(null);
 
   React.useEffect(() => {
     dispatch(
@@ -68,8 +65,8 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   }, [debounceSearchTerm, clId, dispatch, filterValue]);
 
   const getItemLayout = (data, index) => {
-    const itemHeight = Platform.OS === 'ios' ? 70 : 80;
-    return { length: data.length, offset: itemHeight * index, index };
+    const itemHeight = 80;
+    return { length: itemHeight, offset: itemHeight * index, index };
   };
 
   React.useEffect(() => {
@@ -90,9 +87,29 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   const renderItem = ({ item, index }) => {
     return (
       <List.Item
+        style={{ height: 80 }}
         title={item.stock_name}
-        description={clType === 'oos' && `Stock: ${item.quantity}`}
-        titleNumberOfLines={3}
+        titleNumberOfLines={2}
+        titleStyle={{ fontSize: 14 }}
+        description={() => (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <Caption>{clType === 'oos' && `Stock: ${item.quantity}`}</Caption>
+            {item.data && item.data !== null && (
+              <>
+                <Caption>{`Available: ${
+                  item.data.Available ? item.data.Available : ''
+                }`}</Caption>
+                <Caption>{`Void: ${
+                  item.data.Void ? item.data.Void : ''
+                }`}</Caption>
+              </>
+            )}
+          </View>
+        )}
         onPress={() => {
           setToIndex(index);
           navigation.navigate('FormScreen', {
@@ -147,21 +164,6 @@ const CheckListItemsScreen = ({ navigation, route }) => {
     searchRef.current && searchRef.current.blur();
   };
 
-  const showAlert = React.useCallback(() => {
-    Alert.alert(
-      'Thông báo',
-      'Gửi báo cáo thành công!',
-      [{ text: 'OK', onPress: () => dispatch(actions.resetProps()) }],
-      { cancelable: false },
-    );
-  }, [dispatch]);
-
-  React.useEffect(() => {
-    if (isSubmittedDoneAll) {
-      showAlert();
-    }
-  }, [isSubmittedDoneAll, showAlert]);
-
   const _onPressGoBack = React.useCallback(() => {
     navigation.goBack();
     dispatch(actions.fetchCheckList({ shopId }));
@@ -188,6 +190,21 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   const changeOption = (value) => {
     setSelectedOption(value);
   };
+
+  const scrollToIndex = React.useCallback(
+    (index) => {
+      flatListRef &&
+        flatListRef.current &&
+        flatListRef.current.scrollToIndex({ animated: true, index });
+    },
+    [flatListRef],
+  );
+
+  React.useEffect(() => {
+    if (toIndex > 0) {
+      scrollToIndex(toIndex);
+    }
+  }, [scrollToIndex, toIndex]);
 
   return (
     <>
@@ -223,6 +240,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
           </View>
           <View style={[styles.container]}>
             <FlatList
+              ref={flatListRef}
               data={stocks}
               renderItem={renderItem}
               getItemLayout={getItemLayout}
@@ -232,7 +250,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
                 backgroundColor: colors.background,
                 paddingBottom: safeArea.bottom,
               }}
-              initialNumToRender={toIndex || 15}
+              initialNumToRender={15}
               initialScrollIndex={toIndex > stocks.length ? 0 : toIndex}
             />
           </View>
