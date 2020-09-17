@@ -91,25 +91,27 @@ const CheckListItemsScreen = ({ navigation, route }) => {
         title={item.stock_name}
         titleNumberOfLines={2}
         titleStyle={{ fontSize: 14 }}
-        description={() => (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}>
-            <Caption>{clType === 'oos' && `Stock: ${item.quantity}`}</Caption>
-            {item.data && item.data !== null && (
-              <>
-                <Caption>{`Available: ${
-                  item.data.Available ? item.data.Available : ''
-                }`}</Caption>
-                <Caption>{`Void: ${
-                  item.data.Void ? item.data.Void : ''
-                }`}</Caption>
-              </>
-            )}
-          </View>
-        )}
+        description={() =>
+          clType === 'oos' && (
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+              }}>
+              <Caption>{`Stock: ${item.quantity}`}</Caption>
+              {item.data && item.data !== null && (
+                <>
+                  <Caption>{`Available: ${
+                    item.data.Available ? item.data.Available : ''
+                  }`}</Caption>
+                  <Caption>{`Void: ${
+                    item.data.Void ? item.data.Void : ''
+                  }`}</Caption>
+                </>
+              )}
+            </View>
+          )
+        }
         onPress={() => {
           setToIndex(index);
           navigation.navigate('FormScreen', {
