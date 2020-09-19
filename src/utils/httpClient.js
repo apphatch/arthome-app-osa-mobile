@@ -6,7 +6,7 @@ const UNAUTHORIZED = 401;
 
 // create an instance of axios
 const instance = axios.create({
-  baseURL: 'http://18.141.11.78:80',
+  baseURL: 'http://54.251.164.171',
   headers: { 'Content-Type': 'application/json', App: 'osa' },
 });
 
