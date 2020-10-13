@@ -21,7 +21,6 @@ export function* checkOut({ payload }) {
   try {
     const formData = new FormData();
 
-    const token = yield select(loginSelectors.makeSelectToken());
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
@@ -41,7 +40,6 @@ export function* checkOut({ payload }) {
 
     const response = yield call(API.checkOut, {
       formData,
-      token,
       authorization,
       shopId,
     });

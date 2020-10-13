@@ -19,7 +19,6 @@ export function* checkIn({ payload }) {
     const { note, photo, shopId } = payload;
     const formData = new FormData();
     const photoName = yield UUIDGenerator.getRandomUUID();
-    const token = yield select(loginSelectors.makeSelectToken());
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
@@ -33,7 +32,6 @@ export function* checkIn({ payload }) {
     formData.append('time', moment().format('DD/MM/YYYY'));
     const response = yield call(API.checkIn, {
       formData,
-      token,
       authorization,
       shopId,
     });
@@ -52,7 +50,6 @@ export function* checkIn({ payload }) {
 
 export function* checkOut({ payload }) {
   try {
-    const token = yield select(loginSelectors.makeSelectToken());
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
@@ -69,7 +66,6 @@ export function* checkOut({ payload }) {
     formData.append('incomplete', incomplete);
     const response = yield call(API.checkOut, {
       formData,
-      token,
       authorization,
       shopId,
     });

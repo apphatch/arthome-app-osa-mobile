@@ -1,8 +1,8 @@
 import { httpClient } from '../../utils';
 import { ENDPOINTS } from './constants';
 
-export const checkOut = ({ formData, token, authorization, shopId }) => {
+export const checkOut = ({ formData, authorization, shopId }) => {
   return httpClient.post(ENDPOINTS.checkOut(shopId), formData, {
-    headers: { 'X-CSRF-Token': token, Authorization: authorization },
+    headers: { Authorization: authorization },
   });
 };

@@ -21,7 +21,6 @@ export function* submitCheckList({ payload }) {
   try {
     const formData = new FormData();
 
-    const token = yield select(loginSelectors.makeSelectToken());
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
@@ -46,7 +45,6 @@ export function* submitCheckList({ payload }) {
     const res = yield call(API.submitCheckListItemData, {
       itemId,
       data: formData,
-      token,
       authorization,
     });
 
@@ -60,14 +58,12 @@ export function* submitCheckList({ payload }) {
 
 export function* fetchCheckList({ payload }) {
   try {
-    const token = yield select(loginSelectors.makeSelectToken());
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
     const { shopId } = payload;
     const response = yield call(API.fetchCheckList, {
       shopId,
-      token,
       authorization,
     });
 
@@ -84,7 +80,6 @@ export function* markDoneAllCheckListItems({ payload: { clId, clType } }) {
     const stocksHasDataNull = yield select(
       selectors.makeSelectStocksHasDataNull(),
     );
-    const token = yield select(loginSelectors.makeSelectToken());
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
@@ -122,7 +117,6 @@ export function* markDoneAllCheckListItems({ payload: { clId, clType } }) {
     formData.append('checklist_items', JSON.stringify(data));
     const res = yield call(API.markDoneAll, {
       data: formData,
-      token,
       authorization,
       clId,
     });
@@ -136,14 +130,12 @@ export function* markDoneAllCheckListItems({ payload: { clId, clType } }) {
 
 export function* fetchStocks({ payload }) {
   try {
-    const token = yield select(loginSelectors.makeSelectToken());
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
     const { filter } = payload;
     const res = yield call(API.fetchStockByCheckList, {
       ...payload,
-      token,
       authorization,
     });
     let categories = [];

@@ -4,7 +4,6 @@ import * as actionTypes from './actionTypes';
 const initialState = {
   isLoggedIn: false,
   isLoading: false,
-  token: null,
   authorization: null,
   user_id: null,
   errorMessage: '',
@@ -33,7 +32,6 @@ function loginRequest(state, action) {
 function loginFailed(state, action) {
   state.isLoggedIn = false;
   state.isLoading = false;
-  state.token = null;
   state.authorization = null;
   state.user_id = null;
   state.errorMessage = action.payload.errorMessage;
@@ -41,7 +39,6 @@ function loginFailed(state, action) {
 function loginResponse(state, action) {
   state.isLoggedIn = true;
   state.isLoading = false;
-  state.token = action.payload.token;
   state.authorization = action.payload.authorization;
   state.user_id = action.payload.user_id;
 }
@@ -50,7 +47,6 @@ function logoutRequest(state, action) {
   state.isLoading = true;
 }
 function logoutResponse(state, action) {
-  state.token = null;
   state.authorization = null;
   state.isLoggedIn = false;
   state.user_id = null;

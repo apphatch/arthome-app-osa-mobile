@@ -19,7 +19,6 @@ export function* login({ payload }) {
     yield delay(2000);
     yield put(
       actions.onLoginResponse({
-        token: response.headers['x-csrf-token'],
         user_id,
       }),
     );
