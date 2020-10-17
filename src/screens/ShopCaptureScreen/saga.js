@@ -37,6 +37,7 @@ export function* checkOut({ payload }) {
     }
     formData.append('note', note);
     formData.append('time', moment().format('DD/MM/YYYY'));
+    console.log(formData);
 
     const response = yield call(API.checkOut, {
       formData,

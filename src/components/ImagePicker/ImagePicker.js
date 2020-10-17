@@ -36,7 +36,8 @@ const CustomImagePicker = ({
 
   React.useEffect(() => {
     register({ name: 'photos' }, { required: true });
-  }, [register]);
+    setValue('photos', photos);
+  }, [register, setValue, photos]);
 
   const onTakePhoto = () => {
     setIsLoading(true);
