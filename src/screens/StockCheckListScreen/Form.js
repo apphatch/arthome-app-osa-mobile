@@ -45,7 +45,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
       mechanic,
       quantity,
       barcode,
-      category,
+      sub_category,
       rental_type,
     },
   } = route;
@@ -132,12 +132,12 @@ const StockCheckListScreen = ({ navigation, route }) => {
               {isRental && (
                 <>
                   <View style={[styles.row, styles.textValue]}>
-                    <Caption style={styles.caption}>Category</Caption>
-                    <Text>{category}</Text>
-                  </View>
-                  <View style={[styles.row, styles.textValue]}>
                     <Caption style={styles.caption}>Rental type</Caption>
                     <Text>{rental_type}</Text>
+                  </View>
+                  <View style={[styles.row, styles.textValue]}>
+                    <Caption style={styles.caption}>Category</Caption>
+                    <Text>{sub_category}</Text>
                   </View>
                 </>
               )}

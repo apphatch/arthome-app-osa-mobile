@@ -20,8 +20,8 @@ const LoginScreen = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectors.makeSelectIsLoading());
 
-  const [username, setUsername] = useState({ value: 'test01', error: '' });
-  const [password, setPassword] = useState({ value: 'password', error: '' });
+  const [username, setUsername] = useState({ value: '', error: '' });
+  const [password, setPassword] = useState({ value: '', error: '' });
   const [error, setError] = useState('');
 
   const _onLoginPressed = React.useCallback(() => {

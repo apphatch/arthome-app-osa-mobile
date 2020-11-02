@@ -123,8 +123,8 @@ const CheckListItemsScreen = ({ navigation, route }) => {
             mechanic: item.mechanic,
             barcode: item.barcode,
             quantity: item.quantity,
-            rental_type: item.rental_type || null,
-            category: item.category || null,
+            rental_type: item.rental_type ? item.rental_type : null,
+            sub_category: item.sub_category ? item.sub_category : null,
           });
         }}
         right={(props) =>
