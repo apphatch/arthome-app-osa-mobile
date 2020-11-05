@@ -64,6 +64,13 @@ const StockCheckListScreen = ({ navigation, route }) => {
             navigation.navigate('ShopCaptureScreen', { shopId, shopName });
           },
         },
+        {
+          icon: 'account-off-outline',
+          label: 'Check out',
+          onPress: () => {
+            navigation.navigate('CheckOutScreen', { shopId, shopName });
+          },
+        },
       ]);
     } else {
       setFABItems([

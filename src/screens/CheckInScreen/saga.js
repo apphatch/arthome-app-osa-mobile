@@ -16,7 +16,7 @@ import {
 
 export function* checkIn({ payload }) {
   try {
-    const { note, photo, shopId } = payload;
+    const { note, photo, shopId, latitude, longitude } = payload;
     const formData = new FormData();
     const photoName = yield UUIDGenerator.getRandomUUID();
     const authorization = yield select(
@@ -30,6 +30,8 @@ export function* checkIn({ payload }) {
     });
     formData.append('note', note);
     formData.append('time', moment().format('DD/MM/YYYY'));
+    formData.append('latitude', latitude);
+    formData.append('longitude', longitude);
     const response = yield call(API.checkIn, {
       formData,
       authorization,
@@ -53,7 +55,7 @@ export function* checkOut({ payload }) {
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
-    const { note, photo, shopId, incomplete } = payload;
+    const { note, photo, shopId, latitude, longitude, incomplete } = payload;
     const formData = new FormData();
     const photoName = yield UUIDGenerator.getRandomUUID();
     formData.append('photo', {
@@ -63,6 +65,8 @@ export function* checkOut({ payload }) {
     });
     formData.append('note', note);
     formData.append('time', moment().format('DD/MM/YYYY'));
+    formData.append('latitude', latitude);
+    formData.append('longitude', longitude);
     formData.append('incomplete', incomplete);
     const response = yield call(API.checkOut, {
       formData,

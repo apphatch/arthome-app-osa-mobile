@@ -1,4 +1,6 @@
 import React, { memo } from 'react';
+import RNLocation from 'react-native-location';
+
 import { Appbar, Caption } from 'react-native-paper';
 import {
   StyleSheet,
@@ -22,6 +24,10 @@ import * as selectors from './selectors';
 import * as shopSelectors from '../ShopScreen/selectors';
 
 import { logger } from '../../utils';
+
+RNLocation.configure({
+  distanceFilter: 5.0,
+});
 
 const CheckOutScreen = ({ navigation, route }) => {
   const {
@@ -53,9 +59,28 @@ const CheckOutScreen = ({ navigation, route }) => {
 
   const onSubmitCheckList = React.useCallback(
     (values) => {
-      dispatch(
-        actions.requestCheckOut({ ...values, shopId, incomplete: false }),
-      );
+      RNLocation.requestPermission({
+        ios: 'whenInUse',
+        android: {
+          detail: 'coarse',
+        },
+      }).then((granted) => {
+        if (granted) {
+          this.locationSubscription = RNLocation.subscribeToLocationUpdates(
+            (locations) => {
+              dispatch(
+                actions.requestCheckOut({
+                  ...values,
+                  shopId,
+                  latitude: locations[0].latitude,
+                  longitude: locations[0].longitude,
+                  incomplete: false,
+                }),
+              );
+            },
+          );
+        }
+      });
     },
     [dispatch, shopId],
   );
