@@ -1,17 +1,21 @@
 import React from 'react';
-import {Provider as PaperProvider} from 'react-native-paper';
-import {I18nManager} from 'react-native';
-import {useColorScheme} from 'react-native-appearance';
+import RNLocation from 'react-native-location';
+import { Provider as PaperProvider } from 'react-native-paper';
+import { I18nManager } from 'react-native';
+import { useColorScheme } from 'react-native-appearance';
 
-import {PreferencesContext} from './context/preferencesContext';
+import { PreferencesContext } from './context/preferencesContext';
 import {
   defaultTheme,
   // darkTheme
 } from './theme';
 
-import {RootNavigator} from './rootNavigator';
+import { RootNavigator } from './rootNavigator';
+import { useDispatch } from 'react-redux';
+import * as actions from './screens/App/actions';
 
 export const Main = () => {
+  const dispatch = useDispatch();
   const colorScheme = useColorScheme();
   const [theme, setTheme] = React.useState(
     colorScheme === 'dark' ? 'dark' : 'light',
@@ -35,6 +39,32 @@ export const Main = () => {
     }),
     [rtl, theme, toggleRTL, toggleTheme],
   );
+
+  React.useEffect(() => {
+    RNLocation.configure({
+      distanceFilter: 5.0,
+    });
+    RNLocation.requestPermission({
+      ios: 'whenInUse',
+      android: {
+        detail: 'fine',
+        rationale: {
+          title: 'Location permission',
+          message: 'We use your location to demo the library',
+          buttonPositive: 'OK',
+          buttonNegative: 'Cancel',
+        },
+      },
+    }).then((granted) => {
+      if (granted) {
+        this.locationSubscription = RNLocation.subscribeToLocationUpdates(
+          (locations) => {
+            dispatch(actions.saveLocation({ location: locations[0] }));
+          },
+        );
+      }
+    });
+  }, [dispatch]);
 
   return (
     <PreferencesContext.Provider value={preferences}>

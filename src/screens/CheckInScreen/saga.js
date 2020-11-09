@@ -75,9 +75,6 @@ export function* checkOut({ payload }) {
     });
     yield put(actions.onCheckOutResponse(response));
     yield put(loginActions.updateAuthorization(response.headers.authorization));
-    if (incomplete) {
-      yield put(actions.reportResponse(response));
-    }
   } catch (error) {
     console.log('function*checkOut -> error', error);
     yield put(actions.checkOutFailed(error.message));

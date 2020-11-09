@@ -1,4 +1,3 @@
 const prefix = '@app';
 
-export const SET_LOGINED = `${prefix}_SET_LOGINED`;
-export const SET_CHECKINED = `${prefix}_SET_CHECKINED`;
+export const SAVE_LOCATION = `${prefix}_SAVE_LOCATION`;

@@ -65,10 +65,10 @@ const StockCheckListScreen = ({ navigation, route }) => {
           },
         },
         {
-          icon: 'account-off-outline',
-          label: 'Check out',
+          icon: 'alert-circle-outline',
+          label: 'Report',
           onPress: () => {
-            navigation.navigate('CheckOutScreen', { shopId, shopName });
+            navigation.navigate('ReportScreen', { shopId, shopName });
           },
         },
       ]);
@@ -79,6 +79,13 @@ const StockCheckListScreen = ({ navigation, route }) => {
           label: 'Chụp hình',
           onPress: () => {
             navigation.navigate('ShopCaptureScreen', { shopId, shopName });
+          },
+        },
+        {
+          icon: 'alert-circle-outline',
+          label: 'Report',
+          onPress: () => {
+            navigation.navigate('ReportScreen', { shopId, shopName });
           },
         },
         {

@@ -17,7 +17,7 @@ const rootSaga = function* rootSaga() {
       checkInSaga(),
       shopCaptureSaga(),
       // sagas
-    ].map(saga => fork(saga)),
+    ].map((saga) => fork(saga)),
   );
 };
 

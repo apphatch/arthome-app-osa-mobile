@@ -7,6 +7,3 @@ export const CHECK_IN_FAILED = `${prefix}_CHECK_IN_FAILED`;
 export const CHECK_OUT_REQUEST = `${prefix}_CHECK_OUT_REQUEST`;
 export const CHECK_OUT_RESPONSE = `${prefix}_CHECK_OUT_RESPONSE`;
 export const CHECK_OUT_FAILED = `${prefix}_CHECK_OUT_FAILED`;
-
-export const REPORT_RESPONSE = `${prefix}_REPORT_RESPONSE`;
-export const RESET_REPORT = `${prefix}_RESET_REPORT`;

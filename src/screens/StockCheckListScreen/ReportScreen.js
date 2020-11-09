@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 
 import { Appbar, Caption } from 'react-native-paper';
 import {
@@ -15,17 +15,14 @@ import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import Paragraph from '../../components/Paragraph';
 
-import TakePhoto from './components/TakePhoto';
+import TakePhoto from '../CheckInScreen/components/TakePhoto';
 
 import { defaultTheme } from '../../theme';
-import * as actions from './actions';
-import * as selectors from './selectors';
-import * as shopSelectors from '../ShopScreen/selectors';
+import * as actions from '../CheckInScreen/actions';
+import * as selectors from '../CheckInScreen/selectors';
 import * as appSelectors from '../App/selectors';
 
-import { logger } from '../../utils';
-
-const CheckOutScreen = ({ navigation, route }) => {
+const ReportScreen = ({ navigation, route }) => {
   const {
     params: { shopId },
   } = route;
@@ -33,10 +30,6 @@ const CheckOutScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectors.makeSelectIsLoading());
   const isCheckIn = useSelector(selectors.makeSelectIsCheckIn());
-  const currentShopChecked = useSelector(
-    shopSelectors.makeSelectShopById(shopId),
-  );
-  logger('CheckOutScreen -> currentShopChecked', currentShopChecked);
   const location = useSelector(appSelectors.makeSelectLocation());
 
   const {
@@ -48,6 +41,8 @@ const CheckOutScreen = ({ navigation, route }) => {
     formState,
   } = useForm({ mode: 'onChange' });
 
+  const [err, setErr] = React.useState('');
+
   React.useEffect(() => {
     if (!isCheckIn) {
       navigation.navigate('ShopScreen');
@@ -56,16 +51,21 @@ const CheckOutScreen = ({ navigation, route }) => {
 
   const onSubmitCheckList = React.useCallback(
     (values) => {
-      if (location) {
-        dispatch(
-          actions.requestCheckOut({
-            ...values,
-            shopId,
-            latitude: location.latitude,
-            longitude: location.longitude,
-            incomplete: false,
-          }),
-        );
+      if (!values.note) {
+        setErr('Cần nhập ghi chú');
+      } else {
+        setErr('');
+        if (location) {
+          dispatch(
+            actions.requestCheckOut({
+              ...values,
+              shopId,
+              latitude: location.latitude,
+              longitude: location.longitude,
+              incomplete: true,
+            }),
+          );
+        }
       }
     },
     [dispatch, shopId, location],
@@ -75,7 +75,7 @@ const CheckOutScreen = ({ navigation, route }) => {
     <>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title={'Check out'} subtitle="" />
+        <Appbar.Content title={'Report'} subtitle="" />
       </Appbar.Header>
 
       <KeyboardAvoidingView
@@ -90,6 +90,7 @@ const CheckOutScreen = ({ navigation, route }) => {
             ref={register({ name: 'note' })}
             onChangeText={(text) => setValue('note', text, true)}
             disabled={isLoading}
+            errorText={err}
           />
 
           <TakePhoto
@@ -97,7 +98,6 @@ const CheckOutScreen = ({ navigation, route }) => {
             isSubmitting={isLoading}
             register={register}
             triggerValidation={trigger}
-            shop={currentShopChecked}
           />
           {errors.photo ? <Paragraph>Cần chụp hình</Paragraph> : null}
 
@@ -106,7 +106,7 @@ const CheckOutScreen = ({ navigation, route }) => {
             onPress={handleSubmit(onSubmitCheckList)}
             loading={isLoading}
             disabled={isLoading || !formState.isValid}>
-            Check out
+            Send Report
           </Button>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -143,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default memo(CheckOutScreen);
+export default memo(ReportScreen);

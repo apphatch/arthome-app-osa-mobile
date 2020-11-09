@@ -1,11 +1,9 @@
 import React, { memo } from 'react';
-import RNLocation from 'react-native-location';
 
 import { Appbar, Caption } from 'react-native-paper';
 import {
   StyleSheet,
   KeyboardAvoidingView,
-  Text,
   Platform,
   ScrollView,
 } from 'react-native';
@@ -13,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
 // ###
-import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import Paragraph from '../../components/Paragraph';
 import FormTextInput from '../../components/FormTextInput';
@@ -24,10 +21,7 @@ import { defaultTheme } from '../../theme';
 import * as actions from './actions';
 import * as selectors from './selectors';
 import * as shopSelectors from '../ShopScreen/selectors';
-
-RNLocation.configure({
-  distanceFilter: 5.0,
-});
+import * as appSelectors from '../App/selectors';
 
 const CheckInScreen = ({ navigation, route }) => {
   const {
@@ -37,10 +31,10 @@ const CheckInScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectors.makeSelectIsLoading());
   const isCheckIn = useSelector(selectors.makeSelectIsCheckIn());
-  const isReport = useSelector(selectors.makeSelectIsReport());
   const currentShopChecked = useSelector(
     shopSelectors.makeSelectShopById(shopId),
   );
+  const location = useSelector(appSelectors.makeSelectLocation());
 
   const {
     register,
@@ -54,8 +48,6 @@ const CheckInScreen = ({ navigation, route }) => {
     mode: 'onChange',
   });
 
-  const [err, setErr] = React.useState(false);
-
   React.useEffect(() => {
     if (isCheckIn) {
       navigation.navigate('StockCheckListScreen', {
@@ -63,52 +55,22 @@ const CheckInScreen = ({ navigation, route }) => {
         params: { shopId, shopName },
       });
     }
-    if (isReport) {
-      navigation.goBack();
-      dispatch(actions.resetReport());
-    }
-  }, [isCheckIn, navigation, shopId, shopName, isReport, dispatch]);
+  }, [isCheckIn, navigation, shopId, shopName]);
 
   const onSubmitCheckList = React.useCallback(
     (values) => {
-      RNLocation.requestPermission({
-        ios: 'whenInUse',
-        android: {
-          detail: 'coarse',
-        },
-      }).then((granted) => {
-        if (granted) {
-          this.locationSubscription = RNLocation.subscribeToLocationUpdates(
-            (locations) => {
-              dispatch(
-                actions.requestCheckOut({
-                  ...values,
-                  shopId,
-                  latitude: locations[0].latitude,
-                  longitude: locations[0].longitude,
-                }),
-              );
-            },
-          );
-        }
-      });
-    },
-    [dispatch, shopId],
-  );
-
-  const report = React.useCallback(
-    (values) => {
-      console.log(values);
-      if (!values.note) {
-        setErr(true);
-      } else {
-        setErr(false);
+      if (location) {
         dispatch(
-          actions.requestCheckOut({ ...values, shopId, incomplete: true }),
+          actions.requestCheckIn({
+            ...values,
+            shopId,
+            latitude: location.latitude,
+            longitude: location.longitude,
+          }),
         );
       }
     },
-    [dispatch, shopId],
+    [dispatch, shopId, location],
   );
 
   return (
@@ -116,20 +78,6 @@ const CheckInScreen = ({ navigation, route }) => {
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
         <Appbar.Content title={shopName} subtitle="" />
-        <Appbar.Action
-          size={50}
-          icon={() => (
-            <Text
-              style={{ color: 'white', lineHeight: 50, textAlign: 'center' }}>
-              Report
-            </Text>
-          )}
-          onPress={handleSubmit(report)}
-          style={{
-            height: '100%',
-          }}
-          disabled={isLoading || !formState.isValid}
-        />
       </Appbar.Header>
 
       <KeyboardAvoidingView
@@ -146,8 +94,6 @@ const CheckInScreen = ({ navigation, route }) => {
             setValue={setValue}
             disabled={isLoading}
             clearErrors={clearErrors}
-            error={err}
-            errorText="Cần nhập ghi chú"
           />
 
           <TakePhoto

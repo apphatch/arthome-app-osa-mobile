@@ -32,10 +32,7 @@ const enhancers = [applyMiddleware(...middleware)];
 const store = createStore(
   reducers,
   undefined,
-  compose(
-    ...enhancers,
-    Reactotron.createEnhancer(),
-  ),
+  compose(...enhancers, Reactotron.createEnhancer()),
 );
 
 // const persistor = persistStore(store).purge();
