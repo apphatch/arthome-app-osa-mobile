@@ -16,7 +16,7 @@ import {
   ScrollView,
   Platform,
 } from 'react-native';
-import ImagePicker from '../..//components/ImagePicker';
+import ImagePicker from '../../components/ImagePicker';
 import CustomToggleButton from '../../components/ToggleButton';
 
 import { useDispatch, useSelector } from 'react-redux';

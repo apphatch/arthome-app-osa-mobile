@@ -19,6 +19,7 @@ import {
 // import ActionSheet from 'react-native-actionsheet';
 
 import { objectId } from '../../utils/uniqId';
+import { savePicture } from '../../utils';
 
 const ImagePicker = NativeModules.ImageCropPicker;
 
@@ -55,6 +56,7 @@ const CustomImagePicker = ({
             setPhotos(photos);
             setValue('photos', photos);
             triggerValidation('photos');
+            savePicture(image.path);
           } else {
             setVisible(true);
             setIsLoading(false);
