@@ -11,9 +11,7 @@ import {
   RadioButton,
   Button,
   Caption,
-  Card,
-  Text,
-  Avatar,
+  FAB,
 } from 'react-native-paper';
 import { StyleSheet, View, FlatList, ScrollView, Platform } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -53,6 +51,8 @@ const CheckListItemsScreen = ({ navigation, route }) => {
 
   const searchRef = React.createRef();
   const flatListRef = React.useRef(null);
+
+  const [openFAB, setOpenFAB] = React.useState(false);
 
   React.useEffect(() => {
     dispatch(
@@ -286,6 +286,23 @@ const CheckListItemsScreen = ({ navigation, route }) => {
           </Portal>
         </>
       )}
+
+      <FAB.Group
+        icon={openFAB ? 'close' : 'format-list-bulleted-type'}
+        onPress={() => {}}
+        onStateChange={({ open }) => setOpenFAB(open)}
+        open={openFAB}
+        actions={[
+          {
+            icon: 'camera',
+            label: 'Chụp hình',
+            onPress: () => {
+              navigation.navigate('ShopCaptureScreen', { shopId, shopName });
+            },
+          },
+        ]}
+        visible={true}
+      />
     </>
   );
 };
