@@ -46,6 +46,9 @@ const CustomImagePicker = ({
       cropping: false,
       includeExif: true,
       mediaType: 'photo',
+      compressImageMaxWidth: 960,
+      compressImageMaxHeight: 720,
+      compressImageQuality: 0.6,
     })
       .then((image) => {
         if (image) {

@@ -25,6 +25,7 @@ import { defaultTheme } from '../../theme';
 import * as selectors from './selectors';
 import { logger, useDebounce } from '../../utils';
 import * as actions from './actions';
+import { selectors as checkInSelectors } from '../CheckInScreen';
 
 const CheckListItemsScreen = ({ navigation, route }) => {
   const safeArea = useSafeArea();
@@ -40,6 +41,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   logger('CheckListItemsScreen -> stocks', stocks);
   const isLoading = useSelector(selectors.makeSelectIsLoading());
   const isSubmitted = useSelector(selectors.makeSelectIsSubmitted());
+  const checkInData = useSelector(checkInSelectors.makeSelectCheckInData());
 
   const [visibleFilter, setVisibleFilter] = React.useState(false);
   const [selectedOption, setSelectedOption] = React.useState('');
@@ -297,7 +299,10 @@ const CheckListItemsScreen = ({ navigation, route }) => {
             icon: 'camera',
             label: 'Chụp hình',
             onPress: () => {
-              navigation.navigate('ShopCaptureScreen', { shopId, shopName });
+              navigation.navigate('ShopCaptureScreen', {
+                shopId: checkInData.shop_id,
+                shopName: checkInData.name,
+              });
             },
           },
         ]}

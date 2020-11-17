@@ -54,7 +54,7 @@ const TakePhoto = (props) => {
           }
         }
 
-        ImageResizer.createResizedImage(uri, 640, 480, 'JPEG', 100, rotation)
+        ImageResizer.createResizedImage(uri, 960, 720, 'JPEG', 60, rotation)
           .then((res) => {
             Marker.markText({
               src: res.uri,

@@ -28,6 +28,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
   const isLoading = useSelector(selectors.makeSelectIsLoading());
   const checkList = useSelector(selectors.makeSelectCheckList());
   const isCheckIn = useSelector(checkInSelectors.makeSelectIsCheckIn());
+  const checkInData = useSelector(checkInSelectors.makeSelectCheckInData());
 
   const {
     params: { shopId, shopName },
@@ -61,14 +62,20 @@ const StockCheckListScreen = ({ navigation, route }) => {
           icon: 'camera',
           label: 'Chụp hình',
           onPress: () => {
-            navigation.navigate('ShopCaptureScreen', { shopId, shopName });
+            navigation.navigate('ShopCaptureScreen', {
+              shopId: checkInData.shop_id,
+              shopName: checkInData.name,
+            });
           },
         },
         {
           icon: 'alert-circle-outline',
           label: 'Report',
           onPress: () => {
-            navigation.navigate('ReportScreen', { shopId, shopName });
+            navigation.navigate('ReportScreen', {
+              shopId: checkInData.shop_id,
+              shopName: checkInData.name,
+            });
           },
         },
       ]);
@@ -78,26 +85,35 @@ const StockCheckListScreen = ({ navigation, route }) => {
           icon: 'camera',
           label: 'Chụp hình',
           onPress: () => {
-            navigation.navigate('ShopCaptureScreen', { shopId, shopName });
+            navigation.navigate('ShopCaptureScreen', {
+              shopId: checkInData.shop_id,
+              shopName: checkInData.name,
+            });
           },
         },
         {
           icon: 'alert-circle-outline',
           label: 'Report',
           onPress: () => {
-            navigation.navigate('ReportScreen', { shopId, shopName });
+            navigation.navigate('ReportScreen', {
+              shopId: checkInData.shop_id,
+              shopName: checkInData.name,
+            });
           },
         },
         {
           icon: 'account-off-outline',
           label: 'Check out',
           onPress: () => {
-            navigation.navigate('CheckOutScreen', { shopId, shopName });
+            navigation.navigate('CheckOutScreen', {
+              shopId: checkInData.shop_id,
+              shopName: checkInData.name,
+            });
           },
         },
       ]);
     }
-  }, [checkList, navigation, shopId, shopName]);
+  }, [checkList, navigation, shopId, shopName, checkInData]);
 
   const debouncedSearchTerm = useDebounce(searchText, 500);
   console.log(
