@@ -40,7 +40,7 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow An Hoà QC to use the camera</string>
+	<string>Allow ArtHomeOSA to use the camera</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This is the plist item for NSLocationAlwaysAndWhenInUseUsageDescription</string>
 	<key>NSLocationAlwaysUsageDescription</key>
@@ -48,9 +48,9 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This is the plist item for NSLocationWhenInUseUsageDescription</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Give An Hoà QC periences permission to save photos</string>
+	<string>Give ArtHomeOSA periences permission to save photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Give An Hoà QC periences permission to access your photos</string>
+	<string>Give ArtHomeOSA periences permission to access your photos</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>opensans-regular.ttf</string>

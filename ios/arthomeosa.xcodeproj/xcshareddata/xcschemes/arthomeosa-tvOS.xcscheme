@@ -5,15 +5,6 @@
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
-      <PreActions>
-         <ExecutionAction
-            ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
-            <ActionContent
-               title = "Run Script"
-               scriptText = "# Type a script or drag a script file from your workspace to insert its path.&#10;echo &quot;.env&quot; &gt; /tmp/envfile&#10;">
-            </ActionContent>
-         </ExecutionAction>
-      </PreActions>
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -23,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "OSA App.app"
-               BlueprintName = "arthomeqc"
-               ReferencedContainer = "container:arthomeqc.xcodeproj">
+               BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
+               BuildableName = "arthomeosa-tvOS.app"
+               BlueprintName = "arthomeosa-tvOS"
+               ReferencedContainer = "container:arthomeosa.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -41,10 +32,10 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "arthomeqcTests.xctest"
-               BlueprintName = "arthomeqcTests"
-               ReferencedContainer = "container:arthomeqc.xcodeproj">
+               BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
+               BuildableName = "arthomeosa-tvOSTests.xctest"
+               BlueprintName = "arthomeosa-tvOSTests"
+               ReferencedContainer = "container:arthomeosa.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -63,10 +54,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "OSA App.app"
-            BlueprintName = "arthomeqc"
-            ReferencedContainer = "container:arthomeqc.xcodeproj">
+            BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
+            BuildableName = "arthomeosa-tvOS.app"
+            BlueprintName = "arthomeosa-tvOS"
+            ReferencedContainer = "container:arthomeosa.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -80,10 +71,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "OSA App.app"
-            BlueprintName = "arthomeqc"
-            ReferencedContainer = "container:arthomeqc.xcodeproj">
+            BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
+            BuildableName = "arthomeosa-tvOS.app"
+            BlueprintName = "arthomeosa-tvOS"
+            ReferencedContainer = "container:arthomeosa.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
