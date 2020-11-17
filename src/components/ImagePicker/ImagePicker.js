@@ -1,5 +1,5 @@
 import React from 'react';
-
+import ImageResizer from 'react-native-image-resizer';
 import {
   View,
   StyleSheet,
@@ -46,20 +46,36 @@ const CustomImagePicker = ({
       cropping: false,
       includeExif: true,
       mediaType: 'photo',
-      compressImageMaxWidth: 960,
-      compressImageMaxHeight: 720,
-      compressImageQuality: 0.6,
     })
       .then((image) => {
         if (image) {
-          photos = [...photos, { ...image, localIdentifier: objectId() }];
+          savePicture(image.path);
+          if (image.size >= 100000) {
+            ImageResizer.createResizedImage(
+              image.path,
+              720,
+              960,
+              'JPEG',
+              60,
+            ).then((res) => {
+              const newPhotos = res;
+              newPhotos.path = res.uri;
+              photos = [
+                ...photos,
+                { ...newPhotos, localIdentifier: objectId() },
+              ];
+              setPhotos(photos);
+            });
+          } else {
+            photos = [...photos, { ...image, localIdentifier: objectId() }];
+            setPhotos(photos);
+          }
+
           if (photos.length <= 10) {
             onTakePhoto();
             setIsLoading(false);
-            setPhotos(photos);
             setValue('photos', photos);
             triggerValidation('photos');
-            savePicture(image.path);
           } else {
             setVisible(true);
             setIsLoading(false);

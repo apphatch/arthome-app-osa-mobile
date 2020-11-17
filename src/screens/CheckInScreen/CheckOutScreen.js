@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 
-import { Appbar, Caption } from 'react-native-paper';
+import { Appbar, Caption, HelperText } from 'react-native-paper';
 import {
   StyleSheet,
   KeyboardAvoidingView,
@@ -13,7 +13,6 @@ import { useForm } from 'react-hook-form';
 // ###
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
-import Paragraph from '../../components/Paragraph';
 
 import TakePhoto from './components/TakePhoto';
 
@@ -99,7 +98,13 @@ const CheckOutScreen = ({ navigation, route }) => {
             triggerValidation={trigger}
             shop={currentShopChecked}
           />
-          {errors.photo ? <Paragraph>Cần chụp hình</Paragraph> : null}
+          {errors.photo ? (
+            <HelperText
+              type="error"
+              style={{ width: '100%', textAlign: 'center' }}>
+              Cần chụp hình
+            </HelperText>
+          ) : null}
 
           <Button
             mode="contained"
