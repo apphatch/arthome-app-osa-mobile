@@ -106,8 +106,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
         <KeyboardAvoidingView
           style={styles.container}
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          enabled
-          keyboardVerticalOffset={'100%'}>
+          enabled>
           <ScrollView>
             <View style={styles.form}>
               <Title style={styles.caption}>{stockName}</Title>
@@ -285,6 +284,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
         icon="check-all"
         label="Gửi"
         onPress={handleSubmit(onSubmitCheckList)}
+        disabled={isLoading}
       />
       <Snackbar
         visible={showSnack}

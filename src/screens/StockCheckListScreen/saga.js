@@ -1,5 +1,5 @@
 import { put, call, select, all, takeLatest } from 'redux-saga/effects';
-import { mapValues } from 'lodash';
+import { mapValues, isEmpty } from 'lodash';
 
 import * as actions from './actions';
 import * as actionTypes from './actionTypes';
@@ -133,7 +133,7 @@ export function* fetchStocks({ payload }) {
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
-    const { filter } = payload;
+    const { filter, isDone } = payload;
     const res = yield call(API.fetchStockByCheckList, {
       ...payload,
       authorization,
@@ -158,11 +158,12 @@ export function* fetchStocks({ payload }) {
       return a.category > b.category ? 1 : -1;
     });
 
-    let newData;
+    let newData = res.data;
     if (filter !== '') {
-      newData = res.data.filter((item) => item.category === filter);
-    } else {
-      newData = res.data;
+      newData = newData.filter((item) => item.category === filter);
+    }
+    if (isDone) {
+      newData = newData.filter((item) => isEmpty(item.data));
     }
     yield put(actions.stocksResponse({ stocks: newData, categories }));
     yield put(loginActions.updateAuthorization(res.headers.authorization));

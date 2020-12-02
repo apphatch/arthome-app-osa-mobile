@@ -52,8 +52,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        enabled
-        keyboardVerticalOffset={'100%'}>
+        enabled>
         <ScrollView>
           <Caption style={styles.caption}>Thông tin</Caption>
           <TextInput

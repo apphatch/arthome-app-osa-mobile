@@ -12,6 +12,7 @@ import {
   Button,
   Caption,
   FAB,
+  Switch,
 } from 'react-native-paper';
 import { StyleSheet, View, FlatList, ScrollView, Platform } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
@@ -50,6 +51,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   const [isFocusSearchInput, setIsFocusSearchInput] = React.useState(false);
   const debounceSearchTerm = useDebounce(searchText, 1000);
   const [toIndex, setToIndex] = React.useState(0);
+  const [isDone, setIsDone] = React.useState(false);
 
   const searchRef = React.createRef();
   const flatListRef = React.useRef(null);
@@ -62,9 +64,10 @@ const CheckListItemsScreen = ({ navigation, route }) => {
         search: debounceSearchTerm,
         checkListId: clId,
         filter: filterValue,
+        isDone,
       }),
     );
-  }, [debounceSearchTerm, clId, dispatch, filterValue]);
+  }, [debounceSearchTerm, clId, dispatch, filterValue, isDone]);
 
   const getItemLayout = (data, index) => {
     const itemHeight = 80;
@@ -89,17 +92,16 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   const renderItem = ({ item, index }) => {
     return (
       <List.Item
-        style={{ height: 80 }}
+        style={{
+          height: 80,
+          paddingVertical: 10,
+        }}
         title={item.stock_name}
         titleNumberOfLines={2}
         titleStyle={{ fontSize: 14 }}
         description={() =>
           clType === 'oos' && (
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-              }}>
+            <View style={styles.rowItem}>
               <Caption>{`Stock: ${item.quantity}`}</Caption>
               {item.data && item.data !== null && (
                 <>
@@ -210,6 +212,10 @@ const CheckListItemsScreen = ({ navigation, route }) => {
     }
   }, [scrollToIndex, toIndex]);
 
+  const onToggleFilter = () => {
+    setIsDone(!isDone);
+  };
+
   return (
     <>
       <Appbar.Header>
@@ -235,6 +241,8 @@ const CheckListItemsScreen = ({ navigation, route }) => {
               autoCompleteType="off"
               spellCheck={false}
             />
+            <Switch value={isDone} onValueChange={onToggleFilter} />
+
             <IconButton
               icon="filter"
               color="gray"
@@ -329,6 +337,14 @@ const styles = StyleSheet.create({
     flex: 1,
     elevation: 0,
     backgroundColor: 'transparent',
+  },
+  rowItem: {
+    height: 80,
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    display: 'flex',
+    alignItems: 'center',
   },
 });
 

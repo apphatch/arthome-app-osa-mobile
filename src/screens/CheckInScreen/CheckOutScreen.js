@@ -73,15 +73,17 @@ const CheckOutScreen = ({ navigation, route }) => {
   return (
     <>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.BackAction
+          onPress={() => navigation.goBack()}
+          disabled={isLoading}
+        />
         <Appbar.Content title={'Check out'} subtitle="" />
       </Appbar.Header>
 
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        enabled
-        keyboardVerticalOffset={'100%'}>
+        enabled>
         <ScrollView>
           <Caption style={styles.caption}>Thông tin</Caption>
           <TextInput

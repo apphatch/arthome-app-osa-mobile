@@ -36,7 +36,25 @@ const CustomToggleButton = (props) => {
           value={checked}
           disabled={disabled}>
           {options.map((o) => (
-            <ToggleButton key={o} icon={() => <Text>{o}</Text>} value={o} />
+            <ToggleButton
+              key={o}
+              icon={() => (
+                <Text
+                  style={
+                    checked === o && {
+                      color: '#fff',
+                    }
+                  }>
+                  {o}
+                </Text>
+              )}
+              value={o}
+              style={
+                checked === o && {
+                  backgroundColor: '#6200ee',
+                }
+              }
+            />
           ))}
         </ToggleButton.Row>
       </View>
