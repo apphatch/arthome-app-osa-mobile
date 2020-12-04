@@ -254,7 +254,7 @@ PODS:
     - React-Core
   - react-native-image-picker (2.3.4):
     - React-Core
-  - react-native-image-resizer (1.4.0):
+  - react-native-image-resizer (1.4.1):
     - React-Core
   - react-native-location (2.5.0):
     - React
@@ -328,10 +328,10 @@ PODS:
     - React
   - RNCPicker (1.8.1):
     - React-Core
-  - RNDeviceInfo (7.0.2):
+  - RNDeviceInfo (7.2.1):
     - React-Core
-  - RNGestureHandler (1.8.0):
-    - React
+  - RNGestureHandler (1.9.0):
+    - React-Core
   - RNImageCropPicker (0.35.1):
     - React-Core
     - React-RCTImage
@@ -343,9 +343,9 @@ PODS:
     - TOCropViewController
   - RNImageMarker (0.6.1):
     - React
-  - RNReanimated (1.13.1):
-    - React
-  - RNScreens (2.14.0):
+  - RNReanimated (1.13.2):
+    - React-Core
+  - RNScreens (2.15.0):
     - React-Core
   - RNSVG (12.1.0):
     - React
@@ -567,7 +567,7 @@ SPEC CHECKSUMS:
   react-native-cameraroll: 60ba0068826eab1c8d43146191bafd4363ea58a7
   react-native-config: d8b45133fd13d4f23bd2064b72f6e2c08b2763ed
   react-native-image-picker: c6d75c4ab2cf46f9289f341242b219cb3c1180d3
-  react-native-image-resizer: 9bb7382bc4faf0e840b088460d6f463b434a4818
+  react-native-image-resizer: 354b09df56858289f386dfbd804e318155c14c8f
   react-native-location: 5a40ec1cc6abf2f6d94df979f98ec76c3a415681
   react-native-safe-area-context: b6e0e284002381d2ff29fa4fff42b4d8282e3c94
   react-native-uuid-generator: 82ffa2a1cac94242ebed52c4dedc5044d3412717
@@ -584,12 +584,12 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNCPicker: 914b557e20b3b8317b084aca9ff4b4edb95f61e4
-  RNDeviceInfo: e1d82a27d0c1ea6278e3b141784dc38e51fc90f4
-  RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
+  RNDeviceInfo: ae953cf4af2775e45597304fc9513a7931ef81ff
+  RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
   RNImageCropPicker: 16951bc02411f50c4d197488ed6406a23dc3b5f1
   RNImageMarker: 3d2ad96afe3db0965ecff23ca97d65b812d06b47
-  RNReanimated: dd8c286ab5dd4ba36d3a7fef8bff7e08711b5476
-  RNScreens: 2e278a90eb15092ed261d4f2271e3fc9b60d08d4
+  RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
+  RNScreens: 2ad555d4d9fa10b91bb765ca07fe9b29d59573f0
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   RNVectorIcons: bc69e6a278b14842063605de32bec61f0b251a59
   TOCropViewController: da59f531f8ac8a94ef6d6c0fc34009350f9e8bfe

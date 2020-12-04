@@ -56,7 +56,8 @@ const StockCheckListScreen = ({ navigation, route }) => {
   const [FABItems, setFABItems] = React.useState([]);
 
   React.useEffect(() => {
-    if (checkList && checkList.length > 0) {
+    const haveChecklist = checkList.filter((c) => c.isDone === true);
+    if (haveChecklist.length > 0) {
       setFABItems([
         {
           icon: 'camera',
@@ -168,7 +169,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
           />
         )}
 
-        <Appbar.Content title={'Check list'} subtitle="" />
+        <Appbar.Content title={checkInData.name || 'Check list'} subtitle="" />
       </Appbar.Header>
       <View style={styles.row}>
         <Searchbar

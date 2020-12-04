@@ -12,11 +12,12 @@ import { useForm } from 'react-hook-form';
 // ###
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
-import ImagePicker from '../../components/ImagePicker';
+import ImagePicker from './components/ImagePicker';
 
 import { defaultTheme } from '../../theme';
 import * as actions from './actions';
 import * as selectors from './selectors';
+import { selectors as checkInSelectors } from '../CheckInScreen';
 
 const ShopCaptureScreen = ({ navigation, route }) => {
   const {
@@ -26,6 +27,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectors.makeSelectIsLoading());
   const errorMessage = useSelector(selectors.makeSelectErrorMessage());
+  const checkInData = useSelector(checkInSelectors.makeSelectCheckInData());
 
   const { register, setValue, handleSubmit, trigger } = useForm({
     mode: 'onChange',
@@ -46,7 +48,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
     <>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title={shopName} subtitle="" />
+        <Appbar.Content title={checkInData.name} subtitle="" />
       </Appbar.Header>
 
       <KeyboardAvoidingView
