@@ -56,7 +56,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
   const [FABItems, setFABItems] = React.useState([]);
 
   React.useEffect(() => {
-    const haveChecklist = checkList.filter((c) => c.isDone === true);
+    const haveChecklist = checkList.filter((c) => !c.completed);
     if (haveChecklist.length > 0) {
       setFABItems([
         {
@@ -134,6 +134,11 @@ const StockCheckListScreen = ({ navigation, route }) => {
           clType: item.checklist_type,
           shopName,
         })
+      }
+      right={(props) =>
+        item.completed ? (
+          <List.Icon {...props} icon="check-circle" color="green" />
+        ) : null
       }
     />
   );

@@ -12,11 +12,13 @@ import * as API from './services';
 export function* login({ payload }) {
   const { username, password, setError } = payload;
   try {
-    const response = yield call(API.login, { username, password });
-    const {
-      data: { user_id, last_checkin_checkout = {} },
-    } = response;
     yield delay(2000);
+    const response = yield call(API.login, { username, password });
+    console.log(response);
+    const {
+      data: { user_id, last_checkin_checkout = {}, shop },
+    } = response;
+    last_checkin_checkout.name = shop.name;
     yield put(
       actions.onLoginResponse({
         user_id,
