@@ -98,7 +98,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
         }}
         title={item.stock_name}
         titleNumberOfLines={2}
-        titleStyle={{ fontSize: 14 }}
+        titleStyle={{ fontSize: 14, height: '70%' }}
         description={() =>
           clType === 'oos' && (
             <View style={styles.rowItem}>
@@ -220,7 +220,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
     <>
       <Appbar.Header>
         <Appbar.BackAction onPress={_onPressGoBack} disabled={isLoading} />
-        <Appbar.Content title={'Sản phẩm'} subtitle="" />
+        <Appbar.Content title={checkInData.name || 'Sản phẩm'} subtitle="" />
       </Appbar.Header>
       {isLoading ? (
         <LoadingIndicator />
@@ -339,7 +339,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   rowItem: {
-    height: 80,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',

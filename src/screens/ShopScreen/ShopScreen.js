@@ -50,7 +50,10 @@ const ShopScreen = ({ navigation, route }) => {
         } else {
           navigation.navigate('StockCheckListScreen', {
             screen: 'StockCheckListScreen',
-            params: { shopId: checkInData.shop_id, shopName: checkInData.name },
+            params: {
+              shopId: checkInData?.shop_id,
+              shopName: checkInData?.name,
+            },
           });
         }
       } else {
@@ -63,8 +66,7 @@ const ShopScreen = ({ navigation, route }) => {
       navigation,
       debounceSearchTerm,
       isCheckIn,
-      checkInData.name,
-      checkInData.shop_id,
+      checkInData,
     ]),
   );
 

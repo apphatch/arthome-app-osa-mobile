@@ -146,6 +146,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
                 const default_value_use =
                   template[fieldName].default_value_use || '';
                 if (type === 'number') {
+                  const { allow_negative } = template[fieldName];
                   return (
                     <NumberInput
                       key={fieldName}
@@ -161,7 +162,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
                           : ''
                       }
                       disabled={isLoading}
-                      rules={{ required }}
+                      rules={{ required, min: !allow_negative && 0 }}
                       error={errors[fieldName]}
                       clearErrors={clearErrors}
                     />

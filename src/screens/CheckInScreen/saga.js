@@ -37,10 +37,16 @@ export function* checkIn({ payload }) {
       authorization,
       shopId,
     });
+    const {
+      data: { last_checkin_checkout = {}, shop },
+    } = response;
+    if (shop !== null) {
+      last_checkin_checkout.name = shop.name;
+    }
     yield put(
       actions.onCheckInResponse({
-        checkInData: response.data.last_checkin_checkout,
-        isCheckIn: !_.isEmpty(response.data.last_checkin_checkout),
+        checkInData: last_checkin_checkout,
+        isCheckIn: !_.isEmpty(last_checkin_checkout),
       }),
     );
     yield put(loginActions.updateAuthorization(response.headers.authorization));
