@@ -14,7 +14,8 @@ import { useForm } from 'react-hook-form';
 import Button from '../../components/Button';
 import FormTextInput from '../../components/FormTextInput';
 
-import TakePhoto from './components/TakePhoto';
+// import TakePhoto from './components/TakePhoto';
+import ImagePicker from './components/ImagePicker';
 
 import { defaultTheme } from '../../theme';
 import * as actions from './actions';
@@ -97,7 +98,7 @@ const CheckInScreen = ({ navigation, route }) => {
             clearErrors={clearErrors}
           />
 
-          <TakePhoto
+          <ImagePicker
             setValue={setValue}
             isSubmitting={isLoading}
             register={register}

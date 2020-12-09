@@ -1,5 +1,4 @@
 import React from 'react';
-import ImageResizer from 'react-native-image-resizer';
 import {
   View,
   StyleSheet,
@@ -8,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Text,
+  Dimensions,
 } from 'react-native';
 import {
   IconButton,
@@ -46,30 +46,15 @@ const CustomImagePicker = ({
       cropping: false,
       includeExif: true,
       mediaType: 'photo',
+      compressImageMaxWidth: (Dimensions.get('window').width * 2) / 3,
+      compressImageMaxHeight: (Dimensions.get('window').height * 2) / 3,
+      compressImageQuality: 0.6,
     })
       .then((image) => {
         if (image) {
           savePicture(image.path);
-          if (image.size >= 100000) {
-            ImageResizer.createResizedImage(
-              image.path,
-              720,
-              960,
-              'JPEG',
-              60,
-            ).then((res) => {
-              const newPhotos = res;
-              newPhotos.path = res.uri;
-              photos = [
-                ...photos,
-                { ...newPhotos, localIdentifier: objectId() },
-              ];
-              setPhotos(photos);
-            });
-          } else {
-            photos = [...photos, { ...image, localIdentifier: objectId() }];
-            setPhotos(photos);
-          }
+          photos = [...photos, { ...image, localIdentifier: objectId() }];
+          setPhotos(photos);
 
           if (photos.length <= 10) {
             onTakePhoto();

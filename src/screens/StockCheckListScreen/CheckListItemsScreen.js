@@ -220,7 +220,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
     <>
       <Appbar.Header>
         <Appbar.BackAction onPress={_onPressGoBack} disabled={isLoading} />
-        <Appbar.Content title={checkInData.name || 'Sản phẩm'} subtitle="" />
+        <Appbar.Content title={'Sản phẩm'} subtitle="" />
       </Appbar.Header>
       {isLoading ? (
         <LoadingIndicator />
