@@ -1,4 +1,5 @@
 import React from 'react';
+import ImageResizer from 'react-native-image-resizer';
 import {
   View,
   StyleSheet,
@@ -7,7 +8,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Text,
-  Dimensions,
 } from 'react-native';
 import {
   IconButton,
@@ -16,10 +16,9 @@ import {
   Dialog,
   Portal,
 } from 'react-native-paper';
-// import ActionSheet from 'react-native-actionsheet';
 
-import { objectId } from '../../utils/uniqId';
 import { savePicture } from '../../utils';
+import { objectId } from '../../utils/uniqId';
 
 const ImagePicker = NativeModules.ImageCropPicker;
 
@@ -29,7 +28,6 @@ const CustomImagePicker = ({
   register,
   triggerValidation,
 }) => {
-  // let actionSheet = React.useRef({});
   let [photos, setPhotos] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
@@ -46,55 +44,53 @@ const CustomImagePicker = ({
       cropping: false,
       includeExif: true,
       mediaType: 'photo',
-      compressImageMaxWidth: (Dimensions.get('window').width * 2) / 3,
-      compressImageMaxHeight: (Dimensions.get('window').height * 2) / 3,
-      compressImageQuality: 0.6,
     })
       .then((image) => {
         if (image) {
-          savePicture(image.path);
-          photos = [...photos, { ...image, localIdentifier: objectId() }];
-          setPhotos(photos);
+          const { path, size, width, height } = image;
+          let reWidth = width;
+          let reHeight = height;
+          let quality = 100;
 
-          if (photos.length <= 10) {
-            onTakePhoto();
-            setIsLoading(false);
-            setValue('photos', photos);
-            triggerValidation('photos');
-          } else {
-            setVisible(true);
-            setIsLoading(false);
+          if (size >= 200000) {
+            reWidth = (width * 2) / 3;
+            reHeight = (height * 2) / 3;
+            quality = 60;
           }
+
+          ImageResizer.createResizedImage(
+            path,
+            reWidth,
+            reHeight,
+            'JPEG',
+            quality,
+            0,
+          )
+            .then((res) => {
+              savePicture(res.path);
+
+              photos = [...photos, { ...res, localIdentifier: objectId() }];
+              setPhotos(photos);
+
+              if (photos.length <= 10) {
+                onTakePhoto();
+                setIsLoading(false);
+                setValue('photos', photos);
+                triggerValidation('photos');
+              } else {
+                setVisible(true);
+                setIsLoading(false);
+              }
+            })
+            .catch(() => {
+              setIsLoading(false);
+            });
         }
       })
       .catch(() => {
         setIsLoading(false);
       });
   };
-
-  // const onChooseAlbum = () => {
-  //   setIsLoading(true);
-  //   ImagePicker.openPicker({
-  //     cropping: false,
-  //     includeExif: true,
-  //     mediaType: 'photo',
-  //     multiple: true,
-  //     maxFiles: 10,
-  //   }).then((image) => {
-  //     if (image) {
-  //       photos = [...photos, { ...image, localIdentifier: objectId() }];
-  //       if (photos.length <= 10) {
-  //         setPhotos(photos);
-  //         setIsLoading(false);
-  //         setValue('photos', photos);
-  //         triggerValidation('photos');
-  //       } else {
-  //         setVisible(true);
-  //         setIsLoading(false);
-  //       }
-  //     }
-  //   });
-  // };
 
   const onRemovePhoto = React.useCallback(
     (photo) => {
@@ -111,7 +107,6 @@ const CustomImagePicker = ({
         })
         .catch((e) => {
           setIsDeleting(false);
-          alert(e);
         });
     },
     [photos, setPhotos, setValue, triggerValidation],
@@ -121,19 +116,6 @@ const CustomImagePicker = ({
     setVisible(false);
   };
 
-  // const showActionSheet = () => {
-  //   actionSheet.show();
-  // };
-
-  // const onChoose = (i) => {
-  //   if (i === 0) {
-  //     onTakePhoto();
-  //   }
-
-  //   if (i === 1) {
-  //     onChooseAlbum();
-  //   }
-  // };
   return (
     <View style={styles.root}>
       <View style={styles.itemBox}>
@@ -178,13 +160,6 @@ const CustomImagePicker = ({
           </Dialog.Actions>
         </Dialog>
       </Portal>
-      {/* <ActionSheet
-        ref={(o) => (actionSheet = o)}
-        options={['Camera', 'Choose from Album', 'Cancel']}
-        cancelButtonIndex={2}
-        onPress={(index) => onChoose(index)}
-        styles={{ messageBox: { height: 60 } }}
-      /> */}
     </View>
   );
 };

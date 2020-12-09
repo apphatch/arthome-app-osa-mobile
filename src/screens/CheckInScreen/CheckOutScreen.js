@@ -14,8 +14,7 @@ import { useForm } from 'react-hook-form';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 
-// import TakePhoto from './components/TakePhoto';
-import ImagePicker from './components/ImagePicker';
+import TakePhoto from './components/TakePhoto';
 
 import { defaultTheme } from '../../theme';
 import * as actions from './actions';
@@ -94,12 +93,11 @@ const CheckOutScreen = ({ navigation, route }) => {
             disabled={isLoading}
           />
 
-          <ImagePicker
+          <TakePhoto
             setValue={setValue}
             isSubmitting={isLoading}
             register={register}
             triggerValidation={trigger}
-            shop={currentShopChecked}
           />
           {errors.photo ? (
             <HelperText

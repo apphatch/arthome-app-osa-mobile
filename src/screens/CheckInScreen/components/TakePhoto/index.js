@@ -13,8 +13,6 @@ import {
   ActivityIndicator,
 } from 'react-native-paper';
 
-import { logger } from '../../../../utils';
-
 const options = {
   storageOptions: {
     skipBackup: true,
@@ -63,9 +61,9 @@ const TakePhoto = (props) => {
             rotation = -90;
           }
         }
-        if (fileSize >= 100000) {
-          reWidth = 720;
-          reHeight = 960;
+        if (fileSize >= 200000) {
+          reWidth = (width * 2) / 3;
+          reHeight = (height * 2) / 3;
           quality = 60;
         }
 

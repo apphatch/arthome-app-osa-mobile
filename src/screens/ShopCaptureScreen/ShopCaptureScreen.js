@@ -29,7 +29,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
   const errorMessage = useSelector(selectors.makeSelectErrorMessage());
   const checkInData = useSelector(checkInSelectors.makeSelectCheckInData());
 
-  const { register, setValue, handleSubmit, trigger } = useForm({
+  const { register, setValue, handleSubmit, trigger, formState } = useForm({
     mode: 'onChange',
   });
 
@@ -76,7 +76,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
             mode="contained"
             onPress={handleSubmit(onSubmitCheckList)}
             loading={isLoading}
-            disabled={isLoading}>
+            disabled={isLoading || !formState.isValid}>
             Gửi
           </Button>
         </ScrollView>

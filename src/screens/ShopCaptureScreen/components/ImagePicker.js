@@ -1,4 +1,5 @@
 import React from 'react';
+import ImageResizer from 'react-native-image-resizer';
 import {
   View,
   StyleSheet,
@@ -7,7 +8,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Text,
-  Dimensions,
 } from 'react-native';
 import {
   IconButton,
@@ -17,8 +17,8 @@ import {
   Portal,
 } from 'react-native-paper';
 
-import { objectId } from '../../../utils/uniqId';
 import { savePicture } from '../../../utils';
+import { objectId } from '../../../utils/uniqId';
 
 const ImagePicker = NativeModules.ImageCropPicker;
 
@@ -44,25 +44,47 @@ const CustomImagePicker = ({
       cropping: false,
       includeExif: true,
       mediaType: 'photo',
-      compressImageMaxWidth: (Dimensions.get('window').width * 2) / 3,
-      compressImageMaxHeight: (Dimensions.get('window').height * 2) / 3,
-      compressImageQuality: 0.6,
     })
       .then((image) => {
         if (image) {
-          savePicture(image.path);
-          photos = [...photos, { ...image, localIdentifier: objectId() }];
-          setPhotos(photos);
+          const { path, size, width, height } = image;
+          let reWidth = width;
+          let reHeight = height;
+          let quality = 100;
 
-          if (photos.length <= 10) {
-            onTakePhoto();
-            setIsLoading(false);
-            setValue('photos', photos);
-            triggerValidation('photos');
-          } else {
-            setVisible(true);
-            setIsLoading(false);
+          if (size >= 200000) {
+            reWidth = (width * 2) / 3;
+            reHeight = (height * 2) / 3;
+            quality = 60;
           }
+
+          ImageResizer.createResizedImage(
+            path,
+            reWidth,
+            reHeight,
+            'JPEG',
+            quality,
+            0,
+          )
+            .then((res) => {
+              savePicture(res.path);
+
+              photos = [...photos, { ...res, localIdentifier: objectId() }];
+              setPhotos(photos);
+
+              if (photos.length <= 10) {
+                onTakePhoto();
+                setIsLoading(false);
+                setValue('photos', photos);
+                triggerValidation('photos');
+              } else {
+                setVisible(true);
+                setIsLoading(false);
+              }
+            })
+            .catch(() => {
+              setIsLoading(false);
+            });
         }
       })
       .catch(() => {
