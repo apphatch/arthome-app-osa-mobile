@@ -1,4 +1,4 @@
-import { put, call, select, all, takeLatest } from 'redux-saga/effects';
+import { put, call, select, all, takeLatest, delay } from 'redux-saga/effects';
 import UUIDGenerator from 'react-native-uuid-generator';
 import moment from 'moment';
 import { CommonActions } from '@react-navigation/native';
@@ -19,6 +19,7 @@ import { logger } from '../../utils';
 export function* checkOut({ payload }) {
   const { note, photos, shopId, navigation } = payload;
   try {
+    yield delay(1000);
     const formData = new FormData();
 
     const authorization = yield select(

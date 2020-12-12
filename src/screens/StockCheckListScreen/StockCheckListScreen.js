@@ -64,8 +64,8 @@ const StockCheckListScreen = ({ navigation, route }) => {
           label: 'Chụp hình',
           onPress: () => {
             navigation.navigate('ShopCaptureScreen', {
-              shopId: checkInData.shop_id,
-              shopName: checkInData.name,
+              shopId: checkInData.shop_id ? checkInData.shop_id : shopId,
+              shopName: checkInData.name ? checkInData.name : shopName,
             });
           },
         },
@@ -74,8 +74,8 @@ const StockCheckListScreen = ({ navigation, route }) => {
           label: 'Report',
           onPress: () => {
             navigation.navigate('ReportScreen', {
-              shopId: checkInData.shop_id,
-              shopName: checkInData.name,
+              shopId: checkInData.shop_id ? checkInData.shop_id : shopId,
+              shopName: checkInData.name ? checkInData.name : shopName,
             });
           },
         },
@@ -87,8 +87,8 @@ const StockCheckListScreen = ({ navigation, route }) => {
           label: 'Chụp hình',
           onPress: () => {
             navigation.navigate('ShopCaptureScreen', {
-              shopId: checkInData.shop_id,
-              shopName: checkInData.name,
+              shopId: checkInData.shop_id ? checkInData.shop_id : shopId,
+              shopName: checkInData.name ? checkInData.name : shopName,
             });
           },
         },
@@ -97,8 +97,8 @@ const StockCheckListScreen = ({ navigation, route }) => {
           label: 'Report',
           onPress: () => {
             navigation.navigate('ReportScreen', {
-              shopId: checkInData.shop_id,
-              shopName: checkInData.name,
+              shopId: checkInData.shop_id ? checkInData.shop_id : shopId,
+              shopName: checkInData.name ? checkInData.name : shopName,
             });
           },
         },
@@ -107,8 +107,8 @@ const StockCheckListScreen = ({ navigation, route }) => {
           label: 'Check out',
           onPress: () => {
             navigation.navigate('CheckOutScreen', {
-              shopId: checkInData.shop_id,
-              shopName: checkInData.name,
+              shopId: checkInData.shop_id ? checkInData.shop_id : shopId,
+              shopName: checkInData.name ? checkInData.name : shopName,
             });
           },
         },
@@ -174,40 +174,45 @@ const StockCheckListScreen = ({ navigation, route }) => {
           />
         )}
 
-        <Appbar.Content title={checkInData.name || 'Check list'} subtitle="" />
-      </Appbar.Header>
-      <View style={styles.row}>
-        <Searchbar
-          placeholder="Tìm kiếm..."
-          onChangeText={_onSearchStockItem}
-          value={searchText}
-          style={styles.searchbar}
-          icon={isFocusSearchInput ? 'keyboard-backspace' : 'magnify'}
-          onFocus={_onFocus}
-          onBlur={_onBlur}
-          onIconPress={_onIconPress}
-          ref={searchRef}
-          autoCorrect={false}
-          autoCompleteType="off"
-          spellCheck={false}
+        <Appbar.Content
+          title={checkInData.name ? checkInData.name : shopName || 'Check list'}
+          subtitle=""
         />
-      </View>
-      <View style={[styles.container]}>
-        {isLoading ? (
-          <LoadingIndicator />
-        ) : (
-          <FlatList
-            data={checkList}
-            renderItem={renderItem}
-            ItemSeparatorComponent={Divider}
-            keyExtractor={keyExtractor}
-            contentContainerStyle={{
-              backgroundColor: colors.background,
-              paddingBottom: safeArea.bottom,
-            }}
-          />
-        )}
-      </View>
+      </Appbar.Header>
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <View style={styles.row}>
+            <Searchbar
+              placeholder="Tìm kiếm..."
+              onChangeText={_onSearchStockItem}
+              value={searchText}
+              style={styles.searchbar}
+              icon={isFocusSearchInput ? 'keyboard-backspace' : 'magnify'}
+              onFocus={_onFocus}
+              onBlur={_onBlur}
+              onIconPress={_onIconPress}
+              ref={searchRef}
+              autoCorrect={false}
+              autoCompleteType="off"
+              spellCheck={false}
+            />
+          </View>
+          <View style={[styles.container]}>
+            <FlatList
+              data={checkList}
+              renderItem={renderItem}
+              ItemSeparatorComponent={Divider}
+              keyExtractor={keyExtractor}
+              contentContainerStyle={{
+                backgroundColor: colors.background,
+                paddingBottom: safeArea.bottom,
+              }}
+            />
+          </View>
+        </>
+      )}
 
       <FAB.Group
         style={[styles.fab]}

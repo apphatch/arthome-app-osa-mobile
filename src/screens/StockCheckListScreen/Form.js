@@ -273,6 +273,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
                   isSubmitting={isLoading}
                   register={register}
                   triggerValidation={trigger}
+                  value={item.data ? item.data.photos : []}
                 />
               )}
             </View>

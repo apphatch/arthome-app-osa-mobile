@@ -1,11 +1,4 @@
-import {
-  put,
-  call,
-  select,
-  // delay,
-  all,
-  takeLatest,
-} from 'redux-saga/effects';
+import { put, call, select, delay, all, takeLatest } from 'redux-saga/effects';
 
 import * as actions from './actions';
 import * as actionTypes from './actionTypes';
@@ -22,6 +15,7 @@ import * as API from './services';
 
 export function* fetchShops({ payload: { userId, search } }) {
   try {
+    yield delay(1000);
     let shops = [];
     let newHeaders = {};
     const authorization = yield select(

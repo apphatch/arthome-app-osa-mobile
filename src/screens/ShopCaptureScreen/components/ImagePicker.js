@@ -95,7 +95,7 @@ const CustomImagePicker = ({
   const onRemovePhoto = React.useCallback(
     (photo) => {
       setIsDeleting(true);
-      ImagePicker.cleanSingle(photo.path)
+      ImagePicker.cleanSingle(photo.uri)
         .then(() => {
           setIsDeleting(false);
           const newPhotos = photos.filter(
@@ -136,7 +136,7 @@ const CustomImagePicker = ({
           return (
             <View style={styles.itemBox} key={photo.localIdentifier}>
               <View style={[styles.item]}>
-                <Image source={{ uri: photo.path }} style={[styles.img]} />
+                <Image source={{ uri: photo.uri }} style={[styles.img]} />
               </View>
               <TouchableOpacity
                 style={[styles.btnDelete]}

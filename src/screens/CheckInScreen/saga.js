@@ -38,11 +38,8 @@ export function* checkIn({ payload }) {
       shopId,
     });
     const {
-      data: { last_checkin_checkout = {}, shop },
+      data: { last_checkin_checkout = {} },
     } = response;
-    if (shop !== null) {
-      last_checkin_checkout.name = shop.name;
-    }
     yield put(
       actions.onCheckInResponse({
         checkInData: last_checkin_checkout,

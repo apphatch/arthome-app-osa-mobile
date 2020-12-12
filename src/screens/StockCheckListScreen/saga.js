@@ -1,4 +1,4 @@
-import { put, call, select, all, takeLatest } from 'redux-saga/effects';
+import { put, call, select, all, takeLatest, delay } from 'redux-saga/effects';
 import { mapValues, isEmpty } from 'lodash';
 
 import * as actions from './actions';
@@ -19,6 +19,7 @@ export function* submitCheckList({ payload }) {
   const { clId, itemId } = payload;
   let { data } = payload;
   try {
+    yield delay(1000);
     const formData = new FormData();
 
     const authorization = yield select(
@@ -58,6 +59,7 @@ export function* submitCheckList({ payload }) {
 
 export function* fetchCheckList({ payload }) {
   try {
+    yield delay(1000);
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
@@ -77,6 +79,7 @@ export function* fetchCheckList({ payload }) {
 
 export function* markDoneAllCheckListItems({ payload: { clId, clType } }) {
   try {
+    yield delay(1000);
     const stocksHasDataNull = yield select(
       selectors.makeSelectStocksHasDataNull(),
     );
@@ -130,6 +133,7 @@ export function* markDoneAllCheckListItems({ payload: { clId, clType } }) {
 
 export function* fetchStocks({ payload }) {
   try {
+    yield delay(1000);
     const authorization = yield select(
       loginSelectors.makeSelectAuthorization(),
     );
