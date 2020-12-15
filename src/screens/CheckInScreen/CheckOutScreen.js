@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-
+import RNLocation from 'react-native-location';
 import { Appbar, Caption, HelperText } from 'react-native-paper';
 import {
   StyleSheet,
@@ -21,6 +21,7 @@ import * as actions from './actions';
 import * as selectors from './selectors';
 import * as shopSelectors from '../ShopScreen/selectors';
 import * as appSelectors from '../App/selectors';
+import * as appAction from '../App/actions';
 
 import { logger } from '../../utils';
 
@@ -37,6 +38,7 @@ const CheckOutScreen = ({ navigation, route }) => {
   );
   logger('CheckOutScreen -> currentShopChecked', currentShopChecked);
   const location = useSelector(appSelectors.makeSelectLocation());
+  const granted = useSelector(appSelectors.makeSelectGranted());
 
   const {
     register,
@@ -48,10 +50,26 @@ const CheckOutScreen = ({ navigation, route }) => {
   } = useForm({ mode: 'onChange' });
 
   React.useEffect(() => {
+    let locationSubscription = () => {
+      return;
+    };
+
     if (!isCheckIn) {
       navigation.navigate('ShopScreen');
+    } else {
+      if (granted) {
+        locationSubscription = RNLocation.subscribeToLocationUpdates(
+          (locations) => {
+            dispatch(appAction.saveLocation({ location: locations[0] }));
+          },
+        );
+      }
     }
-  }, [isCheckIn, navigation]);
+
+    return () => {
+      locationSubscription();
+    };
+  }, [isCheckIn, navigation, dispatch, granted]);
 
   const onSubmitCheckList = React.useCallback(
     (values) => {

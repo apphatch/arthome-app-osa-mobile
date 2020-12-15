@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-
+import RNLocation from 'react-native-location';
 import { Appbar, Caption, HelperText } from 'react-native-paper';
 import {
   StyleSheet,
@@ -19,8 +19,9 @@ import TakePhoto from './components/TakePhoto';
 import { defaultTheme } from '../../theme';
 import * as actions from './actions';
 import * as selectors from './selectors';
-import * as shopSelectors from '../ShopScreen/selectors';
+// import * as shopSelectors from '../ShopScreen/selectors';
 import * as appSelectors from '../App/selectors';
+import * as appAction from '../App/actions';
 
 const CheckInScreen = ({ navigation, route }) => {
   const {
@@ -30,10 +31,11 @@ const CheckInScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectors.makeSelectIsLoading());
   const isCheckIn = useSelector(selectors.makeSelectIsCheckIn());
-  const currentShopChecked = useSelector(
-    shopSelectors.makeSelectShopById(shopId),
-  );
+  // const currentShopChecked = useSelector(
+  //   shopSelectors.makeSelectShopById(shopId),
+  // );
   const location = useSelector(appSelectors.makeSelectLocation());
+  const granted = useSelector(appSelectors.makeSelectGranted());
 
   const {
     register,
@@ -48,13 +50,29 @@ const CheckInScreen = ({ navigation, route }) => {
   });
 
   React.useEffect(() => {
+    let locationSubscription = () => {
+      return;
+    };
+
     if (isCheckIn) {
       navigation.navigate('StockCheckListScreen', {
         screen: 'StockCheckListScreen',
         params: { shopId, shopName },
       });
+    } else {
+      if (granted) {
+        locationSubscription = RNLocation.subscribeToLocationUpdates(
+          (locations) => {
+            dispatch(appAction.saveLocation({ location: locations[0] }));
+          },
+        );
+      }
     }
-  }, [isCheckIn, navigation, shopId, shopName]);
+
+    return () => {
+      locationSubscription();
+    };
+  }, [isCheckIn, navigation, shopId, shopName, dispatch, granted]);
 
   const onSubmitCheckList = React.useCallback(
     (values) => {

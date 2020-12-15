@@ -57,11 +57,7 @@ export const Main = () => {
       },
     }).then((granted) => {
       if (granted) {
-        this.locationSubscription = RNLocation.subscribeToLocationUpdates(
-          (locations) => {
-            dispatch(actions.saveLocation({ location: locations[0] }));
-          },
-        );
+        dispatch(actions.checkLocationPermission({ granted }));
       }
     });
   }, [dispatch]);

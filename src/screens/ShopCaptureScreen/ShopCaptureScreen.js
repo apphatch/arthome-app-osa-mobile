@@ -48,7 +48,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
     <>
       <Appbar.Header>
         <Appbar.BackAction onPress={() => navigation.goBack()} />
-        <Appbar.Content title={checkInData.name} subtitle="" />
+        <Appbar.Content title={checkInData.name || shopName} subtitle="" />
       </Appbar.Header>
 
       <KeyboardAvoidingView
@@ -76,7 +76,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
             mode="contained"
             onPress={handleSubmit(onSubmitCheckList)}
             loading={isLoading}
-            disabled={isLoading || !formState.isValid}>
+            disabled={isLoading}>
             Gửi
           </Button>
         </ScrollView>

@@ -57,7 +57,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
 
   React.useEffect(() => {
     const haveChecklist = checkList.filter((c) => !c.completed);
-    if (haveChecklist.length > 0) {
+    if (haveChecklist.length === 0) {
       setFABItems([
         {
           icon: 'camera',
@@ -67,6 +67,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
               shopId: checkInData.shop_id ? checkInData.shop_id : shopId,
               shopName: checkInData.name ? checkInData.name : shopName,
             });
+            setOpenFAB(false);
           },
         },
         {
@@ -77,6 +78,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
               shopId: checkInData.shop_id ? checkInData.shop_id : shopId,
               shopName: checkInData.name ? checkInData.name : shopName,
             });
+            setOpenFAB(false);
           },
         },
       ]);
@@ -90,6 +92,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
               shopId: checkInData.shop_id ? checkInData.shop_id : shopId,
               shopName: checkInData.name ? checkInData.name : shopName,
             });
+            setOpenFAB(false);
           },
         },
         {
@@ -100,6 +103,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
               shopId: checkInData.shop_id ? checkInData.shop_id : shopId,
               shopName: checkInData.name ? checkInData.name : shopName,
             });
+            setOpenFAB(false);
           },
         },
         {
@@ -110,6 +114,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
               shopId: checkInData.shop_id ? checkInData.shop_id : shopId,
               shopName: checkInData.name ? checkInData.name : shopName,
             });
+            setOpenFAB(false);
           },
         },
       ]);

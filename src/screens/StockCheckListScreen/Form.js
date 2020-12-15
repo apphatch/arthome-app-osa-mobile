@@ -11,8 +11,6 @@ import {
   StyleSheet,
   View,
   KeyboardAvoidingView,
-  Keyboard,
-  TouchableWithoutFeedback,
   ScrollView,
   Platform,
 } from 'react-native';
@@ -57,8 +55,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
 
   // const item = useSelector(selectors.makeSelectCheckListItemById(clId, itemId));
   const item = useSelector(selectors.makeSelectStockById(itemId));
-
-  const [showSnack, setShowSnack] = React.useState(false);
+  const [error, setError] = React.useState('');
 
   const {
     handleSubmit,
@@ -78,7 +75,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
         }, 500);
       } else {
         if (errorMessage && errorMessage.length) {
-          setShowSnack(true);
+          setError('Gửi lỗi không thành công');
         }
       }
     }
@@ -99,187 +96,187 @@ const StockCheckListScreen = ({ navigation, route }) => {
   return (
     <>
       <Appbar.Header>
-        <Appbar.BackAction onPress={() => navigation.goBack()} />
+        <Appbar.BackAction
+          onPress={() => navigation.goBack()}
+          disabled={isLoading}
+        />
         <Appbar.Content title={'Kiểm tra lỗi'} subtitle="" />
       </Appbar.Header>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          enabled>
-          <ScrollView>
-            <View style={styles.form}>
-              <Title style={styles.caption}>{stockName}</Title>
-              {isPromotion && (
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+        <ScrollView>
+          <View style={styles.form}>
+            <Title style={styles.caption}>{stockName}</Title>
+            {isPromotion && (
+              <View style={[styles.row, styles.textValue]}>
+                <Caption style={styles.caption}>Mechanic</Caption>
+                <Text>{mechanic}</Text>
+              </View>
+            )}
+            {isOOS && (
+              <View style={[styles.row, styles.textValue]}>
+                <Caption style={styles.caption}>Stock</Caption>
+                <Text>{quantity}</Text>
+              </View>
+            )}
+            {(isOOS || isNpd || isPromotion || isOsa) && (
+              <View style={[styles.row, styles.textValue]}>
+                <Caption style={styles.caption}>Barcode</Caption>
+                <Text>{barcode}</Text>
+              </View>
+            )}
+            {isRental && (
+              <>
                 <View style={[styles.row, styles.textValue]}>
-                  <Caption style={styles.caption}>Mechanic</Caption>
-                  <Text>{mechanic}</Text>
+                  <Caption style={styles.caption}>Rental type</Caption>
+                  <Text>{rental_type}</Text>
                 </View>
-              )}
-              {isOOS && (
                 <View style={[styles.row, styles.textValue]}>
-                  <Caption style={styles.caption}>Stock</Caption>
-                  <Text>{quantity}</Text>
+                  <Caption style={styles.caption}>Category</Caption>
+                  <Text>{sub_category}</Text>
                 </View>
-              )}
-              {(isOOS || isNpd || isPromotion || isOsa) && (
-                <View style={[styles.row, styles.textValue]}>
-                  <Caption style={styles.caption}>Barcode</Caption>
-                  <Text>{barcode}</Text>
-                </View>
-              )}
-              {isRental && (
-                <>
-                  <View style={[styles.row, styles.textValue]}>
-                    <Caption style={styles.caption}>Rental type</Caption>
-                    <Text>{rental_type}</Text>
-                  </View>
-                  <View style={[styles.row, styles.textValue]}>
-                    <Caption style={styles.caption}>Category</Caption>
-                    <Text>{sub_category}</Text>
-                  </View>
-                </>
-              )}
-              {Object.keys(template).map((fieldName) => {
-                const type = template[fieldName].type;
-                const required = template[fieldName].required;
-                const default_value_use =
-                  template[fieldName].default_value_use || '';
-                if (type === 'number') {
-                  const { allow_negative } = template[fieldName];
-                  return (
-                    <NumberInput
-                      key={fieldName}
-                      name={fieldName}
-                      label={fieldName}
-                      register={register}
-                      setValue={setValue}
-                      value={
-                        item && item.data && item.data[fieldName]
-                          ? item.data[fieldName].toString()
-                          : item[default_value_use]
-                          ? item[default_value_use].toString()
-                          : ''
-                      }
-                      disabled={isLoading}
-                      rules={{ required, min: !allow_negative && 0 }}
-                      error={errors[fieldName]}
-                      clearErrors={clearErrors}
-                    />
-                  );
-                }
-                if (type === 'input') {
-                  return (
-                    <FormTextInput
-                      key={fieldName}
-                      name={fieldName}
-                      label={fieldName}
-                      register={register}
-                      setValue={setValue}
-                      value={
-                        item.data && item.data[fieldName]
-                          ? item.data[fieldName]
-                          : item[default_value_use]
-                          ? item[default_value_use].toString()
-                          : ''
-                      }
-                      disabled={isLoading}
-                      rules={{ required }}
-                      error={errors[fieldName]}
-                      clearErrors={clearErrors}
-                    />
-                  );
-                }
-                if (type === 'checkbox') {
-                  return (
-                    <CustomSwitch
-                      register={register}
-                      setValue={setValue}
-                      name={fieldName}
-                      label={fieldName}
-                      key={fieldName}
-                      rules={{ required }}
-                      error={errors[fieldName]}
-                      value={item.data ? item.data[fieldName] : false}
-                      disabled={isLoading}
-                      clearErrors={clearErrors}
-                    />
-                  );
-                }
-                if (type === 'select') {
-                  return (
-                    <CustomSelect
-                      key={fieldName}
-                      options={template[fieldName].values.map((val) => {
-                        return {
-                          value: val,
-                          label: val,
-                          color:
-                            item.data != null && item.data[fieldName] === val
-                              ? 'purple'
-                              : 'black',
-                        };
-                      })}
-                      register={register}
-                      setValue={setValue}
-                      name={fieldName}
-                      label={fieldName}
-                      rules={{ required }}
-                      error={errors[fieldName]}
-                      value={item.data ? item.data[fieldName] : null}
-                      disabled={isLoading}
-                      clearErrors={clearErrors}
-                    />
-                  );
-                }
-                if (type === 'radio') {
-                  return (
-                    <CustomToggleButton
-                      options={template[fieldName].values}
-                      register={register}
-                      setValue={setValue}
-                      name={fieldName}
-                      label={fieldName}
-                      key={fieldName}
-                      rules={{ required }}
-                      error={errors[fieldName]}
-                      value={item.data ? item.data[fieldName] : ''}
-                      disabled={isLoading}
-                      clearErrors={clearErrors}
-                    />
-                  );
-                }
-                if (type === 'textarea') {
-                  return (
-                    <FormTextArea
-                      key={fieldName}
-                      name={fieldName}
-                      label={fieldName}
-                      register={register}
-                      setValue={setValue}
-                      value={item.data ? item.data[fieldName] : ''}
-                      disabled={isLoading}
-                      rules={{ required }}
-                      error={errors[fieldName]}
-                      clearErrors={clearErrors}
-                    />
-                  );
-                }
-              })}
+              </>
+            )}
+            {Object.keys(template).map((fieldName) => {
+              const type = template[fieldName].type;
+              const required = template[fieldName].required;
+              const default_value_use =
+                template[fieldName].default_value_use || '';
+              if (type === 'number') {
+                const { allow_negative } = template[fieldName];
+                return (
+                  <NumberInput
+                    key={fieldName}
+                    name={fieldName}
+                    label={fieldName}
+                    register={register}
+                    setValue={setValue}
+                    value={
+                      item && item.data && item.data[fieldName]
+                        ? item.data[fieldName].toString()
+                        : item[default_value_use]
+                        ? item[default_value_use].toString()
+                        : ''
+                    }
+                    disabled={isLoading}
+                    rules={{ required, min: !allow_negative && 0 }}
+                    error={errors[fieldName]}
+                    clearErrors={clearErrors}
+                  />
+                );
+              }
+              if (type === 'input') {
+                return (
+                  <FormTextInput
+                    key={fieldName}
+                    name={fieldName}
+                    label={fieldName}
+                    register={register}
+                    setValue={setValue}
+                    value={
+                      item.data && item.data[fieldName]
+                        ? item.data[fieldName]
+                        : item[default_value_use]
+                        ? item[default_value_use].toString()
+                        : ''
+                    }
+                    disabled={isLoading}
+                    rules={{ required }}
+                    error={errors[fieldName]}
+                    clearErrors={clearErrors}
+                  />
+                );
+              }
+              if (type === 'checkbox') {
+                return (
+                  <CustomSwitch
+                    register={register}
+                    setValue={setValue}
+                    name={fieldName}
+                    label={fieldName}
+                    key={fieldName}
+                    rules={{ required }}
+                    error={errors[fieldName]}
+                    value={item.data ? item.data[fieldName] : false}
+                    disabled={isLoading}
+                    clearErrors={clearErrors}
+                  />
+                );
+              }
+              if (type === 'select') {
+                return (
+                  <CustomSelect
+                    key={fieldName}
+                    options={template[fieldName].values.map((val) => {
+                      return {
+                        value: val,
+                        label: val,
+                        color:
+                          item.data != null && item.data[fieldName] === val
+                            ? 'purple'
+                            : 'black',
+                      };
+                    })}
+                    register={register}
+                    setValue={setValue}
+                    name={fieldName}
+                    label={fieldName}
+                    rules={{ required }}
+                    error={errors[fieldName]}
+                    value={item.data ? item.data[fieldName] : null}
+                    disabled={isLoading}
+                    clearErrors={clearErrors}
+                  />
+                );
+              }
+              if (type === 'radio') {
+                return (
+                  <CustomToggleButton
+                    options={template[fieldName].values}
+                    register={register}
+                    setValue={setValue}
+                    name={fieldName}
+                    label={fieldName}
+                    key={fieldName}
+                    rules={{ required }}
+                    error={errors[fieldName]}
+                    value={item.data ? item.data[fieldName] : ''}
+                    disabled={isLoading}
+                    clearErrors={clearErrors}
+                  />
+                );
+              }
+              if (type === 'textarea') {
+                return (
+                  <FormTextArea
+                    key={fieldName}
+                    name={fieldName}
+                    label={fieldName}
+                    register={register}
+                    setValue={setValue}
+                    value={item.data ? item.data[fieldName] : ''}
+                    disabled={isLoading}
+                    rules={{ required }}
+                    error={errors[fieldName]}
+                    clearErrors={clearErrors}
+                  />
+                );
+              }
+            })}
 
-              {isRental && (
-                <ImagePicker
-                  setValue={setValue}
-                  isSubmitting={isLoading}
-                  register={register}
-                  triggerValidation={trigger}
-                  value={item.data ? item.data.photos : []}
-                />
-              )}
-            </View>
-          </ScrollView>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+            {isRental && (
+              <ImagePicker
+                setValue={setValue}
+                isSubmitting={isLoading}
+                register={register}
+                triggerValidation={trigger}
+                value={item.data.photos || []}
+              />
+            )}
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
       <FAB
         visible={true}
         style={[styles.fab]}
@@ -289,10 +286,10 @@ const StockCheckListScreen = ({ navigation, route }) => {
         disabled={isLoading}
       />
       <Snackbar
-        visible={showSnack}
-        onDismiss={() => setShowSnack(false)}
+        visible={!!error}
+        onDismiss={() => setError('')}
         duration={4000}>
-        Gửi lỗi không thành công
+        {error}
       </Snackbar>
     </>
   );
@@ -313,6 +310,7 @@ const styles = StyleSheet.create({
   },
   form: {
     paddingHorizontal: 16,
+    width: '100%',
   },
   row: {
     flexDirection: 'row',

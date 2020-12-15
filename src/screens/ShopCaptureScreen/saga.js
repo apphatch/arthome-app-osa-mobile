@@ -30,7 +30,7 @@ export function* checkOut({ payload }) {
       const element = photos[i];
       const photoName = yield UUIDGenerator.getRandomUUID();
       const photo = {
-        uri: element.path,
+        uri: element.uri,
         type: 'image/jpeg',
         name: photoName,
       };

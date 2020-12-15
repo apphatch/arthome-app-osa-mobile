@@ -67,12 +67,10 @@ const CustomImagePicker = ({
             0,
           )
             .then((res) => {
-              savePicture(res.path);
-
+              savePicture(res.uri);
               photos = [...photos, { ...res, localIdentifier: objectId() }];
               setPhotos(photos);
-
-              if (photos.length <= 10) {
+              if (photos.length < 10) {
                 onTakePhoto();
                 setIsLoading(false);
                 setValue('photos', photos);
@@ -125,7 +123,7 @@ const CustomImagePicker = ({
           onPress={onTakePhoto}
           disabled={isLoading || isDeleting}
         />
-        {!photos.length ? (
+        {photos.length <= 0 ? (
           <Paragraph style={{ color: 'red', textAlign: 'center' }}>
             Cần chọn hình ảnh
           </Paragraph>
