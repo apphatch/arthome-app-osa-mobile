@@ -15,7 +15,7 @@ import * as API from './services';
 
 export function* fetchShops({ payload: { userId, search } }) {
   try {
-    yield delay(1000);
+    yield delay(0);
     let shops = [];
     let newHeaders = {};
     const authorization = yield select(

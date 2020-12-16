@@ -19,7 +19,7 @@ import { logger } from '../../utils';
 export function* checkOut({ payload }) {
   const { note, photos, shopId, navigation } = payload;
   try {
-    yield delay(1000);
+    yield delay(0);
     const formData = new FormData();
 
     const authorization = yield select(
