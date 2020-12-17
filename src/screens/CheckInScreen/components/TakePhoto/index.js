@@ -64,7 +64,7 @@ const TakePhoto = (props) => {
         if (fileSize >= 200000) {
           reWidth = (width * 2) / 3;
           reHeight = (height * 2) / 3;
-          quality = 60;
+          quality = Platform.OS === 'ios' ? 40 : 60;
         }
 
         ImageResizer.createResizedImage(
