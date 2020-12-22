@@ -2,6 +2,7 @@ import React, { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Snackbar } from 'react-native-paper';
 import { ScrollView, StyleSheet } from 'react-native';
+import _ from 'lodash';
 
 // ### components
 import Background from '../../components/Background';
@@ -19,9 +20,16 @@ import * as selectors from './selectors';
 const LoginScreen = () => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectors.makeSelectIsLoading());
+  const account = useSelector(selectors.makeSelectAccount());
 
-  const [username, setUsername] = useState({ value: '', error: '' });
-  const [password, setPassword] = useState({ value: '', error: '' });
+  const [username, setUsername] = useState({
+    value: !_.isEmpty(account) ? account.username : '',
+    error: '',
+  });
+  const [password, setPassword] = useState({
+    value: !_.isEmpty(account) ? account.password : '',
+    error: '',
+  });
   const [error, setError] = useState('');
 
   const _onLoginPressed = React.useCallback(() => {

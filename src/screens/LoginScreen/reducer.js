@@ -19,6 +19,7 @@ const handlers = {
   [actionTypes.LOGOUT_FAILED]: logoutFailed,
 
   [actionTypes.UPDATE_AUTH]: updateAuthorization,
+  [actionTypes.REMEMBER_ACCOUNT]: rememberAccount,
 };
 
 export default createReducer(initialState, handlers);
@@ -58,4 +59,8 @@ function logoutFailed(state, action) {
 
 function updateAuthorization(state, action) {
   state.authorization = action.payload.authorization;
+}
+
+function rememberAccount(state, action) {
+  state.account = action.payload;
 }

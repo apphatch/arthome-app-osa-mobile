@@ -17,3 +17,6 @@ export const logoutFailed = (errorMessage) =>
 
 export const updateAuthorization = (authorization) =>
   createAction(actionTypes.UPDATE_AUTH, { authorization });
+
+export const rememberAccount = (username, password) =>
+  createAction(actionTypes.REMEMBER_ACCOUNT, { username, password });

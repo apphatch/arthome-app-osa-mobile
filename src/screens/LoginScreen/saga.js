@@ -35,6 +35,7 @@ export function* login({ payload }) {
       }),
     );
     yield put(actions.updateAuthorization(response.headers.authorization));
+    yield put(actions.rememberAccount(username, password));
   } catch (error) {
     yield put(actions.loginFailed(error.message));
     setError('Đăng nhập không thành công');
