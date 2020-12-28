@@ -1,5 +1,5 @@
 import React from 'react';
-import ImagePicker from 'react-native-image-picker';
+import { launchCamera } from 'react-native-image-picker';
 import ImageResizer from 'react-native-image-resizer';
 import Marker, { Position } from 'react-native-image-marker';
 import moment from 'moment-timezone';
@@ -32,7 +32,7 @@ const TakePhoto = (props) => {
 
   const onTakePhoto = React.useCallback(() => {
     setIsLoading(true);
-    ImagePicker.launchCamera(options, (response) => {
+    launchCamera(options, (response) => {
       if (response.didCancel) {
         setIsLoading(false);
       } else if (response.error) {
@@ -64,7 +64,7 @@ const TakePhoto = (props) => {
         if (fileSize >= 200000) {
           reWidth = (width * 2) / 3;
           reHeight = (height * 2) / 3;
-          quality = Platform.OS === 'ios' ? 40 : 60;
+          quality = Platform.OS === 'ios' ? 15 : 60;
         }
 
         ImageResizer.createResizedImage(

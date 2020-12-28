@@ -56,7 +56,7 @@ const CustomImagePicker = ({
           if (size >= 200000) {
             reWidth = (width * 2) / 3;
             reHeight = (height * 2) / 3;
-            quality = Platform.OS === 'ios' ? 40 : 60;
+            quality = Platform.OS === 'ios' ? 15 : 60;
           }
 
           ImageResizer.createResizedImage(
