@@ -14,10 +14,9 @@ import {
 } from 'react-native-paper';
 
 const options = {
-  storageOptions: {
-    skipBackup: true,
-    path: 'images',
-  },
+  mediaType: 'photo',
+  includeBase64: false,
+  saveToPhotos: false,
 };
 
 const TakePhoto = (props) => {

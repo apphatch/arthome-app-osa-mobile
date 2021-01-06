@@ -11,9 +11,7 @@ import rootSagas from './sagas';
 const config = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: [],
-  debug: true, //to get useful logging,
-  version: 4,
+  whitelist: ['login', 'checkIn'],
 };
 
 const middleware = [];

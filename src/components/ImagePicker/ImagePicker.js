@@ -38,6 +38,10 @@ const CustomImagePicker = ({
   React.useEffect(() => {
     register({ name: 'photos' }, { required: true });
     setValue('photos', photos);
+
+    return () => {
+      ImagePicker.clean();
+    };
   }, [register, setValue, photos]);
 
   const onTakePhoto = () => {
