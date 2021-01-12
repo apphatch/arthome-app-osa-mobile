@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-
+import RNLocation from 'react-native-location';
 import { Appbar, Caption } from 'react-native-paper';
 import {
   StyleSheet,
@@ -15,12 +15,13 @@ import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
 import Paragraph from '../../components/Paragraph';
 
-import TakePhoto from '../CheckInScreen/components/TakePhoto';
+import TakePhoto from '../../components/TakePhoto';
 
 import { defaultTheme } from '../../theme';
 import * as actions from '../CheckInScreen/actions';
 import * as selectors from '../CheckInScreen/selectors';
 import * as appSelectors from '../App/selectors';
+import * as appAction from '../App/actions';
 
 const ReportScreen = ({ navigation, route }) => {
   const {
@@ -31,6 +32,7 @@ const ReportScreen = ({ navigation, route }) => {
   const isLoading = useSelector(selectors.makeSelectIsLoading());
   const isCheckIn = useSelector(selectors.makeSelectIsCheckIn());
   const location = useSelector(appSelectors.makeSelectLocation());
+  const granted = useSelector(appSelectors.makeSelectGranted());
 
   const {
     register,
@@ -46,8 +48,14 @@ const ReportScreen = ({ navigation, route }) => {
   React.useEffect(() => {
     if (!isCheckIn) {
       navigation.navigate('ShopScreen');
+    } else {
+      if (granted) {
+        RNLocation.getLatestLocation((locations) => {
+          dispatch(appAction.saveLocation({ location: locations[0] }));
+        });
+      }
     }
-  }, [isCheckIn, navigation]);
+  }, [isCheckIn, navigation, shopId, dispatch, granted]);
 
   const onSubmitCheckList = React.useCallback(
     (values) => {
@@ -55,6 +63,7 @@ const ReportScreen = ({ navigation, route }) => {
         setErr('Cần nhập ghi chú');
       } else {
         setErr('');
+        console.log(location);
         if (location) {
           dispatch(
             actions.requestCheckOut({

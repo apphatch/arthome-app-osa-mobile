@@ -40,9 +40,13 @@ const CustomImagePicker = ({
     setValue('photos', photos);
 
     return () => {
-      ImagePicker.clean();
+      ImagePicker.clean().then(() => {
+        setPhotos([]);
+        setValue('photos', []);
+        triggerValidation('photos');
+      });
     };
-  }, [register, setValue, photos]);
+  }, [register, setValue, photos, triggerValidation]);
 
   const onTakePhoto = () => {
     setIsLoading(true);
