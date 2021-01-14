@@ -19,12 +19,13 @@ const FormTextInput = (props) => {
   const [localValue, setLocalValue] = React.useState(value);
 
   React.useEffect(() => {
+    register({ name }, rules);
     setValue(name, localValue);
   }, [name, register, rules, localValue, setValue]);
 
   const handleInputChange = React.useCallback(
     (val) => {
-      setValue(name, val, true);
+      setValue(name, val, { shouldValidate: true });
       setLocalValue(val);
       clearErrors(name);
     },

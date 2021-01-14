@@ -27,7 +27,7 @@ import { logger } from '../../utils';
 
 const CheckOutScreen = ({ navigation, route }) => {
   const {
-    params: { shopId },
+    params: { shopId, shopName },
   } = route;
 
   const dispatch = useDispatch();
@@ -116,6 +116,7 @@ const CheckOutScreen = ({ navigation, route }) => {
             isSubmitting={isLoading}
             register={register}
             triggerValidation={trigger}
+            shopName={shopName}
           />
           {errors.photo ? (
             <HelperText

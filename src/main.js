@@ -1,7 +1,7 @@
 import React from 'react';
 import RNLocation from 'react-native-location';
 import { Provider as PaperProvider } from 'react-native-paper';
-import { I18nManager } from 'react-native';
+import { I18nManager, NativeModules } from 'react-native';
 import { useColorScheme } from 'react-native-appearance';
 
 import { PreferencesContext } from './context/preferencesContext';
@@ -13,6 +13,8 @@ import {
 import { RootNavigator } from './rootNavigator';
 import { useDispatch } from 'react-redux';
 import * as actions from './screens/App/actions';
+
+const ImagePicker = NativeModules.ImageCropPicker;
 
 export const Main = () => {
   const dispatch = useDispatch();
@@ -60,6 +62,10 @@ export const Main = () => {
         dispatch(actions.checkLocationPermission({ granted }));
       }
     });
+
+    return () => {
+      ImagePicker.clean();
+    };
   }, [dispatch]);
 
   return (

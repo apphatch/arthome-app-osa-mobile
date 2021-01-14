@@ -119,6 +119,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
         onPress={() => {
           setToIndex(index);
           navigation.navigate('FormScreen', {
+            shopName: checkInData.name,
             itemId: item.id,
             clId,
             shopId,

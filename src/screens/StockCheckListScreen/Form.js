@@ -45,6 +45,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
       barcode,
       sub_category,
       rental_type,
+      shopName,
     },
   } = route;
 
@@ -272,6 +273,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
                 register={register}
                 triggerValidation={trigger}
                 value={item.data.photos || []}
+                shopName={shopName}
               />
             )}
           </View>

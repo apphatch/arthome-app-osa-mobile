@@ -10,18 +10,20 @@ const FormTextArea = (props) => {
     disabled,
     label,
     clearErrors,
+    rules,
   } = props;
 
   const [localValue, setLocalValue] = React.useState(value);
 
   React.useEffect(() => {
     setValue(name, localValue);
-  }, [name, register, localValue, setValue]);
+    register({ name }, rules);
+  }, [name, register, localValue, setValue, rules]);
 
   return (
     <TextInput
       label={label}
-      ref={register({ name: name })}
+      ref={register({ name }, rules)}
       onChangeText={(text) => {
         setValue(name, text, true);
         setLocalValue(text);

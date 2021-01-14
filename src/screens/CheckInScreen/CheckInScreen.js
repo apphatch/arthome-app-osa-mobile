@@ -120,6 +120,7 @@ const CheckInScreen = ({ navigation, route }) => {
             isSubmitting={isLoading}
             register={register}
             triggerValidation={trigger}
+            shopName={shopName}
           />
           {errors.photo ? (
             <HelperText

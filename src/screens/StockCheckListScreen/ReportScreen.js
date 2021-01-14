@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import RNLocation from 'react-native-location';
-import { Appbar, Caption } from 'react-native-paper';
+import { Appbar, Caption, HelperText } from 'react-native-paper';
 import {
   StyleSheet,
   KeyboardAvoidingView,
@@ -11,9 +11,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 
 // ###
-import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
-import Paragraph from '../../components/Paragraph';
+import FormTextInput from '../../components/FormTextInput';
 
 import TakePhoto from '../../components/TakePhoto';
 
@@ -25,7 +24,7 @@ import * as appAction from '../App/actions';
 
 const ReportScreen = ({ navigation, route }) => {
   const {
-    params: { shopId },
+    params: { shopId, shopName },
   } = route;
 
   const dispatch = useDispatch();
@@ -41,40 +40,44 @@ const ReportScreen = ({ navigation, route }) => {
     errors,
     trigger,
     formState,
+    getValues,
+    clearErrors,
   } = useForm({ mode: 'onChange' });
 
-  const [err, setErr] = React.useState('');
-
   React.useEffect(() => {
+    let locationSubscription = () => {
+      return;
+    };
+
     if (!isCheckIn) {
       navigation.navigate('ShopScreen');
     } else {
       if (granted) {
-        RNLocation.getLatestLocation((locations) => {
-          dispatch(appAction.saveLocation({ location: locations[0] }));
-        });
+        locationSubscription = RNLocation.subscribeToLocationUpdates(
+          (locations) => {
+            dispatch(appAction.saveLocation({ location: locations[0] }));
+          },
+        );
       }
     }
+
+    return () => {
+      locationSubscription();
+    };
   }, [isCheckIn, navigation, shopId, dispatch, granted]);
 
-  const onSubmitCheckList = React.useCallback(
+  const onSubmit = React.useCallback(
     (values) => {
-      if (!values.note) {
-        setErr('Cần nhập ghi chú');
-      } else {
-        setErr('');
-        console.log(location);
-        if (location) {
-          dispatch(
-            actions.requestCheckOut({
-              ...values,
-              shopId,
-              latitude: location.latitude,
-              longitude: location.longitude,
-              incomplete: true,
-            }),
-          );
-        }
+      if (location) {
+        dispatch(
+          actions.requestCheckOut({
+            ...values,
+            shopId,
+            latitude: location.latitude,
+            longitude: location.longitude,
+            incomplete: true,
+          }),
+        );
       }
     },
     [dispatch, shopId, location],
@@ -93,12 +96,15 @@ const ReportScreen = ({ navigation, route }) => {
         enabled>
         <ScrollView>
           <Caption style={styles.caption}>Thông tin</Caption>
-          <TextInput
+          <FormTextInput
+            name="note"
             label="Ghi chú"
-            ref={register({ name: 'note' })}
-            onChangeText={(text) => setValue('note', text, true)}
+            register={register}
+            setValue={setValue}
             disabled={isLoading}
-            errorText={err}
+            error={errors.note}
+            clearErrors={clearErrors}
+            rules={{ required: true }}
           />
 
           <TakePhoto
@@ -106,14 +112,19 @@ const ReportScreen = ({ navigation, route }) => {
             isSubmitting={isLoading}
             register={register}
             triggerValidation={trigger}
+            shopName={shopName}
           />
-          {errors.photo ? <Paragraph>Cần chụp hình</Paragraph> : null}
+          {errors.photo ? (
+            <HelperText style={{ color: 'red', textAlign: 'center' }}>
+              Cần chụp hình
+            </HelperText>
+          ) : null}
 
           <Button
             mode="contained"
-            onPress={handleSubmit(onSubmitCheckList)}
+            onPress={handleSubmit(onSubmit)}
             loading={isLoading}
-            disabled={isLoading || !formState.isValid}>
+            disabled={isLoading}>
             Send Report
           </Button>
         </ScrollView>

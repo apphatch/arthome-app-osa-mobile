@@ -18,6 +18,7 @@ const NumberInput = (props) => {
 
   React.useEffect(() => {
     setValue(name, localValue);
+    register({ name }, rules);
   }, [name, register, rules, localValue, setValue]);
 
   const handleInputChange = React.useCallback(
