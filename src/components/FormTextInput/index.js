@@ -25,7 +25,7 @@ const FormTextInput = (props) => {
 
   const handleInputChange = React.useCallback(
     (val) => {
-      setValue(name, val, { shouldValidate: true });
+      setValue(name, val, true);
       setLocalValue(val);
       clearErrors(name);
     },

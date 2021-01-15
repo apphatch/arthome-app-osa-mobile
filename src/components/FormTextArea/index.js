@@ -16,8 +16,8 @@ const FormTextArea = (props) => {
   const [localValue, setLocalValue] = React.useState(value);
 
   React.useEffect(() => {
-    setValue(name, localValue);
     register({ name }, rules);
+    setValue(name, localValue);
   }, [name, register, localValue, setValue, rules]);
 
   return (
