@@ -22,10 +22,6 @@ const TakePhoto = (props) => {
 
   React.useEffect(() => {
     register({ name: 'photo' }, { required: true });
-
-    return () => {
-      onRemovePhoto();
-    };
   }, [register, onRemovePhoto]);
 
   const onTakePhoto = React.useCallback(() => {

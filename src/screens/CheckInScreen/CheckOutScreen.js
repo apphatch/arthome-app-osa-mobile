@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  NativeModules,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -24,6 +25,8 @@ import * as appSelectors from '../App/selectors';
 import * as appAction from '../App/actions';
 
 import { logger } from '../../utils';
+
+const ImageCropPicker = NativeModules.ImageCropPicker;
 
 const CheckOutScreen = ({ navigation, route }) => {
   const {
@@ -68,6 +71,7 @@ const CheckOutScreen = ({ navigation, route }) => {
 
     return () => {
       locationSubscription();
+      ImageCropPicker.clean();
     };
   }, [isCheckIn, navigation, dispatch, granted]);
 

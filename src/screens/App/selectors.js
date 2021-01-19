@@ -8,4 +8,7 @@ const makeSelectLocation = () =>
 const makeSelectGranted = () =>
   createSelector(selectAppDomain(), (state) => state.granted);
 
-export { makeSelectLocation, makeSelectGranted };
+const makeSelectServerTime = () =>
+  createSelector(selectAppDomain(), (state) => state.serverTime);
+
+export { makeSelectLocation, makeSelectGranted, makeSelectServerTime };

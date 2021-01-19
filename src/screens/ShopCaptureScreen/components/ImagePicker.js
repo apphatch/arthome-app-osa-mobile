@@ -1,5 +1,7 @@
 import React from 'react';
 import ImageResizer from 'react-native-image-resizer';
+import Marker, { Position } from 'react-native-image-marker';
+import moment from 'moment-timezone';
 import {
   View,
   StyleSheet,
@@ -18,7 +20,6 @@ import {
   Portal,
 } from 'react-native-paper';
 
-import { savePicture } from '../../../utils';
 import { objectId } from '../../../utils/uniqId';
 
 const ImagePicker = NativeModules.ImageCropPicker;
@@ -28,8 +29,10 @@ const CustomImagePicker = ({
   isSubmitting,
   register,
   triggerValidation,
+  value = [],
+  shopName = '',
 }) => {
-  let [photos, setPhotos] = React.useState([]);
+  let [photos, setPhotos] = React.useState(value);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
@@ -37,11 +40,7 @@ const CustomImagePicker = ({
   React.useEffect(() => {
     register({ name: 'photos' }, { required: true });
     setValue('photos', photos);
-
-    return () => {
-      ImagePicker.clean();
-    };
-  }, [register, setValue, photos]);
+  }, [register, setValue, photos, triggerValidation]);
 
   const onTakePhoto = () => {
     setIsLoading(true);
@@ -52,6 +51,9 @@ const CustomImagePicker = ({
     })
       .then((image) => {
         if (image) {
+          const now = moment()
+            .tz('Asia/Ho_Chi_Minh')
+            .format('HH:mm:ss DD-MM-YYYY');
           const { path, size, width, height } = image;
           let reWidth = width;
           let reHeight = height;
@@ -72,18 +74,44 @@ const CustomImagePicker = ({
             0,
           )
             .then((res) => {
-              savePicture(res.uri);
-              photos = [...photos, { ...res, localIdentifier: objectId() }];
-              setPhotos(photos);
-              if (photos.length < 10) {
-                onTakePhoto();
-                setIsLoading(false);
-                setValue('photos', photos);
-                triggerValidation('photos');
-              } else {
-                setVisible(true);
-                setIsLoading(false);
-              }
+              Marker.markText({
+                src: res.uri,
+                color: '#FF0000',
+                fontSize: 16,
+                X: 30,
+                Y: 30,
+                scale: 1,
+                quality: 100,
+                text: `${now} ${shopName}`,
+                position: Position.topLeft,
+              })
+                .then((_path) => {
+                  const source = {
+                    uri:
+                      Platform.OS === 'android'
+                        ? 'file://' + _path
+                        : 'file:///' + _path,
+                  };
+                  console.log('source', source);
+                  photos = [
+                    ...photos,
+                    { ...source, localIdentifier: objectId() },
+                  ];
+
+                  setPhotos(photos);
+                  setIsLoading(false);
+
+                  if (photos.length <= 10) {
+                    onTakePhoto();
+                    setValue('photos', photos);
+                    triggerValidation('photos');
+                  } else {
+                    setVisible(true);
+                  }
+                })
+                .catch(() => {
+                  setIsLoading(false);
+                });
             })
             .catch(() => {
               setIsLoading(false);

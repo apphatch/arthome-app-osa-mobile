@@ -1,5 +1,6 @@
 import { all, fork } from 'redux-saga/effects';
 
+import { appSaga } from '../screens/App';
 import { saga as loginSaga } from '../screens/LoginScreen';
 import { shopSaga } from '../screens/ShopScreen';
 import { stockSaga } from '../screens/StockScreen';
@@ -10,6 +11,7 @@ import { shopCaptureSaga } from '../screens/ShopCaptureScreen';
 const rootSaga = function* rootSaga() {
   yield all(
     [
+      appSaga(),
       loginSaga(),
       shopSaga(),
       stockSaga(),

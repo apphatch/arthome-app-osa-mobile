@@ -30,7 +30,7 @@ const CustomImagePicker = ({
   isSubmitting,
   register,
   triggerValidation,
-  value,
+  value = [],
   shopName = '',
 }) => {
   let [photos, setPhotos] = React.useState(value);
@@ -41,14 +41,6 @@ const CustomImagePicker = ({
   React.useEffect(() => {
     register({ name: 'photos' }, { required: true });
     setValue('photos', photos);
-
-    return () => {
-      ImagePicker.clean().then(() => {
-        setPhotos([]);
-        setValue('photos', []);
-        triggerValidation('photos');
-      });
-    };
   }, [register, setValue, photos, triggerValidation]);
 
   const onTakePhoto = () => {
@@ -106,6 +98,7 @@ const CustomImagePicker = ({
                     ...photos,
                     { ...source, localIdentifier: objectId() },
                   ];
+
                   setPhotos(photos);
                   savePicture(source.uri);
                   setIsLoading(false);

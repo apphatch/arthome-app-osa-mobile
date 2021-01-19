@@ -13,6 +13,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
+  NativeModules,
 } from 'react-native';
 import ImagePicker from '../../components/ImagePicker';
 import CustomToggleButton from '../../components/ToggleButton';
@@ -30,6 +31,8 @@ import NumberInput from '../../components/NumberInput';
 import { defaultTheme } from '../../theme';
 import * as actions from './actions';
 import * as selectors from './selectors';
+
+const ImageCropPicker = NativeModules.ImageCropPicker;
 
 const StockCheckListScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
@@ -80,6 +83,10 @@ const StockCheckListScreen = ({ navigation, route }) => {
         }
       }
     }
+
+    return () => {
+      ImageCropPicker.clean();
+    };
   }, [isLoading, isSubmitted, navigation, errorMessage, dispatch]);
 
   const onSubmitCheckList = React.useCallback(
