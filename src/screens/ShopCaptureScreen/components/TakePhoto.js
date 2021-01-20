@@ -10,8 +10,7 @@ import { savePicture } from '../../../utils';
 import CameraScreen from '../../../components/CameraScreen';
 
 const TakePhoto = ({ navigation, shopName, serverTime }) => {
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
+  const { width, height } = Dimensions.get('window');
 
   const onBottomButtonPressed = (event) => {
     switch (event.type) {
@@ -28,8 +27,8 @@ const TakePhoto = ({ navigation, shopName, serverTime }) => {
         }
         ImageResizer.createResizedImage(
           event.image.uri,
-          windowWidth,
-          windowHeight,
+          width,
+          height,
           'JPEG',
           quality,
           0,
