@@ -27,6 +27,7 @@ const TakePhoto = (props) => {
     register,
     triggerValidation,
     serverTime,
+    shopName,
   } = props;
 
   const [photo, setPhoto] = React.useState(null);
@@ -65,7 +66,7 @@ const TakePhoto = (props) => {
               Y: 30,
               scale: 1,
               quality: 100,
-              text: `${now}`,
+              text: `${shopName}\n${now}`,
               position: Position.topLeft,
             })
               .then((_path) => {
