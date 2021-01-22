@@ -91,7 +91,7 @@ const TakePhoto = (props) => {
           });
       }
     });
-  }, [setValue, triggerValidation]);
+  }, [setValue, triggerValidation, serverTime, shopName]);
 
   const onRemovePhoto = React.useCallback(() => {
     ImagePicker.clean().then(() => {
