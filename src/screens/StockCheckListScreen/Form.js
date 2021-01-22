@@ -31,6 +31,7 @@ import NumberInput from '../../components/NumberInput';
 import { defaultTheme } from '../../theme';
 import * as actions from './actions';
 import * as selectors from './selectors';
+import { selectors as appSelectors, actions as appActions } from '../App';
 
 const ImageCropPicker = NativeModules.ImageCropPicker;
 
@@ -56,6 +57,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
   const isSubmitted = useSelector(selectors.makeSelectIsSubmitted());
   const errorMessage = useSelector(selectors.makeSelectErrorMessage());
   const template = useSelector(selectors.makeSelectTemplate(clId));
+  const serverTime = useSelector(appSelectors.makeSelectServerTime());
 
   // const item = useSelector(selectors.makeSelectCheckListItemById(clId, itemId));
   const item = useSelector(selectors.makeSelectStockById(itemId));
@@ -71,6 +73,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
   } = useForm({});
 
   React.useEffect(() => {
+    dispatch(appActions.getServerTime());
     if (!isLoading) {
       if (isSubmitted) {
         dispatch(actions.resetProps());
@@ -281,6 +284,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
                 triggerValidation={trigger}
                 value={item.data.photos || []}
                 shopName={shopName}
+                serverTime={serverTime}
               />
             )}
           </View>

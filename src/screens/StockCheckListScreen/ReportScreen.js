@@ -21,7 +21,7 @@ import { defaultTheme } from '../../theme';
 import * as actions from '../CheckInScreen/actions';
 import * as selectors from '../CheckInScreen/selectors';
 import * as appSelectors from '../App/selectors';
-import * as appAction from '../App/actions';
+import * as appActions from '../App/actions';
 
 const ImageCropPicker = NativeModules.ImageCropPicker;
 
@@ -35,6 +35,7 @@ const ReportScreen = ({ navigation, route }) => {
   const isCheckIn = useSelector(selectors.makeSelectIsCheckIn());
   const location = useSelector(appSelectors.makeSelectLocation());
   const granted = useSelector(appSelectors.makeSelectGranted());
+  const serverTime = useSelector(appSelectors.makeSelectServerTime());
 
   const {
     register,
@@ -53,10 +54,11 @@ const ReportScreen = ({ navigation, route }) => {
     if (!isCheckIn) {
       navigation.navigate('ShopScreen');
     } else {
+      dispatch(appActions.getServerTime());
       if (granted) {
         locationSubscription = RNLocation.subscribeToLocationUpdates(
           (locations) => {
-            dispatch(appAction.saveLocation({ location: locations[0] }));
+            dispatch(appActions.saveLocation({ location: locations[0] }));
           },
         );
       }
@@ -115,6 +117,7 @@ const ReportScreen = ({ navigation, route }) => {
             register={register}
             triggerValidation={trigger}
             shopName={shopName}
+            serverTime={serverTime}
           />
           {errors.photo ? (
             <HelperText style={{ color: 'red', textAlign: 'center' }}>

@@ -3,7 +3,13 @@ import ImageResizer from 'react-native-image-resizer';
 import Marker, { Position } from 'react-native-image-marker';
 import moment from 'moment-timezone';
 
-import { View, StyleSheet, Platform, NativeModules } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  Platform,
+  NativeModules,
+  Dimensions,
+} from 'react-native';
 import {
   IconButton,
   Colors,
@@ -15,7 +21,13 @@ import {
 const ImagePicker = NativeModules.ImageCropPicker;
 
 const TakePhoto = (props) => {
-  const { setValue, isSubmitting, register, triggerValidation } = props;
+  const {
+    setValue,
+    isSubmitting,
+    register,
+    triggerValidation,
+    serverTime,
+  } = props;
 
   const [photo, setPhoto] = React.useState(null);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -33,27 +45,17 @@ const TakePhoto = (props) => {
     }).then((image) => {
       if (image) {
         const now = moment()
-          .tz('Asia/Ho_Chi_Minh')
+          .tz(serverTime, 'Asia/Ho_Chi_Minh')
           .format('HH:mm:ss DD-MM-YYYY');
-        const { path, size, width, height } = image;
-        let reWidth = width;
-        let reHeight = height;
+        const { width, height } = Dimensions.get('window');
+        const { path, size } = image;
         let quality = 100;
 
         if (size >= 200000) {
-          reWidth = (width * 2) / 3;
-          reHeight = (height * 2) / 3;
-          quality = Platform.OS === 'ios' ? 15 : 60;
+          quality = Platform.OS === 'ios' ? 20 : 60;
         }
 
-        ImageResizer.createResizedImage(
-          path,
-          reWidth,
-          reHeight,
-          'JPEG',
-          quality,
-          0,
-        )
+        ImageResizer.createResizedImage(path, width, height, 'JPEG', quality, 0)
           .then((res) => {
             Marker.markText({
               src: res.uri,

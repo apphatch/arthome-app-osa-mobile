@@ -22,7 +22,7 @@ import * as actions from './actions';
 import * as selectors from './selectors';
 import * as shopSelectors from '../ShopScreen/selectors';
 import * as appSelectors from '../App/selectors';
-import * as appAction from '../App/actions';
+import * as appActions from '../App/actions';
 
 import { logger } from '../../utils';
 
@@ -42,6 +42,7 @@ const CheckOutScreen = ({ navigation, route }) => {
   logger('CheckOutScreen -> currentShopChecked', currentShopChecked);
   const location = useSelector(appSelectors.makeSelectLocation());
   const granted = useSelector(appSelectors.makeSelectGranted());
+  const serverTime = useSelector(appSelectors.makeSelectServerTime());
 
   const {
     register,
@@ -60,10 +61,11 @@ const CheckOutScreen = ({ navigation, route }) => {
     if (!isCheckIn) {
       navigation.navigate('ShopScreen');
     } else {
+      dispatch(appActions.getServerTime());
       if (granted) {
         locationSubscription = RNLocation.subscribeToLocationUpdates(
           (locations) => {
-            dispatch(appAction.saveLocation({ location: locations[0] }));
+            dispatch(appActions.saveLocation({ location: locations[0] }));
           },
         );
       }
@@ -121,6 +123,7 @@ const CheckOutScreen = ({ navigation, route }) => {
             register={register}
             triggerValidation={trigger}
             shopName={shopName}
+            serverTime={serverTime}
           />
           {errors.photo ? (
             <HelperText

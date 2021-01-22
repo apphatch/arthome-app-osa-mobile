@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Text,
   Platform,
+  Dimensions,
 } from 'react-native';
 import {
   IconButton,
@@ -32,6 +33,7 @@ const CustomImagePicker = ({
   triggerValidation,
   value = [],
   shopName = '',
+  serverTime,
 }) => {
   let [photos, setPhotos] = React.useState(value);
   const [isLoading, setIsLoading] = React.useState(false);
@@ -52,24 +54,21 @@ const CustomImagePicker = ({
     })
       .then((image) => {
         if (image) {
+          const { width, height } = Dimensions.get('window');
           const now = moment()
-            .tz('Asia/Ho_Chi_Minh')
+            .tz(serverTime, 'Asia/Ho_Chi_Minh')
             .format('HH:mm:ss DD-MM-YYYY');
-          const { path, size, width, height } = image;
-          let reWidth = width;
-          let reHeight = height;
+          const { path, size } = image;
           let quality = 100;
 
           if (size >= 200000) {
-            reWidth = (width * 2) / 3;
-            reHeight = (height * 2) / 3;
-            quality = Platform.OS === 'ios' ? 15 : 60;
+            quality = Platform.OS === 'ios' ? 20 : 60;
           }
 
           ImageResizer.createResizedImage(
             path,
-            reWidth,
-            reHeight,
+            width,
+            height,
             'JPEG',
             quality,
             0,
@@ -83,7 +82,7 @@ const CustomImagePicker = ({
                 Y: 30,
                 scale: 1,
                 quality: 100,
-                text: `${now} ${shopName}`,
+                text: `${shopName}\n${now}`,
                 position: Position.topLeft,
               })
                 .then((_path) => {
