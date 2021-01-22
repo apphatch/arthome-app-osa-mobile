@@ -36,11 +36,18 @@ const ShopCaptureScreen = ({ navigation, route }) => {
   const serverTime = useSelector(appSelectors.makeSelectServerTime());
 
   let [photos, setPhotos] = React.useState([]);
+  const [cachePhotos, setCachePhotos] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
 
   React.useEffect(() => {
     dispatch(appActions.getServerTime());
+
+    return () => {
+      ImagePicker.clean().then(() => {
+        setCachePhotos([]);
+      });
+    };
   }, [dispatch]);
 
   const onTakePhoto = () => {
@@ -55,6 +62,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
           photos = [...photos, { ...image, localIdentifier: objectId() }];
 
           setPhotos(photos);
+          setCachePhotos(photos);
           setIsLoading(false);
           onTakePhoto();
         }
@@ -85,8 +93,8 @@ const ShopCaptureScreen = ({ navigation, route }) => {
       .tz(serverTime, 'Asia/Ho_Chi_Minh')
       .format('HH:mm:ss DD-MM-YYYY');
 
-    if (photos.length > 0) {
-      photos.forEach((photo) => {
+    if (cachePhotos.length > 0) {
+      cachePhotos.forEach((photo) => {
         const { width, height } = Dimensions.get('window');
         const { size, path } = photo;
         let quality = 100;
@@ -104,7 +112,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
               Y: 30,
               scale: 1,
               quality: 100,
-              text: `${shopName} ${now}`,
+              text: `${shopName}\n${now}`,
               position: Position.topLeft,
             })
               .then((_path) => {
@@ -122,11 +130,8 @@ const ShopCaptureScreen = ({ navigation, route }) => {
           .catch(() => {
             setIsLoading(false);
           });
-
-        ImagePicker.clean().then(() => {
-          setPhotos([]);
-        });
       });
+      setPhotos([]);
     } else {
       setIsLoading(false);
     }
