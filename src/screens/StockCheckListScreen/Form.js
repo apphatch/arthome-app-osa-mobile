@@ -73,7 +73,6 @@ const StockCheckListScreen = ({ navigation, route }) => {
   } = useForm({});
 
   React.useEffect(() => {
-    dispatch(appActions.getServerTime());
     if (!isLoading) {
       if (isSubmitted) {
         dispatch(actions.resetProps());
@@ -81,6 +80,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
           navigation.goBack();
         }, 500);
       } else {
+        dispatch(appActions.getServerTime());
         if (errorMessage && errorMessage.length) {
           setError('Gửi lỗi không thành công');
         }

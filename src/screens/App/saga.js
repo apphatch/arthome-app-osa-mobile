@@ -20,10 +20,12 @@ export function* getServerTime() {
       loginSelectors.makeSelectAuthorization(),
     );
     const response = yield call(API.getServerTime, { authorization });
-    yield put(loginActions.updateAuthorization(response.headers.authorization));
+    console.log(response);
     yield put(
       actions.getServerTimeSuccess({ time: response.data.server_time }),
     );
+
+    yield put(loginActions.updateAuthorization(response.headers.authorization));
   } catch (error) {
     logger('function*getServerTime -> error', error);
     yield put(actions.getServerTimeFailed('Server Time Error'));

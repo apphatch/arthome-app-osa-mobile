@@ -18,7 +18,7 @@ const TakePhoto = ({ navigation, shopName, serverTime }) => {
         navigation.goBack();
         break;
       case 'capture':
-        const formatTime = moment()
+        const formatTime = moment
           .tz(serverTime, 'Asia/Ho_Chi_Minh')
           .format('HH:mm:ss DD-MM-YYYY');
         let quality = 100;

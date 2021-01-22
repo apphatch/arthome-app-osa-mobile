@@ -89,7 +89,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
 
   const saveImage = () => {
     setIsLoading(true);
-    const now = moment()
+    const now = moment
       .tz(serverTime, 'Asia/Ho_Chi_Minh')
       .format('HH:mm:ss DD-MM-YYYY');
 

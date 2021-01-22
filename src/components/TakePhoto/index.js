@@ -45,7 +45,7 @@ const TakePhoto = (props) => {
       mediaType: 'photo',
     }).then((image) => {
       if (image) {
-        const now = moment()
+        const now = moment
           .tz(serverTime, 'Asia/Ho_Chi_Minh')
           .format('HH:mm:ss DD-MM-YYYY');
         const { width, height } = Dimensions.get('window');
