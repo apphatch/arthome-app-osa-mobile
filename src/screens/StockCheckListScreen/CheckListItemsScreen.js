@@ -34,7 +34,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
 
   const {
-    params: { clId, shopId, clType },
+    params: { clId, shopId, clType, shopName },
   } = route;
 
   const stocks = useSelector(selectors.makeSelectStocks());
@@ -119,7 +119,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
         onPress={() => {
           setToIndex(index);
           navigation.navigate('FormScreen', {
-            shopName: checkInData.name,
+            shopName: checkInData.name ? checkInData.name : shopName,
             itemId: item.id,
             clId,
             shopId,
@@ -310,7 +310,7 @@ const CheckListItemsScreen = ({ navigation, route }) => {
             onPress: () => {
               navigation.navigate('ShopCaptureScreen', {
                 shopId: checkInData.shop_id,
-                shopName: checkInData.name,
+                shopName: checkInData.name ? checkInData.name : shopName,
               });
             },
           },

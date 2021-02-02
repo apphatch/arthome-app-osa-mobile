@@ -13,7 +13,6 @@ import {
   TouchableOpacity,
   Image,
   Text,
-  Dimensions,
 } from 'react-native';
 import { Button, Appbar, IconButton } from 'react-native-paper';
 import { useDispatch, useSelector } from 'react-redux';
@@ -95,25 +94,37 @@ const ShopCaptureScreen = ({ navigation, route }) => {
 
     if (cachePhotos.length > 0) {
       cachePhotos.forEach((photo) => {
-        const { width, height } = Dimensions.get('window');
-        const { size, path } = photo;
+        const { width, height, size, path } = photo;
+        let reWidth = width;
+        let reHeight = height;
         let quality = 100;
 
         if (size >= 200000) {
-          quality = Platform.OS === 'ios' ? 20 : 60;
+          reWidth = (width * 2) / 3;
+          reHeight = (height * 2) / 3;
+          quality = Platform.OS === 'ios' ? 15 : 60;
         }
-        ImageResizer.createResizedImage(path, width, height, 'JPEG', quality, 0)
+
+        ImageResizer.createResizedImage(
+          path,
+          reWidth,
+          reHeight,
+          'JPEG',
+          quality,
+          0,
+        )
           .then((res) => {
             Marker.markText({
               src: res.uri,
               color: '#FF0000',
-              fontSize: 16,
+              fontSize: Platform.OS === 'ios' ? 130 : 30,
               X: 30,
               Y: 30,
               scale: 1,
               quality: 100,
               text: `${shopName}\n${now}`,
               position: Position.topLeft,
+              filename: now,
             })
               .then((_path) => {
                 const uri =

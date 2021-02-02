@@ -20,11 +20,8 @@ import TakePhoto from '../../components/TakePhoto';
 import { defaultTheme } from '../../theme';
 import * as actions from './actions';
 import * as selectors from './selectors';
-import * as shopSelectors from '../ShopScreen/selectors';
 import * as appSelectors from '../App/selectors';
 import * as appActions from '../App/actions';
-
-import { logger } from '../../utils';
 
 const ImageCropPicker = NativeModules.ImageCropPicker;
 
@@ -36,10 +33,6 @@ const CheckOutScreen = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectors.makeSelectIsLoading());
   const isCheckIn = useSelector(selectors.makeSelectIsCheckIn());
-  const currentShopChecked = useSelector(
-    shopSelectors.makeSelectShopById(shopId),
-  );
-  logger('CheckOutScreen -> currentShopChecked', currentShopChecked);
   const location = useSelector(appSelectors.makeSelectLocation());
   const granted = useSelector(appSelectors.makeSelectGranted());
   const serverTime = useSelector(appSelectors.makeSelectServerTime());

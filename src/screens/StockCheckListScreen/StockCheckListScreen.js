@@ -137,7 +137,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
           clId: item.id,
           shopId,
           clType: item.checklist_type,
-          shopName,
+          shopName: checkInData.name ? checkInData.name : shopName,
         })
       }
       right={(props) =>

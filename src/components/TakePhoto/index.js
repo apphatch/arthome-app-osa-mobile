@@ -3,13 +3,7 @@ import ImageResizer from 'react-native-image-resizer';
 import Marker, { Position } from 'react-native-image-marker';
 import moment from 'moment-timezone';
 
-import {
-  View,
-  StyleSheet,
-  Platform,
-  NativeModules,
-  Dimensions,
-} from 'react-native';
+import { View, StyleSheet, Platform, NativeModules } from 'react-native';
 import {
   IconButton,
   Colors,
@@ -48,26 +42,37 @@ const TakePhoto = (props) => {
         const now = moment
           .tz(serverTime, 'Asia/Ho_Chi_Minh')
           .format('HH:mm:ss DD-MM-YYYY');
-        const { width, height } = Dimensions.get('window');
-        const { path, size } = image;
+        const { width, height, path, size } = image;
+        let reWidth = width;
+        let reHeight = height;
         let quality = 100;
 
         if (size >= 200000) {
-          quality = Platform.OS === 'ios' ? 20 : 60;
+          reWidth = (width * 2) / 3;
+          reHeight = (height * 2) / 3;
+          quality = Platform.OS === 'ios' ? 15 : 60;
         }
 
-        ImageResizer.createResizedImage(path, width, height, 'JPEG', quality, 0)
+        ImageResizer.createResizedImage(
+          path,
+          reWidth,
+          reHeight,
+          'JPEG',
+          quality,
+          0,
+        )
           .then((res) => {
             Marker.markText({
               src: res.uri,
               color: '#FF0000',
-              fontSize: 16,
+              fontSize: Platform.OS === 'ios' ? 130 : 30,
               X: 30,
               Y: 30,
               scale: 1,
               quality: 100,
               text: `${shopName}\n${now}`,
               position: Position.topLeft,
+              filename: now,
             })
               .then((_path) => {
                 const source = {
