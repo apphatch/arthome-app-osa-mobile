@@ -65,7 +65,7 @@ const TakePhoto = (props) => {
             Marker.markText({
               src: res.uri,
               color: '#FF0000',
-              fontSize: Platform.OS === 'ios' ? 130 : 30,
+              fontSize: Platform.OS === 'ios' ? 130 : 50,
               X: 30,
               Y: 30,
               scale: 1,
