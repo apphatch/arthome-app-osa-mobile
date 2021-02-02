@@ -90,7 +90,7 @@ const ShopCaptureScreen = ({ navigation, route }) => {
     setIsLoading(true);
     const now = moment
       .tz(serverTime, 'Asia/Ho_Chi_Minh')
-      .format('HH:mm:ss DD-MM-YYYY');
+      .format('DD/MM/YYYY HH:mm:ss');
 
     if (cachePhotos.length > 0) {
       cachePhotos.forEach((photo) => {

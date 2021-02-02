@@ -55,7 +55,7 @@ const CustomImagePicker = ({
         if (image) {
           const now = moment
             .tz(serverTime, 'Asia/Ho_Chi_Minh')
-            .format('HH:mm:ss DD-MM-YYYY');
+            .format('DD/MM/YYYY HH:mm:ss');
           const { width, height, path, size } = image;
           let reWidth = width;
           let reHeight = height;
