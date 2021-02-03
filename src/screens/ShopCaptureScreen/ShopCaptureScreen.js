@@ -93,60 +93,58 @@ const ShopCaptureScreen = ({ navigation, route }) => {
       .format('DD/MM/YYYY HH:mm:ss');
     const filename = moment
       .tz(serverTime, 'Asia/Ho_Chi_Minh')
-      .format('DDMMYYY_HHmmss');
+      .format('DD-MM-YYYY-HH-mm-ss');
 
     if (cachePhotos.length > 0) {
       cachePhotos.forEach((photo, i) => {
-        setTimeout(() => {
-          const { width, height, size, path } = photo;
-          let reWidth = width;
-          let reHeight = height;
-          let quality = 100;
+        const { width, height, size, path } = photo;
+        let reWidth = width;
+        let reHeight = height;
+        let quality = 100;
 
-          if (size >= 200000) {
-            reWidth = (width * 2) / 3;
-            reHeight = (height * 2) / 3;
-            quality = Platform.OS === 'ios' ? 15 : 60;
-          }
+        if (size >= 200000) {
+          reWidth = (width * 2) / 3;
+          reHeight = (height * 2) / 3;
+          quality = Platform.OS === 'ios' ? 15 : 60;
+        }
 
-          ImageResizer.createResizedImage(
-            path,
-            reWidth,
-            reHeight,
-            'JPEG',
-            quality,
-            0,
-          )
-            .then((res) => {
-              Marker.markText({
-                src: res.uri,
-                color: '#FF0000',
-                fontSize: Platform.OS === 'ios' ? 130 : 50,
-                X: 30,
-                Y: 30,
-                scale: 1,
-                quality: 100,
-                text: `${shopName}\n${now}`,
-                position: Position.topLeft,
-                filename: filename,
-              })
-                .then((_path) => {
-                  console.log(_path);
-                  const uri =
-                    Platform.OS === 'android'
-                      ? 'file://' + _path
-                      : 'file:///' + _path;
-                  savePicture(uri);
-                  setIsLoading(false);
-                })
-                .catch(() => {
-                  setIsLoading(false);
-                });
+        ImageResizer.createResizedImage(
+          path,
+          reWidth,
+          reHeight,
+          'JPEG',
+          quality,
+          0,
+        )
+          .then((res) => {
+            Marker.markText({
+              src: res.uri,
+              color: '#FF0000',
+              fontSize: Platform.OS === 'ios' ? 130 : 50,
+              X: 30,
+              Y: 30,
+              scale: 1,
+              quality: 100,
+              text: `${shopName}\n${now}`,
+              position: Position.topLeft,
+              filename: `${filename}-${i}`,
             })
-            .catch(() => {
-              setIsLoading(false);
-            });
-        }, 100 * (i + 1));
+              .then((_path) => {
+                console.log(_path);
+                const uri =
+                  Platform.OS === 'android'
+                    ? 'file://' + _path
+                    : 'file:///' + _path;
+                savePicture(uri);
+                setIsLoading(false);
+              })
+              .catch(() => {
+                setIsLoading(false);
+              });
+          })
+          .catch(() => {
+            setIsLoading(false);
+          });
       });
       setPhotos([]);
     } else {

@@ -38,6 +38,7 @@ const CustomImagePicker = ({
   const [isLoading, setIsLoading] = React.useState(false);
   const [isDeleting, setIsDeleting] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
+  let index = 0;
 
   React.useEffect(() => {
     register({ name: 'photos' }, { required: true });
@@ -58,7 +59,7 @@ const CustomImagePicker = ({
             .format('DD/MM/YYYY HH:mm:ss');
           const filename = moment
             .tz(serverTime, 'Asia/Ho_Chi_Minh')
-            .format('DDMMYYY_HHmmss');
+            .format('DD-MM-YYYY-HH-mm-ss');
           const { width, height, path, size } = image;
           let reWidth = width;
           let reHeight = height;
@@ -89,7 +90,7 @@ const CustomImagePicker = ({
                 quality: 100,
                 text: `${shopName}\n${now}`,
                 position: Position.topLeft,
-                filename: filename,
+                filename: `${filename}-${index}`,
               })
                 .then((_path) => {
                   const source = {
@@ -109,6 +110,7 @@ const CustomImagePicker = ({
                   setIsLoading(false);
 
                   if (photos.length <= 10) {
+                    index++;
                     onTakePhoto();
                     setValue('photos', photos);
                     triggerValidation('photos');

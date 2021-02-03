@@ -44,7 +44,7 @@ const TakePhoto = (props) => {
           .format('DD/MM/YYYY HH:mm:ss');
         const filename = moment
           .tz(serverTime, 'Asia/Ho_Chi_Minh')
-          .format('DDMMYYY_HHmmss');
+          .format('DD-MM-YYYY-HH-mm-ss');
         const { width, height, path, size } = image;
         let reWidth = width;
         let reHeight = height;
