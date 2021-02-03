@@ -91,6 +91,9 @@ const ShopCaptureScreen = ({ navigation, route }) => {
     const now = moment
       .tz(serverTime, 'Asia/Ho_Chi_Minh')
       .format('DD/MM/YYYY HH:mm:ss');
+    const filename = moment
+      .tz(serverTime, 'Asia/Ho_Chi_Minh')
+      .format('DDMMYYY_HHmmss');
 
     if (cachePhotos.length > 0) {
       cachePhotos.forEach((photo) => {
@@ -124,9 +127,10 @@ const ShopCaptureScreen = ({ navigation, route }) => {
               quality: 100,
               text: `${shopName}\n${now}`,
               position: Position.topLeft,
-              filename: now,
+              filename: filename,
             })
               .then((_path) => {
+                console.log(_path);
                 const uri =
                   Platform.OS === 'android'
                     ? 'file://' + _path

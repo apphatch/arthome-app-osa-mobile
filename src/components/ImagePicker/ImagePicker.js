@@ -56,6 +56,9 @@ const CustomImagePicker = ({
           const now = moment
             .tz(serverTime, 'Asia/Ho_Chi_Minh')
             .format('DD/MM/YYYY HH:mm:ss');
+          const filename = moment
+            .tz(serverTime, 'Asia/Ho_Chi_Minh')
+            .format('DDMMYYY_HHmmss');
           const { width, height, path, size } = image;
           let reWidth = width;
           let reHeight = height;
@@ -86,7 +89,7 @@ const CustomImagePicker = ({
                 quality: 100,
                 text: `${shopName}\n${now}`,
                 position: Position.topLeft,
-                filename: now,
+                filename: filename,
               })
                 .then((_path) => {
                   const source = {
