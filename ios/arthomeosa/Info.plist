@@ -40,17 +40,17 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow ArtHomeOSA to use the camera</string>
+	<string>Allow ArtHomeOSA to use the camera for check-in/check-out</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This is the plist item for NSLocationAlwaysAndWhenInUseUsageDescription</string>
+	<string>Allow ArtHomeOSA to use the location for check-in/check-out</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This is the plist item for NSLocationAlwaysUsageDescription</string>
+	<string>Allow ArtHomeOSA to use the location for check-in/check-out</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This is the plist item for NSLocationWhenInUseUsageDescription</string>
+	<string>Allow ArtHomeOSA to use the location for check-in/check-out</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Give ArtHomeOSA periences permission to save photos</string>
+	<string>Allow ArtHomeOSA periences permission to save photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Give ArtHomeOSA periences permission to access your photos</string>
+	<string>Allow ArtHomeOSA periences permission to access your photos</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>opensans-regular.ttf</string>
