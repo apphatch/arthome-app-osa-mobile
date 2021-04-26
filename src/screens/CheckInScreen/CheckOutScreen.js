@@ -41,9 +41,8 @@ const CheckOutScreen = ({ navigation, route }) => {
     register,
     setValue,
     handleSubmit,
-    errors,
+    formState: { errors, isValid },
     trigger,
-    formState,
   } = useForm({ mode: 'onChange' });
 
   React.useEffect(() => {
@@ -105,7 +104,7 @@ const CheckOutScreen = ({ navigation, route }) => {
           <Caption style={styles.caption}>Thông tin</Caption>
           <TextInput
             label="Ghi chú"
-            ref={register({ name: 'note' })}
+            ref={register('note')}
             onChangeText={(text) => setValue('note', text, true)}
             disabled={isLoading}
           />
@@ -130,7 +129,7 @@ const CheckOutScreen = ({ navigation, route }) => {
             mode="contained"
             onPress={handleSubmit(onSubmitCheckList)}
             loading={isLoading}
-            disabled={isLoading || !formState.isValid}>
+            disabled={isLoading || !isValid}>
             Check out
           </Button>
         </ScrollView>

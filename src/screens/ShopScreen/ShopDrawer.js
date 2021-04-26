@@ -37,7 +37,7 @@ export default function DrawerContent(props) {
             }}>
             <Avatar.Image source={require('../../assets/logo.png')} size={70} />
           </TouchableOpacity>
-          <Title style={styles.title}>An Hoà QC</Title>
+          <Title style={styles.title}>An Hoà OSA</Title>
         </View>
 
         <Drawer.Section style={styles.drawerSection}>

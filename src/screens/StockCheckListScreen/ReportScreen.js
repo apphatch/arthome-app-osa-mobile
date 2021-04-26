@@ -41,7 +41,7 @@ const ReportScreen = ({ navigation, route }) => {
     register,
     setValue,
     handleSubmit,
-    errors,
+    formState: { errors },
     trigger,
     clearErrors,
   } = useForm({ mode: 'onChange' });

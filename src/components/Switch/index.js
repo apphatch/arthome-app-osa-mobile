@@ -18,7 +18,7 @@ const CustomSwitch = (props) => {
   const [isSwitchOn, setIsSwitchOn] = React.useState(value);
 
   React.useEffect(() => {
-    register({ name }, rules);
+    register(name, rules);
     setValue(name, isSwitchOn, true);
   }, [name, register, rules, isSwitchOn, setValue]);
 

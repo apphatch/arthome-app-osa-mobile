@@ -19,7 +19,7 @@ const CustomToggleButton = (props) => {
   const [checked, setChecked] = React.useState(value);
 
   React.useEffect(() => {
-    register({ name }, rules);
+    register(name, rules);
     setValue(name, checked, true);
   }, [name, register, rules, checked, setValue]);
 

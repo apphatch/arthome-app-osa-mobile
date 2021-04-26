@@ -12,7 +12,7 @@ import {
   processColor,
 } from 'react-native';
 import _ from 'lodash';
-import { CameraKitCamera } from 'react-native-camera-kit';
+import { CameraScreen } from 'react-native-camera-kit';
 
 const IsIOS = Platform.OS === 'ios';
 const GalleryManager = IsIOS
@@ -178,7 +178,7 @@ export default class CameraScreenBase extends Component {
             source={{ uri: this.state.imageCaptured.uri }}
           />
         ) : (
-          <CameraKitCamera
+          <CameraScreen
             ref={(cam) => (this.camera = cam)}
             style={{ flex: 1, justifyContent: 'flex-end' }}
             cameraOptions={this.state.cameraOptions}
@@ -376,7 +376,7 @@ export default class CameraScreenBase extends Component {
   }
 
   render() {
-    throw 'Implemented in CameraKitCameraScreen!';
+    throw 'Implemented in CameraScreenScreen!';
   }
 }
 

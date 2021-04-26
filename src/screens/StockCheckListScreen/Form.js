@@ -67,10 +67,10 @@ const StockCheckListScreen = ({ navigation, route }) => {
     handleSubmit,
     register,
     setValue,
-    errors,
+    formState: { errors },
     clearErrors,
     trigger,
-  } = useForm({});
+  } = useForm();
 
   React.useEffect(() => {
     if (!isLoading) {
@@ -152,8 +152,7 @@ const StockCheckListScreen = ({ navigation, route }) => {
             {Object.keys(template).map((fieldName) => {
               const type = template[fieldName].type;
               const required = template[fieldName].required;
-              const default_value_use =
-                template[fieldName].default_value_use || '';
+              const defaultData = template[fieldName].default || '';
               if (type === 'number') {
                 const { allow_negative } = template[fieldName];
                 return (
@@ -164,11 +163,10 @@ const StockCheckListScreen = ({ navigation, route }) => {
                     register={register}
                     setValue={setValue}
                     value={
-                      item && item.data && item.data[fieldName]
-                        ? item.data[fieldName].toString()
-                        : item[default_value_use]
-                        ? item[default_value_use].toString()
-                        : ''
+                      item.data[fieldName] ||
+                      item[defaultData.field] ||
+                      defaultData.value ||
+                      ''
                     }
                     disabled={isLoading}
                     rules={{ required, min: !allow_negative && 0 }}
@@ -186,11 +184,10 @@ const StockCheckListScreen = ({ navigation, route }) => {
                     register={register}
                     setValue={setValue}
                     value={
-                      item.data && item.data[fieldName]
-                        ? item.data[fieldName]
-                        : item[default_value_use]
-                        ? item[default_value_use].toString()
-                        : ''
+                      item.data[fieldName] ||
+                      item[defaultData.field] ||
+                      defaultData.value ||
+                      ''
                     }
                     disabled={isLoading}
                     rules={{ required }}
@@ -209,7 +206,12 @@ const StockCheckListScreen = ({ navigation, route }) => {
                     key={fieldName}
                     rules={{ required }}
                     error={errors[fieldName]}
-                    value={item.data ? item.data[fieldName] : false}
+                    value={
+                      item.data[fieldName] ||
+                      item[defaultData.field] ||
+                      defaultData.value ||
+                      false
+                    }
                     disabled={isLoading}
                     clearErrors={clearErrors}
                   />
@@ -235,7 +237,12 @@ const StockCheckListScreen = ({ navigation, route }) => {
                     label={fieldName}
                     rules={{ required }}
                     error={errors[fieldName]}
-                    value={item.data ? item.data[fieldName] : null}
+                    value={
+                      item.data[fieldName] ||
+                      item[defaultData.field] ||
+                      defaultData.value ||
+                      null
+                    }
                     disabled={isLoading}
                     clearErrors={clearErrors}
                   />
@@ -252,7 +259,12 @@ const StockCheckListScreen = ({ navigation, route }) => {
                     key={fieldName}
                     rules={{ required }}
                     error={errors[fieldName]}
-                    value={item.data ? item.data[fieldName] : ''}
+                    value={
+                      item.data[fieldName] ||
+                      item[defaultData.field] ||
+                      defaultData.value ||
+                      ''
+                    }
                     disabled={isLoading}
                     clearErrors={clearErrors}
                   />
@@ -266,7 +278,12 @@ const StockCheckListScreen = ({ navigation, route }) => {
                     label={fieldName}
                     register={register}
                     setValue={setValue}
-                    value={item.data ? item.data[fieldName] : ''}
+                    value={
+                      item.data[fieldName] ||
+                      item[defaultData.field] ||
+                      defaultData.value ||
+                      ''
+                    }
                     disabled={isLoading}
                     rules={{ required }}
                     error={errors[fieldName]}

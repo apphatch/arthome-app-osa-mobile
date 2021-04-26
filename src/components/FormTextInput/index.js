@@ -19,7 +19,7 @@ const FormTextInput = (props) => {
   const [localValue, setLocalValue] = React.useState(value);
 
   React.useEffect(() => {
-    register({ name }, rules);
+    register(name, rules);
     setValue(name, localValue);
   }, [name, register, rules, localValue, setValue]);
 
@@ -36,7 +36,7 @@ const FormTextInput = (props) => {
     <>
       <TextInput
         label={label}
-        ref={register({ name }, rules)}
+        ref={register(name, rules)}
         onChangeText={handleInputChange}
         value={localValue}
         disabled={disabled}

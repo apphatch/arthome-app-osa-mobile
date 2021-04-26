@@ -41,7 +41,7 @@ const CustomImagePicker = ({
   let index = 0;
 
   React.useEffect(() => {
-    register({ name: 'photos' }, { required: true });
+    register('photos', { required: true });
     setValue('photos', photos);
   }, [register, setValue, photos, triggerValidation]);
 

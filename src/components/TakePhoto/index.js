@@ -28,7 +28,7 @@ const TakePhoto = (props) => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   React.useEffect(() => {
-    register({ name: 'photo' }, { required: true });
+    register('photo', { required: true });
   }, [register, onRemovePhoto]);
 
   const onTakePhoto = React.useCallback(() => {

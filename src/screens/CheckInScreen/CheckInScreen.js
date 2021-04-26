@@ -45,8 +45,7 @@ const CheckInScreen = ({ navigation, route }) => {
     register,
     setValue,
     handleSubmit,
-    errors,
-    formState,
+    formState: { errors, isValid },
     trigger,
     clearErrors,
   } = useForm({
@@ -141,7 +140,7 @@ const CheckInScreen = ({ navigation, route }) => {
             mode="contained"
             onPress={handleSubmit(onSubmitCheckList)}
             loading={isLoading}
-            disabled={isLoading || !formState.isValid}>
+            disabled={isLoading || !isValid}>
             Check in
           </Button>
         </ScrollView>

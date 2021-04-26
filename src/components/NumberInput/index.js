@@ -17,7 +17,7 @@ const NumberInput = (props) => {
   const [localValue, setLocalValue] = React.useState(value);
 
   React.useEffect(() => {
-    register({ name }, rules);
+    register(name, rules);
     setValue(name, localValue);
   }, [name, register, rules, localValue, setValue]);
 
@@ -35,7 +35,7 @@ const NumberInput = (props) => {
   return (
     <TextInput
       label={label}
-      ref={register({ name }, rules)}
+      ref={register(name, rules)}
       keyboardType="numeric"
       onChangeText={handleInputChange}
       value={localValue}
