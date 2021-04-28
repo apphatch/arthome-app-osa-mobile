@@ -32,11 +32,11 @@ export function* submitCheckList({ payload }) {
       const currentCl = yield select(selectors.makeSelectCheckListById(clId));
       const { template } = currentCl;
       data = mapValues(template, (o) => {
-        if (o.default_value_use && data[o.default_value_use]) {
-          return data[o.default_value_use].toString();
+        if (o.default && data[o.default.field]) {
+          return data[o.default.field].toString();
         }
-        if (o.type === 'radio') {
-          return 'Y';
+        if (o.default && data[o.default.value]) {
+          return data[o.default.value].toString();
         }
         return '';
       });
